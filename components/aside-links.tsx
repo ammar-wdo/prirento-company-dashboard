@@ -2,119 +2,86 @@
 
 import { cn } from "@/lib/utils";
 import {
+  Archive,
   Building2,
   Car,
+  CarIcon,
   Coins,
   Component,
   Gavel,
   Grid3X3,
   LayoutDashboard,
   Navigation,
+  Settings,
   ShipWheel,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import SignoutButton from "./signout-button";
 
+export type CompanyType = "cars" | "yacths";
+type Props = {
+  companyType: CompanyType;
+};
 
-type Props = {};
-
-const AsideLinks = (props: Props) => {
+const AsideLinks = ({ companyType }: Props) => {
   const pathname = usePathname();
   const links = [
     {
-      label: "Main",
-      elements: [
-        {
-          label: "Dashboard",
-          href: "/dashboard",
-          active: pathname === "/dashboard",
-          icon: <LayoutDashboard className="h-4 w-4" />,
-        },
-        {
-          label: "Location",
-          href: "/dashboard/location",
-          active: pathname === "/dashboard/location",
-          icon: <Navigation className="h-4 w-4" />,
-        },
-        {
-          label: "Category",
-          href: "/dashboard/category",
-          active: pathname === "/dashboard/category",
-          icon: <Grid3X3 className="h-4 w-4" />,
-        },
-        {
-          label: "Company",
-          href: "/dashboard/company",
-          active: pathname === "/dashboard/company",
-          icon: <Building2 className="h-4 w-4" />,
-        },
-      ],
+      label: "Dashboard",
+      href: "/dashboard",
+      active: pathname === "/dashboard",
+      icon: <LayoutDashboard className="h-6 w-6 text-secondaryGold" />,
     },
     {
-      label: "Items",
-      elements: [
-        {
-          label: "Car",
-          href: "/dashboard/car",
-          active: pathname === "/dashboard/car",
-          icon: <Car className="h-4 w-4" />,
-        },
-        {
-          label: "Yacht",
-          href: "/dashboard/yacht",
-          active: pathname === "/dashboard/yacht",
-          icon: <ShipWheel className="h-4 w-4" />,
-        },
-      ],
+      label: "Cars",
+      href: "/dashboard/cars",
+      active: pathname === "/dashboard/cars",
+      icon: <CarIcon className="h-6 w-6 text-secondaryGold" />,
+      type: "cars",
     },
     {
-      label: "Actions",
-      elements: [
-        {
-          label: "Discount",
-          href: "/dashboard/discount",
-          active: pathname === "/dashboard/discount",
-          icon: <Coins className="h-4 w-4" />,
-        },
-        {
-          label: "Admin rules",
-          href: "/dashboard/admin-rules",
-          active: pathname === "/dashboard/admin-rules",
-          icon: <Gavel className="h-4 w-4" />,
-        },
-      ],
+      label: "Yachts",
+      href: "/dashboard/yachts",
+      active: pathname === "/dashboard/yachts",
+      icon: <Navigation className="h-6 w-6 text-secondaryGold" />,
+      type: "yacths",
+    },
+    {
+      label: "Bookings",
+      href: "/dashboard/bookings",
+      active: pathname === "/dashboard/bookings",
+      icon: <Archive className="h-6 w-6 text-secondaryGold" />,
+    },
+    {
+      label: "Settings",
+      href: "/dashboard/settings",
+      active: pathname === "/dashboard/settings",
+      icon: <Settings className="h-6 w-6 text-secondaryGold" />,
     },
   ];
 
   const router = useRouter();
   return (
-    <div className="p-4 flex flex-col w-full flex-1">
-      {links.map((el) => (
-        <div key={el.label}>
-          <h3 className=" text-lg font-semibold mt-12">{el.label}</h3>
-          <div className="flex flex-col gap-1">
-            {el.elements.map((el) => (
-              <button
-                onClick={() => router.push(el.href)}
-                className={cn(
-                  "flex items-center gap-3 p-2 hover:bg-muted rounded-md transition cursor-pointer w-full",
-                  el.active && "bg-muted"
-                )}
-                key={el.label}
-              >
-                {el.icon}
-                <span className="text-sm font-medium "> {el.label}</span>
-               
-              </button>
-            ))}
-          </div>
-        </div>
-      ))}
+    <div className=" flex flex-col w-full flex-1 gap-y-3">
+      {links.map(({ label, href, active, icon, type }) => {
+        if(type && companyType!==type) return
+        return  <button
+        onClick={() => router.push(href)}
+        className={cn(
+          "flex items-center gap-3 p-2 text-lg font-medium hover:bg-white/10 rounded-xl text-white transition cursor-pointer w-full",
+          active && "bg-white text-main hover:bg-white"
+        )}
+        key={label}
+      >
+        {icon}
+        <span className="text-sm font-medium "> {label}</span>
+       
+      </button>
+      })}
       <div className="mt-auto w-full">
-      <SignoutButton/>
+        <SignoutButton />
       </div>
-      
     </div>
   );
 };
