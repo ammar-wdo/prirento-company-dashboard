@@ -5,6 +5,7 @@ import { getCompanyEmail } from '@/lib/utils'
 import React from 'react'
 import NoResult from '../no-result'
 import prisma from '@/lib/prisma'
+import CarCard from './car-card'
 
 type Props = {}
 
@@ -19,9 +20,21 @@ const cars = await prisma.car.findMany({
             email:email as string
         },
         
+        
     },
     orderBy:{
         createdAt:'desc'
+    }
+    ,include:{
+        carModel:{
+            include:{
+                carBrand:{
+                    select:{
+                        brand:true
+                    }
+                }
+            }
+        }
     }
 }) 
 
@@ -32,7 +45,7 @@ const cars = await prisma.car.findMany({
         {!cars.length && <NoResult title='No cars'/>}
         {!!cars.length && <div className='flex gap-3 flex-wrap'>
             {cars.map((car)=><div>
-               {}
+               {<CarCard car={car}/>}
             </div>)}
             </div>}
     </div>

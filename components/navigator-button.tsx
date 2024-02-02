@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 type Props = {
     title?:string,
     href:string,
-    variant?:"default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "site" | null | undefined
+    variant?:"default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "site" | "siteSecondary" | null | undefined
     
 } & React.HtmlHTMLAttributes<HTMLButtonElement>
 
