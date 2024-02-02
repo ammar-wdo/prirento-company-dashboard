@@ -45,7 +45,7 @@ const cars = await prisma.car.findMany({
         {!cars.length && <NoResult title='No cars'/>}
         {!!cars.length && <div className='flex gap-3 flex-wrap'>
             {cars.map((car)=><div>
-               {<CarCard car={car}/>}
+               {<CarCard key={car.id} car={car}/>}
             </div>)}
             </div>}
     </div>
