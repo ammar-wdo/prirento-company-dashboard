@@ -24,12 +24,12 @@ const LoginForm = (props: Props) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-3 border rounded-md max-w-[400px] w-full">
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="username" {...field} />
+                <Input placeholder="email" {...field} />
               </FormControl>
 
               <FormMessage />

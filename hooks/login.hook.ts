@@ -13,7 +13,7 @@ export const useLogin = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -26,7 +26,7 @@ export const useLogin = () => {
       setLoading(true);
       setError(false);
       const res = await signIn("credentials", {
-        username: values.username,
+        email: values.email,
         password: values.password,
         redirect: false,
         callbackUrl: "/dashboard",

@@ -1,4 +1,5 @@
-
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -7,4 +8,401 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+
+
+
+
+
+
+
+
+
+
+model Company {
+  id   String @id @default(uuid())
+  name String
+
+  slug String @unique
+
+  email       String @unique
+  password    String
+  address     String
+  phoneNumber String
+  whatsApp    String
+
+  logo    String
+  gallary String[]
+
+  content String
+
+  promoted Boolean
+
+  openingTime String[]
+
+  terms String
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  cars Car[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+model Location {
+  id   String @id @default(uuid())
+  name String
+
+  subLocations SubLocation[]
+
+  pickupCars  Car[] @relation("PickupLocations")
+  dropoffCars Car[] @relation("DropoffLocations")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+
+model SubLocation {
+  id   String @id @default(uuid())
+  name String
+
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+
+  pickupCars  Car[] @relation("PickupSubLocations")
+  dropoffCars Car[] @relation("DropoffSubLocations")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  companies Company[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+
+
+model CarBrand {
+  id    String @id @default(uuid())
+  brand String
+
+  logo String
+
+  carModels CarModel[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+model CarModel {
+  id         String @id @default(uuid())
+  name       String
+  carBrandId String
+
+  carBrand CarBrand @relation(fields: [carBrandId], references: [id])
+  cars     Car[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+model Car {
+  id            String       @id @default(uuid())
+  description   String
+  year          String
+  colors        CarColors
+  interiorColor CarColors
+  seats         Int
+  doors         Int
+  engine        String
+  kmIncluded    Int
+  carType       CarTypes
+  gallary       String[]
+  transmition   Transmission
+  electric      Electric
+  carStatus     CarStatus
+
+  slug String @unique
+
+  deposite              Int
+  commession            Int
+  reservationFlatFee    Int?
+  reservationPercentage Int?
+
+  pricings  Int[]
+  hourPrice Int?
+
+  minimumHours Int?
+  deleviryFee  Int
+  coolDown     Int
+
+  additionalFeatures Json[]
+
+  disabled Boolean @default(false)
+
+  pickupLocations  Location[] @relation("PickupLocations")
+  dropoffLocations Location[] @relation("DropoffLocations")
+
+  pickupSubLocations  SubLocation[] @relation("PickupSubLocations")
+  dropoffSubLocations SubLocation[] @relation("DropoffSubLocations")
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  carModelId String
+  carModel   CarModel @relation(fields: [carModelId], references: [id])
+
+  superAdminRules SuperadminRule[]
+  discounts       CarDiscount[]
+
+  availabilities CarAvailability[]
+  carExtraOptions CarExtraOption[]
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+}
+
+
+
+
+
+
+
+
+
+
+model CarAvailability {
+  id String @id @default(uuid())
+
+  label String?
+
+  startDate DateTime
+  endDate   DateTime
+
+  carId String
+  car   Car    @relation(fields: [carId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+
+
+
+model CarDiscount {
+  id        String @id @default(uuid())
+  label     String
+  promocode String
+
+  type  DiscountType @default(fixed)
+  value Int
+
+  applyToAll Boolean @default(true)
+
+  carId String?
+  car   Car?    @relation(fields: [carId], references: [id])
+
+  discountApplyType DiscountApplyType @default(created)
+
+  startDate DateTime
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+model SuperadminRule {
+  id String @id @default(uuid())
+
+  label       String
+  description String
+
+  type  SuperadminType @default(fixed)
+  value Int
+
+  mandatory  Boolean @default(false)
+  applyToAll Boolean @default(true)
+
+  carId String?
+  car   Car?    @relation(fields: [carId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+model CarExtraOption {
+  id          String               @id @default(uuid())
+  label       String
+  description String
+  price       Int
+  status      CarExtraOptionStatus @default(pending)
+  logo        String
+
+  carId String
+  car   Car    @relation(fields: [carId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+
+
+
+//ENUMS
+
+enum Transmission {
+  auto
+  manual
+}
+
+enum CarTypes {
+  SUV
+  super_cars
+  sports
+  convertable
+  classics
+  business
+}
+
+enum Electric {
+  fully_electric
+  hybrid
+}
+
+enum CarStatus {
+  pending
+  active
+}
+
+enum CarColors {
+  Black
+  White
+  Silver
+  Gray
+  Blue
+  Red
+  Brown
+  Green
+  Beige
+  Gold
+  Orange
+  Yellow
+  Purple
+  Maroon
+  Navy
+  Charcoal
+  Other
+}
+
+enum DiscountType {
+  fixed
+  percentage
+}
+
+enum DiscountApplyType {
+  created
+  booked
+}
+
+enum SuperadminType {
+  fixed
+  percentage
+}
+
+enum CarExtraOptionStatus {
+  pending
+  active
 }
