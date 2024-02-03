@@ -1,12 +1,32 @@
 import Heading from '@/components/heading'
+import prisma from '@/lib/prisma'
+import { getCompany } from '@/lib/utils'
+import { notFound } from 'next/navigation'
 import React from 'react'
 
-type Props = {}
+type Props = {
+  params:{carId:string}
+}
 
-const page = (props: Props) => {
+const page = async({params}: Props) => {
+
+  const company = await getCompany()
+
+  const car = await prisma.car.findUnique({
+   where:{
+    id:params.carId,
+    companyId:company?.id,
+    
+   },
+   include:{
+    carModel:{include:{carBrand:{select:{brand:true}}}}
+   }
+  })
+
+  if(!car) notFound()
   return (
     <div>
-        <Heading title='Pricings' description='Manage pricings for each day'/>
+        <Heading title={`${car.carModel.carBrand.brand} ${car.carModel.name}`} description='Manage pricings for each day'/>
     </div>
   )
 }

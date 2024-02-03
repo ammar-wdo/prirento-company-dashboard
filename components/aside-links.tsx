@@ -67,7 +67,7 @@ const AsideLinks = ({ companyType }: Props) => {
       {links.map(({ label, href, active, icon, type }) => {
         if(type && companyType!==type) return
         return  <button
-        onClick={() => router.push(href)}
+        onClick={() => {router.push(href)}}
         className={cn(
           "flex items-center gap-3 p-2 text-lg font-medium hover:bg-white/10 rounded-xl text-white transition cursor-pointer w-full",
           active && "bg-white text-main hover:bg-white"

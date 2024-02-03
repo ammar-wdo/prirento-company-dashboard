@@ -36,7 +36,7 @@ const CarFeed = async (props: Props) => {
     <div>
       {!cars.length && <NoResult title="No cars" />}
       {!!cars.length && (
-        <div className="flex gap-1  w-full overflow-x-auto xl:grid xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="flex gap-4  w-full overflow-x-auto xl:grid xl:grid-cols-3 2xl:grid-cols-4">
           {cars.map((car) => (
            <CarCard key={car?.id} car={car} />
           ))}
