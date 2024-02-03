@@ -176,3 +176,18 @@ export const carSchema = z
 
   .and(colorSchema)
   .and(numericValues);
+
+
+
+
+  export const carPricingsSchema = z.object({
+    pricings: z
+      .array(z.coerce.number())
+      .refine((pricings) => !pricings.includes(0), {
+        message: "Pricings cannot include zero",
+      })
+      .refine((pricings) => !pricings.some((val) => val < 0), {
+        message: "Negative values not allowed",
+      }),
+    hourPrice: requiredNumber.refine((val) => val > 0, "Enter positive value"),
+  });
