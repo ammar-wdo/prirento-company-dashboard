@@ -13,6 +13,13 @@ datasource db {
 
 
 
+
+
+
+
+
+
+
 model Company {
   id   String @id @default(uuid())
   name String
@@ -181,12 +188,12 @@ model Car {
   gallary       String[]
   transmition   Transmission
   electric      Electric
-  carStatus     CarStatus
+  carStatus     CarStatus @default(pending)
 
-  slug String @unique
+  slug String? @unique
 
   deposite              Int
-  commession            Int
+  commession            Int?
   reservationFlatFee    Int?
   reservationPercentage Int?
 

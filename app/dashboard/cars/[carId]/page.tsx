@@ -1,5 +1,6 @@
 
 
+import CarForm from "@/components/(car)/car-form";
 import Heading from "@/components/heading";
 import prisma from "@/lib/prisma";
 import { getCompanyEmail } from "@/lib/utils";
@@ -14,7 +15,7 @@ type Props = {
 const page = async ({ params }: Props) => {
   const email =await getCompanyEmail()
 
-  const car = await prisma.car.findUnique({
+  const carRes =  prisma.car.findUnique({
     where: {
       id: params.carId,
       company: {
@@ -23,20 +24,31 @@ const page = async ({ params }: Props) => {
     },include:{
       carModel:{
         include:{
+          
           carBrand:{
             select:{
               brand:true
             }
           }
         }
-      }
+      },
+      pickupLocations: { select: { id: true } },
+      dropoffLocations: { select: { id: true } },
     }
   });
+  const modelsRes = prisma.carModel.findMany({include:{carBrand:{select:{logo:true,brand:true}}}})
+  const locationsRes = prisma.location.findMany();
+
+  const [car,locations,models] = await Promise.all([carRes,locationsRes,modelsRes])
 
   if (!car && params.carId !== "new") notFound();
 
   return <div>
     <Heading title={`${car?.carModel.carBrand.brand} ${car?.carModel.name}`} description="Update your car informations" />
+    <div className="mt-16 max-w-5xl">
+      <CarForm car={car} locations={locations}  models={models}/>
+      </div>
+
   </div>;
 };
 

@@ -7,6 +7,7 @@ import {
     TooltipTrigger,
   } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { Loader } from "lucide-react"
 
 
   import React, { useEffect, useState } from 'react'
@@ -16,7 +17,7 @@ import { cn } from "@/lib/utils"
   const ToolTip = ({title,children,side,className,description,text,backGround,border}: Props) => {
     const [mount,setMount]=useState(false)
     useEffect(()=>{setMount(true)},[])
-    if(!mount)return null
+    if(!mount)return <div className="w-full flex items-center justify-center"><Loader className="h-5 w-5 animate-spin text-center"/></div>
     return (
         <TooltipProvider>
         <Tooltip delayDuration={40} >
