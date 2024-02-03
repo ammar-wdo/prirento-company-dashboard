@@ -38,7 +38,7 @@ const CarFeed = async (props: Props) => {
       {!!cars.length && (
         <div className="flex gap-3 flex-wrap">
           {cars.map((car) => (
-            <div>{<CarCard key={car?.id} car={car} />}</div>
+           <CarCard key={car?.id} car={car} />
           ))}
         </div>
       )}
