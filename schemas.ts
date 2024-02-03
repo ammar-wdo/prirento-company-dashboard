@@ -191,3 +191,18 @@ export const carSchema = z
       }),
     hourPrice: requiredNumber.refine((val) => val > 0, "Enter positive value"),
   });
+
+
+
+
+
+  export const carExtraOptionsSchema = z.object({
+    label:requiredString,
+    description:requiredString,
+    price:requiredNumber .refine((val) => val, "Required field")
+    .refine((val) => val > 0, "Enter positive value"),
+  
+    logo:requiredString,
+   
+
+  })
