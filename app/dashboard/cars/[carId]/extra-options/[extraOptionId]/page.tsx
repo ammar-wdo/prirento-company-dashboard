@@ -40,7 +40,7 @@ const page = async ({ params }: Props) => {
       <Heading
         title={
           extraOption
-            ? `${extraOption.car.carModel.carBrand.brand} ${extraOption.car.carModel.name} - Extraoptions`
+            ? `${extraOption.car.carModel.carBrand.brand} ${extraOption.car.carModel.name} - Extra options`
             : "Extra options"
         }
         description={
