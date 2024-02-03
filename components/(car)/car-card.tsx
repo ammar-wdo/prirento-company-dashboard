@@ -14,7 +14,7 @@ type Props = {
 
 const CarCard = ({ car }: Props) => {
   return (
-    <div className=" rounded-xl overflow-hidden border flex flex-col w-[300px] md:w-[400px]">
+    <div className=" rounded-xl overflow-hidden border flex flex-col w-[300px] md:w-[400px] shrink-0">
       <SwiperComponent gallary={car.gallary}/>
       <div className="p-4 bg-white flex flex-col gap-2 flex-1">
         <h3 className="capitalize text-lg font-medium">

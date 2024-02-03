@@ -1,4 +1,4 @@
-
+import MobileSheet from "@/components/mobile-sheet";
 import SideBar from "@/components/side-bar";
 import React from "react";
 
@@ -8,9 +8,12 @@ type Props = {
 
 const layout = ({ children }: Props) => {
   return (
-    <div>
-        <SideBar />
-      <main className="pl-80 p-20 bg-muted min-h-screen">{children}</main>
+    <div className="relative">
+      <MobileSheet>
+        <SideBar sheet={true} />
+      </MobileSheet>
+      <SideBar />
+      <main className="lg:pl-80 md:p-20 p-8 bg-muted min-h-screen">{children}</main>
     </div>
   );
 };
