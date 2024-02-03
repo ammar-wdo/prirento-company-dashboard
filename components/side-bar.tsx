@@ -13,7 +13,7 @@ const SideBar = async(props: Props) => {
     <div className="w-72 border-r fixed top-0 left-0 min-h-screen flex flex-col bg-main py-8 px-4">
       <div className="mb-12">
         <div className="w-[100px] aspect-[14.73/7]  relative">
-          <Image src={'/logo.png'} fill alt="Logo"/>
+          <Image src={'/Logo.png'} fill alt="Logo"/>
         </div>
       </div>
       <AsideLinks companyType={type}/>
