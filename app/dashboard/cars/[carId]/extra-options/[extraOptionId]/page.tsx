@@ -44,7 +44,7 @@ const page = async ({ params }: Props) => {
             : "Extra options"
         }
         description={
-          extraOption ? "Update extraoptione" : "Create extra options"
+          extraOption ? `Update ${extraOption.label} extra option` : "Create extra options"
         }
       />
 
