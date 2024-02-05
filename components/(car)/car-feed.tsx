@@ -4,6 +4,7 @@ import React from "react";
 import NoResult from "../no-result";
 import prisma from "@/lib/prisma";
 import CarCard from "./car-card";
+import CarClientFilter from "./car-client-filter";
 
 type Props = {};
 
@@ -36,11 +37,7 @@ const CarFeed = async (props: Props) => {
     <div>
       {!cars.length && <NoResult title="No cars" />}
       {!!cars.length && (
-        <div className="flex gap-4  w-full overflow-x-auto xl:grid xl:grid-cols-3 2xl:grid-cols-4">
-          {cars.map((car) => (
-           <CarCard key={car?.id} car={car} />
-          ))}
-        </div>
+       <CarClientFilter cars={cars}/>
       )}
     </div>
   );

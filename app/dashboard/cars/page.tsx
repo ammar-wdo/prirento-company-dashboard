@@ -12,9 +12,7 @@ const page = async (props: Props) => {
     <div>
       <div className="flex md:items-center justify-between md:flex-row flex-col md:gap-0 gap-4">
         <Heading title="Cars" description="Manage your cars" />
-        <NavigatorButton href="/dashboard/cars/new" variant={"site"}>
-          <Plus /> Create New Car
-        </NavigatorButton>
+      
       </div>
       <div className="mt-16">
         <CarFeed />
