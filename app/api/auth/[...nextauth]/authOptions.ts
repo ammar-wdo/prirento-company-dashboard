@@ -25,7 +25,7 @@ session:{
               password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                const email = credentials?.email
+                const email = credentials?.email.toLocaleLowerCase()
                 const password = credentials?.password
                 if(!email || !password) throw new Error('Enter all required fields')
 

@@ -206,3 +206,28 @@ export const carSchema = z
    
 
   })
+
+
+  const newPassword = z.string().min(8, { message: "Enter at least 8 chars" });
+  export const companySchema = z.object({
+   
+ 
+    email: requiredString.min(2, "E-mail is required").email(),
+    password: z.string().min(8, "Password should be at least 8 chars"),
+    newPassword: z
+    .union([z.string(), z.undefined()])
+    .refine((val) => !val || newPassword.safeParse(val).success),
+    address: requiredString,
+    phoneNumber: requiredString.refine((value) => {
+      const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;
+      return phoneRegex.test(value);
+    }, "Invalid phone number"),
+    whatsApp: requiredString.refine((value) => {
+      const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;
+      return phoneRegex.test(value);
+    }, "Invalid phone number"),
+    logo: z.string().min(1, "You should upload a logo"),
+    gallary: z.array(requiredString),
+    openingTime: z.array(z.string()).optional(),
+   
+  });
