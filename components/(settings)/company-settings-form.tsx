@@ -20,6 +20,7 @@ import { SingleImageDropzone } from "../single-image-dropezone";
 import ActionLoaderButton from "../action-loader-button";
 import { Day, useCompany } from "@/hooks/company-settings.hook";
 import TimeSelect from "../time-select";
+import { Checkbox } from "../ui/checkbox";
 
 type Props = { company: Company };
 
@@ -38,8 +39,9 @@ const CompanySettingsForm = ({ company }: Props) => {
     logOut,
     generateTimeSlots,
     dropdownStatus,
-   toggleDropdown,
-   setter
+    toggleDropdown,
+    setter,
+    toggleClose
   } = useCompany({ company });
   return (
     <Form {...form}>
@@ -100,34 +102,43 @@ const CompanySettingsForm = ({ company }: Props) => {
               <FormLabel>Opening times*</FormLabel>
               <FormControl>
                 <ul className="flex flex-col gap-2 w-full mt-3">
-                <li className="grid grid-cols-4 gap-4 font-medium" >
-                       <span className="text-xs md:text-base">Day</span>
-                        <span className="text-xs md:text-base">Open time</span>
-                       <span className="text-xs md:text-base">Close time</span>
-                      </li>
+                  <li className="grid grid-cols-4 gap-4 font-medium">
+                    <span className="text-xs md:text-base">Day</span>
+                    <span className="text-xs md:text-base">Open time</span>
+                    <span className="text-xs md:text-base">Close time</span>
+                    <span className="text-xs md:text-base">Closed</span>
+                  </li>
                   {Object.entries(form.watch("openingTime")).map(
                     ([day, { openTime, closeTime }]) => (
                       <li className="grid grid-cols-4 gap-4" key={day}>
-                        <span className="text-xs md:text-base shrink">{day}</span>{" "}
+                        <span className="text-xs md:text-base shrink">
+                          {day}
+                        </span>{" "}
                         <TimeSelect
-                        
-                        open={dropdownStatus[day].openTimeDropdown}
-                        toggle={()=>{toggleDropdown(day,'openTimeDropdown')}}
-                        onChange = {(value:string)=>setter(day as Day,'openTime',value)}
-
-                        
-
-
+                          open={dropdownStatus[day].openTimeDropdown}
+                          toggle={() => {
+                            toggleDropdown(day, "openTimeDropdown");
+                          }}
+                          onChange={(value: string) =>
+                            setter(day as Day, "openTime", value)
+                          }
                           generateTimeSlots={generateTimeSlots}
                           time={openTime}
                         />{" "}
-                        {" "}
                         <TimeSelect
                           generateTimeSlots={generateTimeSlots}
                           time={closeTime}
                           open={dropdownStatus[day].closeTimeDropdown}
-                          toggle={()=>toggleDropdown(day,'closeTimeDropdown')}
-                          onChange = {(value:string)=>setter(day as Day,'closeTime',value)}
+                          toggle={() =>
+                            toggleDropdown(day, "closeTimeDropdown")
+                          }
+                          onChange={(value: string) =>
+                            setter(day as Day, "closeTime", value)
+                          }
+                        />
+                        <Checkbox
+                          checked={form.watch(`openingTime.${day as Day}.closed`)}
+                          onCheckedChange={()=>toggleClose(day as Day)}
                         />
                       </li>
                     )

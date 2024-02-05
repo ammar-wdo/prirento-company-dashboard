@@ -31,6 +31,7 @@ type DropdownStatus= {
   [day: string]: {
     openTimeDropdown: boolean;
     closeTimeDropdown: boolean;
+    closed:boolean
   };
 }
 
@@ -54,7 +55,7 @@ export const useCompany = ({ company }: Props) => {
   const [dropdownStatus, setDropdownStatus] = useState<DropdownStatus>(
     Object.keys(defaultOpeningTimes).reduce((acc, day) => ({
       ...acc,
-      [day]: { openTimeDropdown: false, closeTimeDropdown: false }
+      [day]: { openTimeDropdown: false, closeTimeDropdown: false ,closed:false}
     }), {} as DropdownStatus) // Type assertion for the initial state
   );
 
@@ -143,6 +144,12 @@ export const useCompany = ({ company }: Props) => {
 
   }
 
+  const toggleClose = (day:Day)=>{
+    const closedValue = form.watch(`openingTime.${day}.closed`)
+
+    form.setValue(`openingTime.${day}.closed`,!closedValue)
+  }
+
   return {
     form,
     onSubmit,
@@ -158,6 +165,7 @@ export const useCompany = ({ company }: Props) => {
     generateTimeSlots,
     dropdownStatus,
     toggleDropdown,
-    setter
+    setter,
+    toggleClose
   };
 };
