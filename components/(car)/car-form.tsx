@@ -214,6 +214,8 @@ const CarForm = ({ car, locations, models }: Props) => {
               </FormItem>
             )}
           />
+
+          
         </FormSectionsWrapper>
 
         <FormSectionsWrapper title="apperance">

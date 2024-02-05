@@ -1,13 +1,11 @@
 "use client";
 
-
 import { Category, Company } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
- 
   FormField,
   FormItem,
   FormLabel,
@@ -15,20 +13,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-
-
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { SingleImageDropzone } from "../single-image-dropezone";
 
 import ActionLoaderButton from "../action-loader-button";
-import { useCompany } from "@/hooks/company-settings.hook";
+import { Day, useCompany } from "@/hooks/company-settings.hook";
+import TimeSelect from "../time-select";
 
+type Props = { company: Company };
 
-
-type Props = {  company: Company };
-
-const CompanySettingsForm = ({  company }: Props) => {
+const CompanySettingsForm = ({ company }: Props) => {
   const {
     form,
     onSubmit,
@@ -40,7 +35,11 @@ const CompanySettingsForm = ({  company }: Props) => {
     setImagesFile,
     ImagesPlaceholder,
     uploadImages,
-    logOut
+    logOut,
+    generateTimeSlots,
+    dropdownStatus,
+   toggleDropdown,
+   setter
   } = useCompany({ company });
   return (
     <Form {...form}>
@@ -48,8 +47,6 @@ const CompanySettingsForm = ({  company }: Props) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-8"
       >
-      
-
         <FormField
           control={form.control}
           name="email"
@@ -65,8 +62,7 @@ const CompanySettingsForm = ({  company }: Props) => {
           )}
         />
 
-
-   <FormField
+        <FormField
           control={form.control}
           name="newPassword"
           render={({ field }) => (
@@ -81,8 +77,6 @@ const CompanySettingsForm = ({  company }: Props) => {
           )}
         />
 
-       
-
         <FormField
           control={form.control}
           name="address"
@@ -91,6 +85,54 @@ const CompanySettingsForm = ({  company }: Props) => {
               <FormLabel>Address*</FormLabel>
               <FormControl>
                 <Input placeholder="address" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="openingTime"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Opening times*</FormLabel>
+              <FormControl>
+                <ul className="flex flex-col gap-2 w-full mt-3">
+                <li className="grid grid-cols-4 gap-4 font-medium" >
+                       <span className="text-xs md:text-base">Day</span>
+                        <span className="text-xs md:text-base">Open time</span>
+                       <span className="text-xs md:text-base">Close time</span>
+                      </li>
+                  {Object.entries(form.watch("openingTime")).map(
+                    ([day, { openTime, closeTime }]) => (
+                      <li className="grid grid-cols-4 gap-4" key={day}>
+                        <span className="text-xs md:text-base shrink">{day}</span>{" "}
+                        <TimeSelect
+                        
+                        open={dropdownStatus[day].openTimeDropdown}
+                        toggle={()=>{toggleDropdown(day,'openTimeDropdown')}}
+                        onChange = {(value:string)=>setter(day as Day,'openTime',value)}
+
+                        
+
+
+                          generateTimeSlots={generateTimeSlots}
+                          time={openTime}
+                        />{" "}
+                        {" "}
+                        <TimeSelect
+                          generateTimeSlots={generateTimeSlots}
+                          time={closeTime}
+                          open={dropdownStatus[day].closeTimeDropdown}
+                          toggle={()=>toggleDropdown(day,'closeTimeDropdown')}
+                          onChange = {(value:string)=>setter(day as Day,'closeTime',value)}
+                        />
+                      </li>
+                    )
+                  )}
+                </ul>
               </FormControl>
 
               <FormMessage />
@@ -223,20 +265,16 @@ const CompanySettingsForm = ({  company }: Props) => {
           )}
         />
 
-      
+        {logOut && (
+          <div className="p-6 font-medium border-yellow-500 bg-yellow-500/20 text-muted-foreground w-full border text-sm">
+            You will be signed out after 7 seconds to log in again with new
+            credentials
+          </div>
+        )}
 
-
-
-
-      
-
-       {logOut&& <div className="p-6 font-medium border-yellow-500 bg-yellow-500/20 text-muted-foreground w-full border text-sm">
-       You will be signed out after 7 seconds to log in again with new credentials
-        </div>}
-
-        <ActionLoaderButton   isLoading={form.formState.isSubmitting}>Update</ActionLoaderButton>
-       
- 
+        <ActionLoaderButton isLoading={form.formState.isSubmitting}>
+          Update
+        </ActionLoaderButton>
       </form>
     </Form>
   );

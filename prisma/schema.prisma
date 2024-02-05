@@ -39,7 +39,7 @@ model Company {
 
   promoted Boolean
 
-  openingTime String[]
+  openingTime Json?
 
   terms String
 

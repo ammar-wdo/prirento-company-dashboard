@@ -209,6 +209,12 @@ export const carSchema = z
 
 
   const newPassword = z.string().min(8, { message: "Enter at least 8 chars" });
+
+  const dayOpeningTimeSchema = z.object({
+    openTime: z.string().min(1, "Open time is required"),
+    closeTime: z.string().min(1, "Close time is required"),
+    closed: z.boolean(),
+  });
   export const companySchema = z.object({
    
  
@@ -228,6 +234,14 @@ export const carSchema = z
     }, "Invalid phone number"),
     logo: z.string().min(1, "You should upload a logo"),
     gallary: z.array(requiredString),
-    openingTime: z.array(z.string()).optional(),
+    openingTime:z.object({
+      Monday: dayOpeningTimeSchema,
+      Tuesday: dayOpeningTimeSchema,
+      Wednesday: dayOpeningTimeSchema,
+      Thursday: dayOpeningTimeSchema,
+      Friday: dayOpeningTimeSchema,
+      Saturday: dayOpeningTimeSchema,
+      Sunday: dayOpeningTimeSchema,
+    }) ,
    
   });
