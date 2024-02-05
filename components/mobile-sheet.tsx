@@ -7,10 +7,7 @@ import {
   } from "@/components/ui/sheet"
 
 import { Menu } from "lucide-react"
-import AsideLinks, { CompanyType } from "./aside-links"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions"
-import Image from "next/image"
+
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 
