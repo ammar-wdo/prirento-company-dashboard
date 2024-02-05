@@ -216,7 +216,7 @@ export const carSchema = z
     password: z.string().min(8, "Password should be at least 8 chars"),
     newPassword: z
     .union([z.string(), z.undefined()])
-    .refine((val) => !val || newPassword.safeParse(val).success),
+    .refine((val) => !val || newPassword.safeParse(val).success,'Enter at least 8 chars'),
     address: requiredString,
     phoneNumber: requiredString.refine((value) => {
       const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;

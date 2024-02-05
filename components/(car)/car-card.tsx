@@ -43,7 +43,8 @@ const CarCard = ({ car }: Props) => {
               className="w-full"
               href={`/dashboard/cars/${car.id}`}
             >
-              <Edit className="w-5 h-5"/>
+              <p className="sm:hidden test-xs">Edit</p>
+              <Edit className="w-5 h-5 hidden sm:block"/>
             </NavigatorButton>
           </ToolTip>
           <ToolTip
@@ -59,7 +60,8 @@ const CarCard = ({ car }: Props) => {
               className="w-full"
               href={`/dashboard/cars/${car.id}/pricing`}
             >
-              <HandCoins className="w-5 h-5"/>
+               <p className="sm:hidden text-xs">Pricings</p>
+              <HandCoins className="w-5 h-5 hidden sm:block"/>
             </NavigatorButton>
           </ToolTip>
           <ToolTip
@@ -75,7 +77,8 @@ const CarCard = ({ car }: Props) => {
               className="w-full"
               href={`/dashboard/cars/${car.id}/availability`}
             >
-              <CheckCircle  className="w-5 h-5"/>
+               <p className="sm:hidden text-xs">Availability</p>
+              <CheckCircle  className="w-5 h-5 hidden sm:block"/>
             </NavigatorButton>
           </ToolTip>
           <ToolTip
@@ -91,7 +94,8 @@ const CarCard = ({ car }: Props) => {
               className="w-full"
               href={`/dashboard/cars/${car.id}/extra-options`}
             >
-              <Settings  className="w-5 h-5"/>
+               <p className="sm:hidden text-xs">Extra options</p>
+              <Settings  className="w-5 h-5 hidden sm:block"/>
             </NavigatorButton>
           </ToolTip>
         </div>
