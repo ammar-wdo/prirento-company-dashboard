@@ -30,7 +30,7 @@ const MobileSheet = ({children}: Props) => {
   if(!mounted) return null
   return (
     <Sheet open={open} onOpenChange={setOpen} >
-    <SheetTrigger className="fixed top-8 right-8 rounded-full p-2 w-8 h-8 bg-main flex items-center justify-center lg:hidden"><Menu className="text-white"/></SheetTrigger>
+    <SheetTrigger className="absolute top-8 right-8 rounded-full p-2 w-8 h-8 bg-main flex items-center justify-center lg:hidden"><Menu className="text-white"/></SheetTrigger>
     <SheetContent style={{color:'white'}}  className="bg-main border-none w-full " side={'left'}>
   
       {children}

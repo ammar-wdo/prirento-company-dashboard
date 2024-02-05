@@ -125,7 +125,7 @@ const CarForm = ({ car, locations, models }: Props) => {
                   <PopoverContent className="w-full p-0">
                     <Command>
                       <CommandInput
-                        placeholder="Search framework..."
+                        placeholder="Search for model"
                         className="h-9"
                       />
                       <CommandEmpty>Model not found</CommandEmpty>
@@ -137,7 +137,7 @@ const CarForm = ({ car, locations, models }: Props) => {
                         
                           <CommandItem
                             className="cursor-pointer"
-                            value={model.name}
+                            value={`${model.carBrand.brand} ${model.name}`}
                             key={model.id}
                           
                             onSelect={() => {
