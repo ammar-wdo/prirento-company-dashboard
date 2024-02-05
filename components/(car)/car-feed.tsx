@@ -35,10 +35,10 @@ const CarFeed = async (props: Props) => {
 
   return (
     <div>
-      {!cars.length && <NoResult title="No cars" />}
-      {!!cars.length && (
+   
+    
        <CarClientFilter cars={cars}/>
-      )}
+
     </div>
   );
 };

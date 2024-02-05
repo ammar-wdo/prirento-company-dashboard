@@ -29,6 +29,9 @@ const CarClientFilter = ({ cars }: Props) => {
    else return car.name.toLocaleLowerCase().includes(filterCarName.toLocaleLowerCase())
   })
 
+
+  {!cars.length && <NoResult title="No cars" />}
+
   return (
     <div className="">
         <div className="flex flex-col gap-2 w-full md:flex-row md:justify-between md:items-center">
@@ -42,7 +45,7 @@ const CarClientFilter = ({ cars }: Props) => {
        
         </div>
        
-        {!filterdCars.length && <NoResult title="No cars found"/>}
+        {!filterdCars.length && <NoResult className="mt-12" title="No cars found"/>}
   <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 gap-4 mt-12">
       {filterdCars.map((car) => (
         <div className="w-full" key={car?.id}>
