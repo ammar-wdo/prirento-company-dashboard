@@ -11,7 +11,7 @@ type Props = {
 const SafeareaWrapper = ({children}: Props) => {
     useViewportHeight()
   return (
-    <div>{children}</div>
+    <div className='safearea'>{children}</div>
   )
 }
 
