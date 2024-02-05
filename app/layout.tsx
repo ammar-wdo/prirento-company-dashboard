@@ -4,7 +4,7 @@ import "./globals.css";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { Toaster } from "sonner";
 import ModalProvider from "@/providers/modal-provider";
-import SafeareaWrapper from "@/components/safearea-wrapper";
+
 
 const inter = Inter({ subsets: ["latin"] });
 

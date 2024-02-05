@@ -14,7 +14,7 @@ const SignoutButton = (props: Props) => {
     await signOut();
     router.refresh();
   };
-  return <Button className="w-full bg-white rounded-xl text-main hover:bg-white/90 hover:text-main" onClick={signOutHandler}><LogOut className="mr-3 h-4 w-4 text-main" />Logout </Button>;
+  return <Button className="w-full bg-white rounded-xl text-main hover:bg-white/90  hover:text-main" onClick={signOutHandler}><LogOut className="mr-3 h-4 w-4 text-main" />Logout </Button>;
 };
 
 export default SignoutButton;

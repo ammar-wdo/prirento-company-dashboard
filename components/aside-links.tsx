@@ -79,7 +79,7 @@ const AsideLinks = ({ companyType }: Props) => {
        
       </button>
       })}
-      <div className="mt-auto w-full">
+      <div className="mt-auto md:mb-0 mb-16 w-full">
         <SignoutButton />
       </div>
     </div>
