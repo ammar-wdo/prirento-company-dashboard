@@ -21,6 +21,7 @@ import ActionLoaderButton from "../action-loader-button";
 import { Day, useCompany } from "@/hooks/company-settings.hook";
 import TimeSelect from "../time-select";
 import { Checkbox } from "../ui/checkbox";
+import { cn } from "@/lib/utils";
 
 type Props = { company: Company };
 
@@ -106,11 +107,11 @@ const CompanySettingsForm = ({ company }: Props) => {
                     <span className="text-xs md:text-base">Day</span>
                     <span className="text-xs md:text-base">Open time</span>
                     <span className="text-xs md:text-base">Close time</span>
-                    <span className="text-xs md:text-base">Closed</span>
+                    <span className="text-xs md:text-base justify-self-center">Closed</span>
                   </li>
                   {Object.entries(form.watch("openingTime")).map(
                     ([day, { openTime, closeTime }]) => (
-                      <li className="grid grid-cols-4 gap-4" key={day}>
+                      <li className={cn("grid grid-cols-4 gap-4",form.watch(`openingTime.${day as Day}.closed`) && 'opacity-30')} key={day}>
                         <span className="text-xs md:text-base shrink">
                           {day}
                         </span>{" "}
@@ -137,6 +138,7 @@ const CompanySettingsForm = ({ company }: Props) => {
                           }
                         />
                         <Checkbox
+                        className="justify-self-center"
                           checked={form.watch(`openingTime.${day as Day}.closed`)}
                           onCheckedChange={()=>toggleClose(day as Day)}
                         />
