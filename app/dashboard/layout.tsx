@@ -1,4 +1,5 @@
 import MobileSheet from "@/components/mobile-sheet";
+import SafeareaWrapper from "@/components/safearea-wrapper";
 import SideBar from "@/components/side-bar";
 import React from "react";
 
@@ -10,10 +11,14 @@ const layout = ({ children }: Props) => {
   return (
     <div className="relative">
       <MobileSheet>
-        <SideBar sheet={true} />
+        <SafeareaWrapper>
+          <SideBar sheet={true} />
+        </SafeareaWrapper>
       </MobileSheet>
       <SideBar />
-      <main className="lg:pl-80 md:p-20 p-8 bg-muted min-h-screen">{children}</main>
+      <main className="lg:pl-80 md:p-20 p-8 bg-muted min-h-screen">
+        {children}
+      </main>
     </div>
   );
 };
