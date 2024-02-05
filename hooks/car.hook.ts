@@ -12,6 +12,7 @@ import { Car } from "@prisma/client";
 import { useGallary } from "./gallary.hook";
 import { addCar, editCar } from "@/actions/car-actions";
 import { toast } from "sonner";
+import { useState } from "react";
 
 
 
@@ -24,6 +25,9 @@ export const useCar = (
       })
     | null
 ) => {
+
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
   const router = useRouter();
   const usedPickups = car?.pickupLocations.map((el) => el.id);
   const usedDropoffs = car?.dropoffLocations.map((el) => el.id);
@@ -100,5 +104,9 @@ export const useCar = (
     imagesFile,
     setImagesFile,
     uploadImages,
+    open,
+    value,
+    setOpen,
+    setValue
   };
 };

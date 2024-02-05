@@ -14,7 +14,7 @@ type Props = {
 
 const CarCard = ({ car }: Props) => {
   return (
-    <div className=" rounded-xl overflow-hidden border flex w-full flex-col ">
+    <div className=" rounded-3xl overflow-hidden border flex w-full flex-col ">
       <SwiperComponent gallary={car.gallary}/>
       <div className="p-4 bg-white flex flex-col gap-2 flex-1">
         <h3 className="capitalize text-lg font-medium">
@@ -40,10 +40,10 @@ const CarCard = ({ car }: Props) => {
           >
             <NavigatorButton
               variant={"siteSecondary"}
-              className="w-full"
+              className="w-full rounded-full"
               href={`/dashboard/cars/${car.id}`}
             >
-              <p className="sm:hidden test-xs">Edit</p>
+              <p className="sm:hidden text-xs">Edit</p>
               <Edit className="w-5 h-5 hidden sm:block"/>
             </NavigatorButton>
           </ToolTip>
@@ -57,7 +57,7 @@ const CarCard = ({ car }: Props) => {
           >
             <NavigatorButton
               variant={"siteSecondary"}
-              className="w-full"
+              className="w-full rounded-full"
               href={`/dashboard/cars/${car.id}/pricing`}
             >
                <p className="sm:hidden text-xs">Pricings</p>
@@ -74,7 +74,7 @@ const CarCard = ({ car }: Props) => {
           >
             <NavigatorButton
               variant={"siteSecondary"}
-              className="w-full"
+              className="w-full rounded-full"
               href={`/dashboard/cars/${car.id}/availability`}
             >
                <p className="sm:hidden text-xs">Availability</p>
@@ -91,7 +91,7 @@ const CarCard = ({ car }: Props) => {
           >
             <NavigatorButton
               variant={"siteSecondary"}
-              className="w-full"
+              className="w-full rounded-full"
               href={`/dashboard/cars/${car.id}/extra-options`}
             >
                <p className="sm:hidden text-xs">Extra options</p>
