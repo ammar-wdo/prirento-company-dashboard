@@ -1,15 +1,17 @@
+import { cn } from '@/lib/utils'
 import React from 'react'
 
 type Props = {
     children:React.ReactNode,
-    title:string
+    title:string,
+    className?:string
 }
 
-const FormSectionsWrapper = ({children,title}: Props) => {
+const FormSectionsWrapper = ({children,title,className}: Props) => {
   return (
     <div className='border rounded-md p-8 bg-white'>
 <h3 className='text-2xl font-semibold capitalize'>{title}</h3>
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6 gap-y-8">
+<div className={cn("grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6 gap-y-8",className)}>
     {children}
 </div>
     </div>

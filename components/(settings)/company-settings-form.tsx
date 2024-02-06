@@ -105,7 +105,7 @@ const CompanySettingsForm = ({ company }: Props) => {
           />
         </FormSectionsWrapper>
 
-        <FormSectionsWrapper title="Working time">
+        <FormSectionsWrapper title="Working time" className="lg:grid-cols-1">
           <FormField
             control={form.control}
             name="openingTime"
