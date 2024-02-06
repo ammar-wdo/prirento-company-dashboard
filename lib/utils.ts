@@ -137,3 +137,15 @@ export const newPasswordCheck = async(newPassword:string | undefined,password:st
 
     return thePassword
 }
+
+
+export const generateTimeSlots = (stepMinutes = 15) => {
+  const slots = [];
+  const totalMinutes = 24 * 60;
+  for (let minute = 0; minute < totalMinutes; minute += stepMinutes) {
+    const hours = Math.floor(minute / 60);
+    const minutes = minute % 60;
+    slots.push(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
+  }
+  return slots;
+}

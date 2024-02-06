@@ -21,7 +21,8 @@ import ActionLoaderButton from "../action-loader-button";
 import { Day, useCompany } from "@/hooks/company-settings.hook";
 import TimeSelect from "../time-select";
 import { Checkbox } from "../ui/checkbox";
-import { cn } from "@/lib/utils";
+import { cn, generateTimeSlots } from "@/lib/utils";
+import OpentimeComponent from "../opentime-component";
 
 type Props = { company: Company };
 
@@ -38,11 +39,11 @@ const CompanySettingsForm = ({ company }: Props) => {
     ImagesPlaceholder,
     uploadImages,
     logOut,
-    generateTimeSlots,
+
     dropdownStatus,
     toggleDropdown,
     setter,
-    toggleClose
+    toggleClose,
   } = useCompany({ company });
   return (
     <Form {...form}>
@@ -107,42 +108,27 @@ const CompanySettingsForm = ({ company }: Props) => {
                     <span className="text-xs md:text-base">Day</span>
                     <span className="text-xs md:text-base">Open time</span>
                     <span className="text-xs md:text-base">Close time</span>
-                    <span className="text-xs md:text-base justify-self-center">Closed</span>
+                    <span className="text-xs md:text-base justify-self-center">
+                      Closed
+                    </span>
                   </li>
                   {Object.entries(form.watch("openingTime")).map(
                     ([day, { openTime, closeTime }]) => (
-                      <li className={cn("grid grid-cols-4 gap-4",form.watch(`openingTime.${day as Day}.closed`) && 'opacity-30')} key={day}>
-                        <span className="text-xs md:text-base shrink">
-                          {day}
-                        </span>{" "}
-                        <TimeSelect
-                          open={dropdownStatus[day].openTimeDropdown}
-                          toggle={() => {
-                            toggleDropdown(day, "openTimeDropdown");
-                          }}
-                          onChange={(value: string) =>
-                            setter(day as Day, "openTime", value)
-                          }
-                          generateTimeSlots={generateTimeSlots}
-                          time={openTime}
-                        />{" "}
-                        <TimeSelect
-                          generateTimeSlots={generateTimeSlots}
-                          time={closeTime}
-                          open={dropdownStatus[day].closeTimeDropdown}
-                          toggle={() =>
-                            toggleDropdown(day, "closeTimeDropdown")
-                          }
-                          onChange={(value: string) =>
-                            setter(day as Day, "closeTime", value)
-                          }
-                        />
-                        <Checkbox
-                        className="justify-self-center"
-                          checked={form.watch(`openingTime.${day as Day}.closed`)}
-                          onCheckedChange={()=>toggleClose(day as Day)}
-                        />
-                      </li>
+                      <OpentimeComponent
+                      key={day}
+                        closeTime={closeTime}
+                        openTime={openTime}
+                        day={day as Day}
+                        dropdownStatus={dropdownStatus}
+                        setter={setter}
+                        toggleClose={toggleClose}
+                        toggleDropdown={toggleDropdown}
+                        isClosed={form.watch(
+                          `openingTime.${day as Day}.closed`
+                        )}
+                        isChecked={form.watch(`openingTime.${day as Day}.closed`)}
+                      />
+                   
                     )
                   )}
                 </ul>

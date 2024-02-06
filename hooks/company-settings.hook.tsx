@@ -27,7 +27,7 @@ type OpeningTimes ={
 }
 
 // Define the structure for the dropdown status state
-type DropdownStatus= {
+export type DropdownStatus= {
   [day: string]: {
     openTimeDropdown: boolean;
     closeTimeDropdown: boolean;
@@ -118,7 +118,7 @@ export const useCompany = ({ company }: Props) => {
   const {
     ImagesPlaceholder,
 
-    deleteanImage,
+ 
     imagesFile,
 
     setImagesFile,
@@ -126,16 +126,7 @@ export const useCompany = ({ company }: Props) => {
   } = useGallary({ form });
 
 
-   const generateTimeSlots = (stepMinutes = 15) => {
-    const slots = [];
-    const totalMinutes = 24 * 60;
-    for (let minute = 0; minute < totalMinutes; minute += stepMinutes) {
-      const hours = Math.floor(minute / 60);
-      const minutes = minute % 60;
-      slots.push(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
-    }
-    return slots;
-  }
+   
 
 
   const setter = (day:Day,type:'openTime' | 'closeTime',value:string)=>{
@@ -162,7 +153,7 @@ export const useCompany = ({ company }: Props) => {
     ImagesPlaceholder,
     uploadImages,
     logOut,
-    generateTimeSlots,
+  
     dropdownStatus,
     toggleDropdown,
     setter,
