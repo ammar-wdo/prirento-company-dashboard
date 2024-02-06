@@ -251,6 +251,7 @@ const CarAvailabilityForm = ({ carAvailability }: Props) => {
                 deleteFunction: deleteCarAvailability,
                 deleteId: carAvailability.id,
                 modal: "delete",
+                url:`/dashboard/cars/${carAvailability.carId}/availability`
               }}
             >
               Delete

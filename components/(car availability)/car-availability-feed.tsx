@@ -47,7 +47,7 @@ car:{companyId:company?.id}
     </TableRow>
   </TableHeader>
   <TableBody>
- {availabilities.map(availability=>   <TableRow key={availability.id}>
+ {availabilities.map(availability=>   <TableRow key={availability.id} className='capitalize'>
       <TableCell className="font-medium">{availability.label || "N/A"}</TableCell>
       <TableCell>{formatDate(availability.startDate)}</TableCell>
       <TableCell>{formatDate(availability.endDate)}</TableCell>
