@@ -35,7 +35,11 @@ export type DropdownStatus= {
   };
 }
 
-export type Day = "Monday"|"Tuesday"|"Wednesday"|"Thursday"|"Friday"|"Saturday"|"Saturday"
+export const daysOrder: Day[] = [
+  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+]
+
+export type Day = "Monday"|"Tuesday"|"Wednesday"|"Thursday"|"Friday"|"Saturday"|"Sunday"
 
 export const useCompany = ({ company }: Props) => {
   const router = useRouter();
