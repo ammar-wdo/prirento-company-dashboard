@@ -109,7 +109,7 @@ const CompanySettingsForm = ({ company }: Props) => {
           name="openingTime"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Opening times*</FormLabel>
+              <FormLabel>Operating hours*</FormLabel>
               <FormControl>
               <ul className="flex flex-col gap-2 w-full mt-3">
   <li className="grid grid-cols-4 gap-4 font-medium">
