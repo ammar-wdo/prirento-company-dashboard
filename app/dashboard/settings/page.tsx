@@ -12,7 +12,7 @@ const page = async(props: Props) => {
     <div>
       <Heading title='Settings' description='Update your informations'/>
 
-      <div className='mt-12 max-w-5xl md:px-6 px-2 py-6  rounded-md bg-white border '>
+      <div className='mt-12 max-w-5xl rounded-md  '>
         <CompanySettingsForm company={company as Company}/>
       </div>
     </div>

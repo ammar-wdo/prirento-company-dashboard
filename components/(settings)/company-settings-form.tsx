@@ -23,6 +23,7 @@ import TimeSelect from "../time-select";
 import { Checkbox } from "../ui/checkbox";
 import { cn, generateTimeSlots } from "@/lib/utils";
 import OpentimeComponent from "../opentime-component";
+import FormWrapper from "../form-wrapper";
 
 type Props = { company: Company };
 
@@ -51,6 +52,9 @@ const CompanySettingsForm = ({ company }: Props) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-8"
       >
+        <FormWrapper>
+
+  
         <FormField
           control={form.control}
           name="email"
@@ -95,6 +99,10 @@ const CompanySettingsForm = ({ company }: Props) => {
             </FormItem>
           )}
         />
+              </FormWrapper>
+
+<FormWrapper>
+
 
         <FormField
           control={form.control}
@@ -135,6 +143,11 @@ const CompanySettingsForm = ({ company }: Props) => {
             </FormItem>
           )}
         />
+        </FormWrapper>
+
+        <FormWrapper>
+
+      
 
         <FormField
           control={form.control}
@@ -196,6 +209,10 @@ const CompanySettingsForm = ({ company }: Props) => {
             </FormItem>
           )}
         />
+          </FormWrapper>
+          <FormWrapper>
+
+      
 
         <FormField
           control={form.control}
@@ -260,6 +277,7 @@ const CompanySettingsForm = ({ company }: Props) => {
             </FormItem>
           )}
         />
+            </FormWrapper>
 
         {logOut && (
           <div className="p-6 font-medium border-yellow-500 bg-yellow-500/20 text-muted-foreground w-full border text-sm">
