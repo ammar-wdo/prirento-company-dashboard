@@ -3,6 +3,7 @@ import Heading from '@/components/heading'
 import NavigatorButton from '@/components/navigator-button'
 import prisma from '@/lib/prisma'
 import { getCompany } from '@/lib/utils'
+import { Plus } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
@@ -32,7 +33,7 @@ const page = async({params}: Props) => {
     <div>
       <div className='flex items-center justify-between'>
       <Heading title={car ? `${car.carModel.carBrand.brand} ${car.carModel.name} - Availability` : 'Availability'} description='Manage your car availability' />
-      <NavigatorButton href={`/dashboard/cars/${params.carId}/availability/new`} >Add new date </NavigatorButton>
+      <NavigatorButton href={`/dashboard/cars/${params.carId}/availability/new`} ><Plus className='mr-2 h-3 w-3' /> Add new date </NavigatorButton>
       </div>
       <div className='mt-12'>
         <CarAvailabilityFeed carId={params.carId} />

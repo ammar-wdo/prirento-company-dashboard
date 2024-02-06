@@ -3,6 +3,7 @@ import Heading from '@/components/heading'
 import NavigatorButton from '@/components/navigator-button'
 import prisma from '@/lib/prisma'
 import { getCompany } from '@/lib/utils'
+import { Plus } from 'lucide-react'
 import React from 'react'
 
 type Props = {params:{carId:string}}
@@ -41,7 +42,7 @@ const page = async({params}: Props) => {
        "Create extra options"
         }
       />
-      <NavigatorButton href={`/dashboard/cars/${params.carId}/extra-options/new`}>Create extra option</NavigatorButton>
+      <NavigatorButton href={`/dashboard/cars/${params.carId}/extra-options/new`}><Plus className='mr-2 h-3 w-3' /> Create extra option</NavigatorButton>
       </div>
        
 

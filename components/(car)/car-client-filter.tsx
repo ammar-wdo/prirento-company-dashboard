@@ -36,7 +36,7 @@ const CarClientFilter = ({ cars }: Props) => {
     <div className="">
         <div className="flex flex-col gap-2 w-full md:flex-row md:justify-between md:items-center">
         <NavigatorButton href="/dashboard/cars/new" variant={"site"}>
-          <Plus  /> Create New Car
+          <Plus  className="mr-2 w-4 h-4"/>Create New Car
         </NavigatorButton>
         <div className="md:w-[300px] w-full relative border rounded-md p-1 bg-white  pl-5">
             <Search className="absolute left-2 top-1/2 -translate-y-[50%] w-5 h-5"/>
