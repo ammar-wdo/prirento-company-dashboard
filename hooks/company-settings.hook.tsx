@@ -88,6 +88,7 @@ export const useCompany = ({ company }: Props) => {
       whatsApp: company?.whatsApp || "",
       logo: company?.logo || "",
       gallary: company?.gallary || [],
+      away:company?.away || false,
 
       openingTime: company?.openingTime as unknown as OpeneingsTime  || defaultOpeningTimes,
     },

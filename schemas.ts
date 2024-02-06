@@ -234,6 +234,7 @@ export const carSchema = z
     }, "Invalid phone number"),
     logo: z.string().min(1, "You should upload a logo"),
     gallary: z.array(requiredString),
+    away:z.coerce.boolean(),
     openingTime:z.object({
       Monday: dayOpeningTimeSchema,
       Tuesday: dayOpeningTimeSchema,
