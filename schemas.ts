@@ -11,7 +11,7 @@ const slugSchema = requiredString
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug format");
 
 export const loginSchema = z.object({
-  email: requiredString.email().max(20, "maximum 20 characters"),
+  email: requiredString.email().max(100, "maximum 100 characters"),
   password: z
     .string()
     .min(8, "Password should be at least 8 chars")
