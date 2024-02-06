@@ -18,7 +18,7 @@ import "react-phone-input-2/lib/style.css";
 import { SingleImageDropzone } from "../single-image-dropezone";
 
 import ActionLoaderButton from "../action-loader-button";
-import { Day, useCompany } from "@/hooks/company-settings.hook";
+import { Day, daysOrder, useCompany } from "@/hooks/company-settings.hook";
 import TimeSelect from "../time-select";
 import { Checkbox } from "../ui/checkbox";
 import { cn, generateTimeSlots } from "@/lib/utils";
@@ -103,35 +103,32 @@ const CompanySettingsForm = ({ company }: Props) => {
             <FormItem>
               <FormLabel>Opening times*</FormLabel>
               <FormControl>
-                <ul className="flex flex-col gap-2 w-full mt-3">
-                  <li className="grid grid-cols-4 gap-4 font-medium">
-                    <span className="text-xs md:text-base">Day</span>
-                    <span className="text-xs md:text-base">Open time</span>
-                    <span className="text-xs md:text-base">Close time</span>
-                    <span className="text-xs md:text-base justify-self-center">
-                      Closed
-                    </span>
-                  </li>
-                  {Object.entries(form.watch("openingTime")).map(
-                    ([day, { openTime, closeTime }]) => (
-                      <OpentimeComponent
-                      key={day}
-                        closeTime={closeTime}
-                        openTime={openTime}
-                        day={day as Day}
-                        dropdownStatus={dropdownStatus}
-                        setter={setter}
-                        toggleClose={toggleClose}
-                        toggleDropdown={toggleDropdown}
-                        isClosed={form.watch(
-                          `openingTime.${day as Day}.closed`
-                        )}
-                        isChecked={form.watch(`openingTime.${day as Day}.closed`)}
-                      />
-                   
-                    )
-                  )}
-                </ul>
+              <ul className="flex flex-col gap-2 w-full mt-3">
+  <li className="grid grid-cols-4 gap-4 font-medium">
+    <span className="text-xs md:text-base">Day</span>
+    <span className="text-xs md:text-base">Open time</span>
+    <span className="text-xs md:text-base">Close time</span>
+    <span className="text-xs md:text-base justify-self-center">Closed</span>
+  </li>
+  {daysOrder.map(day => {
+    // Assuming form.watch("openingTime") returns an object with the same structure as defaultOpeningTimes
+    const dayData = form.watch(`openingTime.${day}`);
+    return (
+      <OpentimeComponent
+        key={day}
+        closeTime={dayData.closeTime}
+        openTime={dayData.openTime}
+        day={day}
+        dropdownStatus={dropdownStatus}
+        setter={setter}
+        toggleClose={toggleClose}
+        toggleDropdown={toggleDropdown}
+        isClosed={dayData.closed}
+        isChecked={dayData.closed}
+      />
+    );
+  })}
+</ul>
               </FormControl>
 
               <FormMessage />
