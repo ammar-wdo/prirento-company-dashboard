@@ -7,7 +7,7 @@ console.log('i')
     try {
         const apiSecret = req.headers.get('api-Secret')
         
-        if(!apiSecret || apiSecret !== process.env.API_SECRET) return NextResponse.json({error:"Unauthorized request"},{status:403,statusText:"Unauthorized request"})
+        // if(!apiSecret || apiSecret !== process.env.API_SECRET) return NextResponse.json({error:"Unauthorized request"},{status:403,statusText:"Unauthorized request"})
 
         const brands = await prisma.carBrand.findMany()
        
