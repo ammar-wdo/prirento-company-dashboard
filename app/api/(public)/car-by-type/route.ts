@@ -21,6 +21,7 @@ export const GET = async (req: NextRequest) => {
       where: {
         carType: carType as CarTypes,
         disabled: false,
+        carStatus:'active',
         company: {
           away: false,
         },
