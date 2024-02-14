@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
+  url= env("DATABASE_URL")
+  directUrl= env("DIRECT_URL")
 }
 
 
@@ -40,8 +40,8 @@ model Company {
 
   promoted Boolean
 
-  openingTime Json?
-  away Boolean @default(false)
+  openingTime Json? 
+    away Boolean @default(false)
 
   terms String
 
@@ -64,6 +64,8 @@ model Company {
 model Location {
   id   String @id @default(uuid())
   name String
+
+  slug  String @unique
 
   subLocations SubLocation[]
 
@@ -88,6 +90,7 @@ model SubLocation {
   id   String @id @default(uuid())
   name String
 
+  slug  String @unique
   locationId String
   location   Location @relation(fields: [locationId], references: [id])
 
@@ -335,6 +338,33 @@ model CarExtraOption {
   updatedAt DateTime @updatedAt
 }
 
+model BlogCategory {
+  id    String @id @default(uuid())
+  label String @unique
+  slug  String @unique
+
+  blogs     Blog[]
+  createdAt DateTime @default(now())
+  updatedUt DateTime @updatedAt
+}
+
+model Blog {
+  id String @id @default(uuid())
+
+  title            String
+  content          String
+  slug             String   @unique
+  tags             String[]
+  featuredImage    String
+  categoryId       String
+  author           String
+  shortDescription String
+
+  category BlogCategory @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedUt DateTime @updatedAt
+}
 
 
 
