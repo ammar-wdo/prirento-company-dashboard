@@ -30,7 +30,7 @@ export const carTypes = [
   "business",
 ] as const;
 export const transmition = ["auto", "manual"] as const;
-export const electric = ["fully_electric", "hybrid"] as const;
+export const electric = ["none","fully_electric", "hybrid"] as const;
 export const carStatus = ["pending", "active"] as const;
 export const carColors = [
   "Black",

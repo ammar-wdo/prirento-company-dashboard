@@ -390,6 +390,7 @@ enum CarTypes {
 }
 
 enum Electric {
+  none
   fully_electric
   hybrid
 }
