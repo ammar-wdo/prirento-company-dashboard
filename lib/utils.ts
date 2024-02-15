@@ -224,3 +224,37 @@ export function formatDate(
 
   return new Intl.DateTimeFormat(locale, mergedOptions).format(date);
 }
+
+export function calculateRentalPeriod(startDate: Date, endDate: Date): { days: number, extraHours: number } {
+  // Calculate the total difference in milliseconds
+  const diffMs = endDate.getTime() - startDate.getTime();
+  
+  // Convert milliseconds to hours and days
+  const hoursTotal = diffMs / (1000 * 60 * 60);
+  const days = Math.floor(hoursTotal / 24);
+  const extraHours = Math.floor(hoursTotal % 24);
+  
+  return { days, extraHours };
+}
+
+export function calculateTotalRentalPriceWithAvailability(
+  pricings: number[], 
+  hourlyPrice: number | null | undefined, 
+  startDate: Date, 
+  endDate: Date
+): { totalPrice: number | null, isAvailable: boolean } {
+  const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
+
+  if((days > 0 && !pricings[days-1]) || !hourlyPrice) return {isAvailable:false,totalPrice:null}
+
+  // Calculate day price
+  const dayPrice = days > 0 ? pricings[days - 1] : 0;
+
+  // Calculate price for extra hours, if hourly price is specified
+  const extraHoursPrice = hourlyPrice ? extraHours * hourlyPrice : 0;
+  
+  // Sum day price and extra hours price to get total price
+  const totalPrice = dayPrice + extraHoursPrice;
+
+  return { totalPrice, isAvailable: true };
+}

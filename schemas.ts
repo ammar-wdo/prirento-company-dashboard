@@ -18,7 +18,6 @@ export const loginSchema = z.object({
     .max(20, "maximum 20 characters"),
 });
 
-
 //car schema
 
 export const carTypes = [
@@ -30,7 +29,7 @@ export const carTypes = [
   "business",
 ] as const;
 export const transmition = ["auto", "manual"] as const;
-export const electric = ["none","fully_electric", "hybrid"] as const;
+export const electric = ["none", "fully_electric", "hybrid"] as const;
 export const carStatus = ["pending", "active"] as const;
 export const carColors = [
   "Black",
@@ -102,44 +101,40 @@ const electricSchema = z
     message: "invalid electric option",
   });
 
+const numericValues = z.object({
+  seats: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine(
+      (value) => value >= 1 && value <= 7,
+      "Minimum of 1 and maximum of 7"
+    ),
+  doors: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine(
+      (value) => value >= 2 && value <= 4,
+      "Minimum of 2 and maximum of 4"
+    ),
+  deposite: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine((val) => val > 0, "Enter positive value"),
 
+  kmIncluded: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine((val) => val > 0, "Enter positive value"),
 
-const numericValues = z
-  .object({
-    seats: requiredNumber
-      .refine((val) => val, "Required field")
-      .refine(
-        (value) => value >= 1 && value <= 7,
-        "Minimum of 1 and maximum of 7"
-      ),
-    doors: requiredNumber
-      .refine((val) => val, "Required field")
-      .refine(
-        (value) => value >= 2 && value <= 4,
-        "Minimum of 2 and maximum of 4"
-      ),
-    deposite: requiredNumber
-      .refine((val) => val, "Required field")
-      .refine((val) => val > 0, "Enter positive value"),
- 
-    
-    kmIncluded: requiredNumber
-      .refine((val) => val, "Required field")
-      .refine((val) => val > 0, "Enter positive value"),
+  minimumHours: z.coerce
+    .number()
+    .positive({ message: "Enter positive value " })
+    .optional()
+    .or(z.literal(undefined)),
+  deleviryFee: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine((val) => val > 0, "Enter positive value"),
+  coolDown: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine((val) => val > 0, "Enter positive value"),
+});
 
-    minimumHours: z.coerce
-      .number()
-      .positive({ message: "Enter positive value " })
-      .optional()
-      .or(z.literal(undefined)),
-    deleviryFee: requiredNumber
-      .refine((val) => val, "Required field")
-      .refine((val) => val > 0, "Enter positive value"),
-    coolDown: requiredNumber
-      .refine((val) => val, "Required field")
-      .refine((val) => val > 0, "Enter positive value"),
-  })
- 
 export const carSchema = z
   .object({
     description: requiredString,
@@ -150,7 +145,6 @@ export const carSchema = z
       .refine((data) => data.length === 4, {
         message: "Year must be exactly 4 digits.",
       }),
-    
 
     engine: requiredString,
 
@@ -165,8 +159,7 @@ export const carSchema = z
     disabled: z.boolean().optional(),
     pickupLocations: z.array(z.string()).min(1, "Pick at least one location"),
     dropoffLocations: z.array(z.string()).min(1, "Pick at least one location"),
- 
- 
+
     carModelId: requiredString,
   })
 
@@ -177,106 +170,122 @@ export const carSchema = z
   .and(colorSchema)
   .and(numericValues);
 
-
-
-
-  export const carPricingsSchema = z.object({
-    pricings: z
-      .array(z.coerce.number())
-      .refine((pricings) => !pricings.includes(0), {
-        message: "Pricings cannot include zero",
-      })
-      .refine((pricings) => !pricings.some((val) => val < 0), {
-        message: "Negative values not allowed",
-      }),
-    hourPrice: requiredNumber.refine((val) => val > 0, "Enter positive value"),
-  });
-
-
-
-
-
-  export const carExtraOptionsSchema = z.object({
-    label:requiredString,
-    description:requiredString,
-    price:requiredNumber .refine((val) => val, "Required field")
-    .refine((val) => val > 0, "Enter positive value"),
-  
-    logo:requiredString,
-   
-
-  })
-
-
-  const newPassword = z.string().min(8, { message: "Enter at least 8 chars" });
-
-  const dayOpeningTimeSchema = z.object({
-    openTime: z.string().min(1, "Open time is required"),
-    closeTime: z.string().min(1, "Close time is required"),
-    closed: z.boolean(),
-  });
-  export const companySchema = z.object({
-   
- 
-    email: requiredString.min(2, "E-mail is required").email(),
-    password: z.string().min(8, "Password should be at least 8 chars"),
-    newPassword: z
-    .union([z.string(), z.undefined()])
-    .refine((val) => !val || newPassword.safeParse(val).success,'Enter at least 8 chars'),
-    address: requiredString,
-    phoneNumber: requiredString.refine((value) => {
-      const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;
-      return phoneRegex.test(value);
-    }, "Invalid phone number"),
-    whatsApp: requiredString.refine((value) => {
-      const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;
-      return phoneRegex.test(value);
-    }, "Invalid phone number"),
-    logo: z.string().min(1, "You should upload a logo"),
-    gallary: z.array(requiredString),
-    away:z.coerce.boolean(),
-    openingTime:z.object({
-      Monday: dayOpeningTimeSchema,
-      Tuesday: dayOpeningTimeSchema,
-      Wednesday: dayOpeningTimeSchema,
-      Thursday: dayOpeningTimeSchema,
-      Friday: dayOpeningTimeSchema,
-      Saturday: dayOpeningTimeSchema,
-      Sunday: dayOpeningTimeSchema,
-    }) ,
-   
-  });
-
-
-
-
-  const timeSchema = z.object({
-    startTime: z.string().min(1, "Start time is required"),
-    endTime: z.string().min(1, "End time is required"),
-  });
-  
-  const dateSchema = z.object({
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().min(1, "End date is required"),
-  });
-  
-  export const carAvailabilitySchema = z
-    .object({
-      label: z.string().optional(),
+export const carPricingsSchema = z.object({
+  pricings: z
+    .array(z.coerce.number())
+    .refine((pricings) => !pricings.includes(0), {
+      message: "Pricings cannot include zero",
     })
-    .and(timeSchema)
-    .and(dateSchema)
+    .refine((pricings) => !pricings.some((val) => val < 0), {
+      message: "Negative values not allowed",
+    }),
+  hourPrice: requiredNumber.refine((val) => val > 0, "Enter positive value"),
+});
+
+export const carExtraOptionsSchema = z.object({
+  label: requiredString,
+  description: requiredString,
+  price: requiredNumber
+    .refine((val) => val, "Required field")
+    .refine((val) => val > 0, "Enter positive value"),
+
+  logo: requiredString,
+});
+
+const newPassword = z.string().min(8, { message: "Enter at least 8 chars" });
+
+const dayOpeningTimeSchema = z.object({
+  openTime: z.string().min(1, "Open time is required"),
+  closeTime: z.string().min(1, "Close time is required"),
+  closed: z.boolean(),
+});
+export const companySchema = z.object({
+  email: requiredString.min(2, "E-mail is required").email(),
+  password: z.string().min(8, "Password should be at least 8 chars"),
+  newPassword: z
+    .union([z.string(), z.undefined()])
     .refine(
-      (data) => {
-        const { startDate, endDate, startTime, endTime } = data;
-  
-        const startDateTime = new Date(`${startDate}T${startTime}`);
-        const endDateTime = new Date(`${endDate}T${endTime}`);
-  
-        return startDateTime < endDateTime;
-      },
-      {
-        message: "Start date must be before end date",
-        path: ["endTime"],
-      }
-    );
+      (val) => !val || newPassword.safeParse(val).success,
+      "Enter at least 8 chars"
+    ),
+  address: requiredString,
+  phoneNumber: requiredString.refine((value) => {
+    const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;
+    return phoneRegex.test(value);
+  }, "Invalid phone number"),
+  whatsApp: requiredString.refine((value) => {
+    const phoneRegex = /^(?:[0-9]){1,3}(?:[ -]*[0-9]){6,14}$/;
+    return phoneRegex.test(value);
+  }, "Invalid phone number"),
+  logo: z.string().min(1, "You should upload a logo"),
+  gallary: z.array(requiredString),
+  away: z.coerce.boolean(),
+  openingTime: z.object({
+    Monday: dayOpeningTimeSchema,
+    Tuesday: dayOpeningTimeSchema,
+    Wednesday: dayOpeningTimeSchema,
+    Thursday: dayOpeningTimeSchema,
+    Friday: dayOpeningTimeSchema,
+    Saturday: dayOpeningTimeSchema,
+    Sunday: dayOpeningTimeSchema,
+  }),
+});
+
+const timeSchema = z.object({
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+});
+
+const dateSchema = z.object({
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
+});
+
+export const carAvailabilitySchema = z
+  .object({
+    label: z.string().optional(),
+  })
+  .and(timeSchema)
+  .and(dateSchema)
+  .refine(
+    (data) => {
+      const { startDate, endDate, startTime, endTime } = data;
+
+      const startDateTime = new Date(`${startDate}T${startTime}`);
+      const endDateTime = new Date(`${endDate}T${endTime}`);
+
+      return startDateTime < endDateTime;
+    },
+    {
+      message: "Start date must be before end date",
+      path: ["endTime"],
+    }
+  );
+
+export const FiltersSchema = z
+  .object({
+    location: requiredString,
+    dropOffLocation: z.string().optional(),
+
+    brand: z.union([z.string(), z.array(z.string())]).optional(),
+    carType: z.union([z.string(), z.array(z.string())]).optional(),
+    seats: z.union([z.string(), z.array(z.string())]).optional(),
+    doors: z.union([z.string(), z.array(z.string())]).optional(),
+    electric: z.union([z.string(), z.array(z.string())]).optional(),
+  })
+  .and(timeSchema)
+  .and(dateSchema)
+  .refine(
+    (data) => {
+      const { startDate, endDate, startTime, endTime } = data;
+
+      const startDateTime = new Date(`${startDate}T${startTime}`);
+      const endDateTime = new Date(`${endDate}T${endTime}`);
+
+      return startDateTime < endDateTime;
+    },
+    {
+      message: "Start date must be before end date",
+      path: ["endTime"],
+    }
+  );
