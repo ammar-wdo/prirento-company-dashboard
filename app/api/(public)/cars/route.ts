@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import {
+  Description,
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
+  mapDescriptionsToNumbers,
   processCars,
 } from "@/lib/utils";
 import { FiltersSchema } from "@/schemas";
@@ -55,10 +57,21 @@ export const GET = async (req: NextRequest) => {
       seats,
     } = validQueries.data;
 
+    let doorsArray;
+    if (doors) {
+      doorsArray = mapDescriptionsToNumbers(doors as unknown as Description[]);
+    }
+
+    let seatsArray;
+    if (seats) {
+      seatsArray = mapDescriptionsToNumbers(seats as unknown as Description[]);
+    }
+
+
     const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
     const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
 
-    console.log("query");
+
 
     const carsRes = await prisma.car.findMany({
       where: {
@@ -67,6 +80,8 @@ export const GET = async (req: NextRequest) => {
         company: {
           away: false,
         },
+        ...(seats && { seats: { in: seatsArray } }),
+        ...(doors && { doors: { in: doorsArray } }),
         ...(electric
           ? Array.isArray(electric)
             ? { electric: { in: electric as Electric[] } }

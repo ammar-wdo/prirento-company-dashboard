@@ -312,3 +312,51 @@ export function processCars(
   const notAvailableCars = allCars.filter(car => car.notAvailable);
 
   return { availableCars, notAvailableCars }}
+
+
+
+
+  export type Description = '2 seats' | '4+ seats' | '2 doors' | '4+ doors'
+
+export function mapDescriptionsToNumbers(descriptions: Description[] | Description | undefined): number[]  {
+  let numbers: number[] = [];
+  console.log('descriptions',descriptions)
+
+  // Process each description and map it to the corresponding numbers
+
+
+  if(Array.isArray(descriptions)){
+  descriptions.forEach(description => {
+    switch (description) {
+     
+      case '2 seats':
+      case '2 doors':
+        numbers.push(2);
+        break;
+      case '4+ seats':
+      case '4+ doors':
+        numbers.push(...[ 4, 5, 6, 7]);
+        break;
+    }
+  });}
+
+  switch (descriptions) {
+   
+    case '2 seats':
+    case '2 doors':
+      numbers.push(2);
+      break;
+    case '4+ seats':
+    case '4+ doors':
+      numbers.push(...[ 4, 5, 6, 7]);
+      break;
+  }
+
+
+
+  // Remove duplicates by converting the numbers array to a Set, then back to an array
+  const uniqueNumbers = Array.from(new Set(numbers));
+
+  // Sort the numbers in ascending order
+  return uniqueNumbers.sort((a, b) => a - b);
+}
