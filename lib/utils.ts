@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from "./prisma";
+import { Car, CarAvailability, CarBrand, CarModel, Company } from "@prisma/client";
+import { CarPublicType } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -238,14 +240,16 @@ export function calculateRentalPeriod(startDate: Date, endDate: Date): { days: n
 }
 
 export function calculateTotalRentalPriceWithAvailability(
-  pricings: number[], 
-  hourlyPrice: number | null | undefined, 
   startDate: Date, 
-  endDate: Date
-): { totalPrice: number | null, isAvailable: boolean } {
+  endDate: Date,
+  pricings: number[], 
+  hourlyPrice: number | null | undefined
+): { totalPrice: number | null, isAvailable: boolean, rentalPeriodDescription: string } {
   const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
 
-  if((days > 0 && !pricings[days-1]) || !hourlyPrice) return {isAvailable:false,totalPrice:null}
+  if ((days > 0 && !pricings[days - 1]) || !hourlyPrice) {
+    return { isAvailable: false, totalPrice: null, rentalPeriodDescription: "Not available" };
+  }
 
   // Calculate day price
   const dayPrice = days > 0 ? pricings[days - 1] : 0;
@@ -256,5 +260,55 @@ export function calculateTotalRentalPriceWithAvailability(
   // Sum day price and extra hours price to get total price
   const totalPrice = dayPrice + extraHoursPrice;
 
-  return { totalPrice, isAvailable: true };
+  // Generate rental period description
+  let rentalPeriodDescription = '';
+  if (days > 0) {
+    rentalPeriodDescription += `${days} day${days > 1 ? 's' : ''}`;
+  }
+  if (extraHours > 0) {
+    rentalPeriodDescription += (days > 0 ? ' and ' : '') + `${extraHours} hour${extraHours > 1 ? 's' : ''}`;
+  }
+
+  return { totalPrice, isAvailable: true, rentalPeriodDescription };
 }
+
+
+
+
+export function processCars(
+  cars: (Car &{availabilities:CarAvailability[],carModel:CarModel & {carBrand:{brand:string}},company:{logo:string}})[] ,
+  startDateObject: Date,
+  endDateObject: Date
+): { availableCars: CarPublicType[], notAvailableCars: CarPublicType[] } {
+
+  const allCars = cars.map(car => {
+    const { totalPrice, isAvailable,rentalPeriodDescription } = calculateTotalRentalPriceWithAvailability(
+      startDateObject,
+      endDateObject,
+      car.pricings,
+      car.hourPrice
+    );
+
+    const notAvailable = !isAvailable || car.availabilities.length > 0;
+
+    return {
+      id: car.id,
+      carName: `${car.carModel.carBrand.brand} ${car.carModel.name}`,
+      year: car.year,
+      seats: car.seats,
+      kmIncluded: car.kmIncluded,
+      carType: car.carType,
+      gallary: car.gallary, 
+      transmition: car.transmition, 
+      availablePrice: totalPrice,
+      companyLogo: car.company.logo,
+      notAvailable,
+      period:rentalPeriodDescription
+    };
+  });
+
+
+  const availableCars = allCars.filter(car => !car.notAvailable);
+  const notAvailableCars = allCars.filter(car => car.notAvailable);
+
+  return { availableCars, notAvailableCars }}
