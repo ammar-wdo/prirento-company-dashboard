@@ -303,7 +303,8 @@ export function processCars(
       availablePrice: totalPrice,
       companyLogo: car.company.logo,
       notAvailable,
-      period:rentalPeriodDescription
+      period:rentalPeriodDescription,
+      slug:car.slug as string
     };
   });
 
@@ -311,7 +312,8 @@ export function processCars(
   const availableCars = allCars.filter(car => !car.notAvailable);
   const notAvailableCars = allCars.filter(car => car.notAvailable);
 
-  return { availableCars, notAvailableCars }}
+  return { availableCars, notAvailableCars }
+}
 
 
 

@@ -12,10 +12,13 @@ export type CarCardType = {
     transmition: Transmission;
     oneDayPrice: number;
     companyLogo: string;
+    slug:string
+  
   };
   
   export type CarPublicType = Omit<CarCardType, 'oneDayPrice'> & {
     availablePrice: number | null;
     notAvailable: boolean;
     period:string
+
   };

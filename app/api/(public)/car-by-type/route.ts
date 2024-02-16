@@ -58,7 +58,8 @@ export const GET = async (req: NextRequest) => {
         gallary: car.gallary,
         transmition: car.transmition,
         oneDayPrice: car.pricings[0],
-        companyLogo:car.company.logo
+        companyLogo:car.company.logo,
+        slug:car.slug
       };
     });
 
