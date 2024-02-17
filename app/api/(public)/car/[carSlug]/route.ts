@@ -3,6 +3,7 @@ import {
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
   doesOverlap,
+  formatDate,
   isCarAvailable,
 } from "@/lib/utils";
 import { FilterOneCarSchema } from "@/schemas";
@@ -116,13 +117,15 @@ export const GET = async (
       endDate: el.endDate,
     }));
     const carPickLocations = car.pickupLocations.map((el) => ({
-      slug: el.slug,
+      slug: el.slug,name:el.name
     }));
     const carDropLocations = car.dropoffLocations.map((el) => ({
-      slug: el.slug,
+      slug: el.slug,name:el.name
     }));
 
-    const { isAvailable, message } = isCarAvailable({
+
+
+    const { isAvailable, message,pickupLocations,dropOffLocations } = isCarAvailable({
       priceAvailability,
       location,
       dropOffLocation,
@@ -151,12 +154,15 @@ export const GET = async (
       specifications: car.additionalFeatures,
       price: totalPrice,
       duration: rentalPeriodDescription,
+      location:car.pickupLocations.find(el=>el.slug===location)?.name,
+      startDate:startDateObject,
+      endDate:endDateObject,
       availability: {
         isAvailable,
-        message,
+        message,pickupLocations,dropOffLocations
       },
     };
-    console.log(returnedCar.brand);
+
 
     return NextResponse.json(
       { car: returnedCar, success: true },

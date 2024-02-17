@@ -391,8 +391,8 @@ export function doesOverlap(
 type IsCarAvailable = {
   priceAvailability: boolean;
   location: string;
-  carPickLocations: { slug: string }[] | [];
-  carDropLocations: { slug: string }[] | [];
+  carPickLocations: { slug: string,name:string }[] | [];
+  carDropLocations: { slug: string,name:string }[] | [];
   dropOffLocation: string | undefined;
   rangeDates: { startDate: Date; endDate: Date }[] | [];
   clientStartDate: Date;
@@ -408,9 +408,11 @@ export const isCarAvailable = ({
   clientStartDate,
   carPickLocations,
   carDropLocations,
-}: IsCarAvailable): { isAvailable: boolean; message: string } => {
+}: IsCarAvailable): { isAvailable: boolean; message: string ,pickupLocations:string,dropOffLocations:string} => {
   let isAvailable = true;
   let message = "";
+  let pickupLocations=''
+  let dropOffLocations=''
 
   console.log(carPickLocations)
   console.log('location',location)
@@ -435,7 +437,9 @@ export const isCarAvailable = ({
   if (!isPickupLocationAvailable || !isDropOffLocationAvailable) {
     isAvailable = false;
     message = "Car is not available in chosen locations";
+     pickupLocations=carPickLocations.map(el=>el.name).join(', ')
+     dropOffLocations=carDropLocations.map(el=>el.name).join(', ')
   }
 
-  return { isAvailable, message };
+  return { isAvailable, message,pickupLocations,dropOffLocations };
 };
