@@ -289,3 +289,25 @@ export const FiltersSchema = z
       path: ["endTime"],
     }
   );
+
+
+
+  export const FilterOneCarSchema = z.object({
+    location: requiredString,
+    dropOffLocation: z.string().optional(),
+  }).and(timeSchema)
+  .and(dateSchema)
+  .refine(
+    (data) => {
+      const { startDate, endDate, startTime, endTime } = data;
+
+      const startDateTime = new Date(`${startDate}T${startTime}`);
+      const endDateTime = new Date(`${endDate}T${endTime}`);
+
+      return startDateTime < endDateTime;
+    },
+    {
+      message: "Start date must be before end date",
+      path: ["endTime"],
+    }
+  );

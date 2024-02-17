@@ -1,48 +1,54 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-import bcrypt from 'bcryptjs';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import bcrypt from "bcryptjs";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from "./prisma";
-import { Car, CarAvailability, CarBrand, CarModel, Company } from "@prisma/client";
+import {
+  Car,
+  CarAvailability,
+  CarBrand,
+  CarModel,
+  Company,
+} from "@prisma/client";
 import { CarPublicType } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-
-export async function comparePasswords(plainPassword:string, hashedPassword:string) {
+export async function comparePasswords(
+  plainPassword: string,
+  hashedPassword: string
+) {
   try {
     const passwordMatch = await bcrypt.compare(plainPassword, hashedPassword);
     return passwordMatch;
   } catch (error) {
-    throw new Error('Error comparing passwords');
+    throw new Error("Error comparing passwords");
   }
 }
 
-
-export const getCompanyEmail = async()=>{
+export const getCompanyEmail = async () => {
   const email = await getServerSession(authOptions).then(
     (data) => data?.user?.email
   );
 
-  return email
-}
+  return email;
+};
 
-export const getCompany = async()=>{
-  const session = await getServerSession(authOptions)
+export const getCompany = async () => {
+  const session = await getServerSession(authOptions);
   const company = await prisma.company.findUnique({
-    where:{
-      email:session?.user?.email as string
-    }
-  })
+    where: {
+      email: session?.user?.email as string,
+    },
+  });
 
-  if(!company) return null
+  if (!company) return null;
 
-  return company
-}
-
+  return company;
+};
 
 export async function areIdsValid(
   ids: string[],
@@ -76,7 +82,6 @@ export async function isIdValid(id: string, model: "company") {
     }
   }
 }
-
 
 export const checkSlug = async (
   slug: string,
@@ -120,26 +125,24 @@ export const checkEmail = async (
   }
 };
 
-
 export const hashPassword = async (password: string) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   return hashedPassword;
 };
 
-
-export const newPasswordCheck = async(newPassword:string | undefined,password:string)=>{
-
-
+export const newPasswordCheck = async (
+  newPassword: string | undefined,
+  password: string
+) => {
   let thePassword;
-    if (newPassword) {
-      thePassword =  await hashPassword(newPassword);
-    } else {
-      thePassword = password;
-    }
+  if (newPassword) {
+    thePassword = await hashPassword(newPassword);
+  } else {
+    thePassword = password;
+  }
 
-    return thePassword
-}
-
+  return thePassword;
+};
 
 export const generateTimeSlots = (stepMinutes = 15) => {
   const slots = [];
@@ -147,14 +150,19 @@ export const generateTimeSlots = (stepMinutes = 15) => {
   for (let minute = 0; minute < totalMinutes; minute += stepMinutes) {
     const hours = Math.floor(minute / 60);
     const minutes = minute % 60;
-    slots.push(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`);
+    slots.push(
+      `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}`
+    );
   }
   return slots;
-}
+};
 
-
-
-export function combineDateAndTimeToUTC(dateString:string, timeString:string) {
+export function combineDateAndTimeToUTC(
+  dateString: string,
+  timeString: string
+) {
   // Combine the date and time strings
   const combinedDateTimeString = `${dateString}T${timeString}:00.000Z`;
 
@@ -166,33 +174,28 @@ export function combineDateAndTimeToUTC(dateString:string, timeString:string) {
 
 export function getTime(date: Date | undefined) {
   if (!date) {
-    return '';
+    return "";
   }
 
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const hours = date.getUTCHours().toString().padStart(2, "0");
+  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 }
-
 
 export function generateHourlyTimes() {
   const times = [];
   for (let hour = 0; hour < 24; hour++) {
     // Pad the hour with a leading zero if it's less than 10
-    const formattedHour = hour.toString().padStart(2, '0');
+    const formattedHour = hour.toString().padStart(2, "0");
     times.push(`${formattedHour}:00`);
   }
   return times;
 }
 
-
-
-export function convertDateToISOString(date:Date | undefined) {
+export function convertDateToISOString(date: Date | undefined) {
   if (!date) {
     return undefined;
   }
-
-
 
   // Manually construct the ISO string in YYYY-MM-DD format
   const year = date.getFullYear();
@@ -200,24 +203,22 @@ export function convertDateToISOString(date:Date | undefined) {
   const day = date.getDate();
 
   // Pad single digit month and day with leading zeros
-  const paddedMonth = month.toString().padStart(2, '0');
-  const paddedDay = day.toString().padStart(2, '0');
+  const paddedMonth = month.toString().padStart(2, "0");
+  const paddedDay = day.toString().padStart(2, "0");
 
   return `${year}-${paddedMonth}-${paddedDay}`;
-
 }
-
 
 export function formatDate(
   date: Date,
-  locale: string = 'en-GB',
+  locale: string = "en-GB",
   options: Intl.DateTimeFormatOptions & { timeZone: string } = {
-    timeZone: 'UTC', // Ensuring timezone is always included in the options
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+    timeZone: "UTC", // Ensuring timezone is always included in the options
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: false, // Use 24-hour format
   }
 ): string {
@@ -227,28 +228,39 @@ export function formatDate(
   return new Intl.DateTimeFormat(locale, mergedOptions).format(date);
 }
 
-export function calculateRentalPeriod(startDate: Date, endDate: Date): { days: number, extraHours: number } {
+export function calculateRentalPeriod(
+  startDate: Date,
+  endDate: Date
+): { days: number; extraHours: number } {
   // Calculate the total difference in milliseconds
   const diffMs = endDate.getTime() - startDate.getTime();
-  
+
   // Convert milliseconds to hours and days
   const hoursTotal = diffMs / (1000 * 60 * 60);
   const days = Math.floor(hoursTotal / 24);
   const extraHours = Math.floor(hoursTotal % 24);
-  
+
   return { days, extraHours };
 }
 
 export function calculateTotalRentalPriceWithAvailability(
-  startDate: Date, 
+  startDate: Date,
   endDate: Date,
-  pricings: number[], 
+  pricings: number[],
   hourlyPrice: number | null | undefined
-): { totalPrice: number | null, isAvailable: boolean, rentalPeriodDescription: string } {
+): {
+  totalPrice: number | null;
+  isAvailable: boolean;
+  rentalPeriodDescription: string;
+} {
   const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
 
   if ((days > 0 && !pricings[days - 1]) || !hourlyPrice) {
-    return { isAvailable: false, totalPrice: null, rentalPeriodDescription: "Not available" };
+    return {
+      isAvailable: false,
+      totalPrice: null,
+      rentalPeriodDescription: "Not available",
+    };
   }
 
   // Calculate day price
@@ -256,38 +268,41 @@ export function calculateTotalRentalPriceWithAvailability(
 
   // Calculate price for extra hours, if hourly price is specified
   const extraHoursPrice = hourlyPrice ? extraHours * hourlyPrice : 0;
-  
+
   // Sum day price and extra hours price to get total price
   const totalPrice = dayPrice + extraHoursPrice;
 
   // Generate rental period description
-  let rentalPeriodDescription = '';
+  let rentalPeriodDescription = "";
   if (days > 0) {
-    rentalPeriodDescription += `${days} day${days > 1 ? 's' : ''}`;
+    rentalPeriodDescription += `${days} day${days > 1 ? "s" : ""}`;
   }
   if (extraHours > 0) {
-    rentalPeriodDescription += (days > 0 ? ' and ' : '') + `${extraHours} hour${extraHours > 1 ? 's' : ''}`;
+    rentalPeriodDescription +=
+      (days > 0 ? " and " : "") +
+      `${extraHours} hour${extraHours > 1 ? "s" : ""}`;
   }
 
   return { totalPrice, isAvailable: true, rentalPeriodDescription };
 }
 
-
-
-
 export function processCars(
-  cars: (Car &{availabilities:CarAvailability[],carModel:CarModel & {carBrand:{brand:string}},company:{logo:string}})[] ,
+  cars: (Car & {
+    availabilities: CarAvailability[];
+    carModel: CarModel & { carBrand: { brand: string } };
+    company: { logo: string };
+  })[],
   startDateObject: Date,
   endDateObject: Date
-): { availableCars: CarPublicType[], notAvailableCars: CarPublicType[] } {
-
-  const allCars = cars.map(car => {
-    const { totalPrice, isAvailable,rentalPeriodDescription } = calculateTotalRentalPriceWithAvailability(
-      startDateObject,
-      endDateObject,
-      car.pricings,
-      car.hourPrice
-    );
+): { availableCars: CarPublicType[]; notAvailableCars: CarPublicType[] } {
+  const allCars = cars.map((car) => {
+    const { totalPrice, isAvailable, rentalPeriodDescription } =
+      calculateTotalRentalPriceWithAvailability(
+        startDateObject,
+        endDateObject,
+        car.pricings,
+        car.hourPrice
+      );
 
     const notAvailable = !isAvailable || car.availabilities.length > 0;
 
@@ -298,63 +313,57 @@ export function processCars(
       seats: car.seats,
       kmIncluded: car.kmIncluded,
       carType: car.carType,
-      gallary: car.gallary, 
-      transmition: car.transmition, 
+      gallary: car.gallary,
+      transmition: car.transmition,
       availablePrice: totalPrice,
       companyLogo: car.company.logo,
       notAvailable,
-      period:rentalPeriodDescription,
-      slug:car.slug as string
+      period: rentalPeriodDescription,
+      slug: car.slug as string,
     };
   });
 
+  const availableCars = allCars.filter((car) => !car.notAvailable);
+  const notAvailableCars = allCars.filter((car) => car.notAvailable);
 
-  const availableCars = allCars.filter(car => !car.notAvailable);
-  const notAvailableCars = allCars.filter(car => car.notAvailable);
-
-  return { availableCars, notAvailableCars }
+  return { availableCars, notAvailableCars };
 }
 
+export type Description = "2 seats" | "4+ seats" | "2 doors" | "4+ doors";
 
-
-
-  export type Description = '2 seats' | '4+ seats' | '2 doors' | '4+ doors'
-
-export function mapDescriptionsToNumbers(descriptions: Description[] | Description | undefined): number[]  {
+export function mapDescriptionsToNumbers(
+  descriptions: Description[] | Description | undefined
+): number[] {
   let numbers: number[] = [];
-  console.log('descriptions',descriptions)
+  console.log("descriptions", descriptions);
 
   // Process each description and map it to the corresponding numbers
 
-
-  if(Array.isArray(descriptions)){
-  descriptions.forEach(description => {
-    switch (description) {
-     
-      case '2 seats':
-      case '2 doors':
-        numbers.push(2);
-        break;
-      case '4+ seats':
-      case '4+ doors':
-        numbers.push(...[ 4, 5, 6, 7]);
-        break;
-    }
-  });}
-
-  switch (descriptions) {
-   
-    case '2 seats':
-    case '2 doors':
-      numbers.push(2);
-      break;
-    case '4+ seats':
-    case '4+ doors':
-      numbers.push(...[ 4, 5, 6, 7]);
-      break;
+  if (Array.isArray(descriptions)) {
+    descriptions.forEach((description) => {
+      switch (description) {
+        case "2 seats":
+        case "2 doors":
+          numbers.push(2);
+          break;
+        case "4+ seats":
+        case "4+ doors":
+          numbers.push(...[4, 5, 6, 7]);
+          break;
+      }
+    });
   }
 
-
+  switch (descriptions) {
+    case "2 seats":
+    case "2 doors":
+      numbers.push(2);
+      break;
+    case "4+ seats":
+    case "4+ doors":
+      numbers.push(...[4, 5, 6, 7]);
+      break;
+  }
 
   // Remove duplicates by converting the numbers array to a Set, then back to an array
   const uniqueNumbers = Array.from(new Set(numbers));
@@ -362,3 +371,71 @@ export function mapDescriptionsToNumbers(descriptions: Description[] | Descripti
   // Sort the numbers in ascending order
   return uniqueNumbers.sort((a, b) => a - b);
 }
+
+type DateRange = {
+  startDate: Date;
+  endDate: Date;
+};
+
+export function doesOverlap(
+  clientStartDate: Date,
+  clientEndDate: Date,
+  dateRanges: DateRange[]
+): boolean {
+  return dateRanges.some(({ startDate, endDate }) => {
+    // Check if the client's date range overlaps with the current date range in the array
+    return clientStartDate <= endDate && clientEndDate >= startDate;
+  });
+}
+
+type IsCarAvailable = {
+  priceAvailability: boolean;
+  location: string;
+  carPickLocations: { slug: string }[] | [];
+  carDropLocations: { slug: string }[] | [];
+  dropOffLocation: string | undefined;
+  rangeDates: { startDate: Date; endDate: Date }[] | [];
+  clientStartDate: Date;
+  clientEndDate: Date;
+};
+
+export const isCarAvailable = ({
+  priceAvailability,
+  location,
+  dropOffLocation,
+  rangeDates,
+  clientEndDate,
+  clientStartDate,
+  carPickLocations,
+  carDropLocations,
+}: IsCarAvailable): { isAvailable: boolean; message: string } => {
+  let isAvailable = true;
+  let message = "";
+
+  console.log(carPickLocations)
+  console.log('location',location)
+  const isPickupLocationAvailable = carPickLocations.some(
+    (el) => el.slug.toLocaleLowerCase() === location.toLocaleLowerCase()
+  );
+
+
+  const isDropOffLocationAvailable = dropOffLocation
+    ? carDropLocations.some((el) => el.slug.toLocaleLowerCase() === dropOffLocation.toLocaleLowerCase())
+    : true;
+
+    console.log(carDropLocations)
+    console.log('dropOffLocation',dropOffLocation)
+  const overLap = doesOverlap(clientStartDate, clientEndDate, rangeDates);
+
+  if (!priceAvailability || overLap) {
+    isAvailable = false;
+    message = "Car is not available for this chosen date and time";
+  }
+
+  if (!isPickupLocationAvailable || !isDropOffLocationAvailable) {
+    isAvailable = false;
+    message = "Car is not available in chosen locations";
+  }
+
+  return { isAvailable, message };
+};
