@@ -18,6 +18,8 @@ export const GET = async (
   { params }: { params: { carSlug: string } }
 ) => {
   try {
+
+
     const apiSecret = req.headers.get("api-Secret");
 
     if (!apiSecret || apiSecret !== process.env.API_SECRET)
@@ -62,7 +64,7 @@ export const GET = async (
       dropOffLocation,
     } = validQueries.data;
 
-    console.log('car location',location)
+
 
     const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
     const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
@@ -171,26 +173,29 @@ export const GET = async (
 
       const isDeliveryFee = (dropOffLocation && (dropOffLocation !== location)) || false
 
-    const returnedCar = {
-      id: car.id,
-      carName: `${car.carModel.carBrand.brand} ${car.carModel.name}`,
-      brand: car.carModel.carBrand.brand,
-      year: car.year,
-      transmition: car.transmition,
-      engine: car.engine,
-      doors: car.doors,
-      electric: car.electric,
-      carType: car.carType,
-      seats: car.seats,
-      description: car.description,
-      gallary: car.gallary,
-      specifications: car.additionalFeatures,
- 
+    const availability = {
+
+  
    
+   
+      kmIncluded: car.kmIncluded,
+      deliveryFee:isDeliveryFee ? car.deleviryFee : null,
+      deposite: car.deposite,
+      price: totalPrice,
+      duration: rentalPeriodDescription,
+      location:locationName?.name,
+      startDate: startDateObject,
+      endDate: endDateObject,
+      availability: {
+        isAvailable,
+        message,
+        pickupLocations,
+        dropOffLocations,
+      },
     };
 
     return NextResponse.json(
-      { car: returnedCar, success: true },
+      { availability, success: true },
       { status: 200 }
     );
   } catch (error: any) {

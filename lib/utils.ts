@@ -414,8 +414,7 @@ export const isCarAvailable = ({
   let pickupLocations=''
   let dropOffLocations=''
 
-  console.log(carPickLocations)
-  console.log('location',location)
+
   const isPickupLocationAvailable = carPickLocations.some(
     (el) => el.slug.toLocaleLowerCase() === location.toLocaleLowerCase()
   );
@@ -425,18 +424,17 @@ export const isCarAvailable = ({
     ? carDropLocations.some((el) => el.slug.toLocaleLowerCase() === dropOffLocation.toLocaleLowerCase())
     : true;
 
-    console.log(carDropLocations)
-    console.log('dropOffLocation',dropOffLocation)
+ 
   const overLap = doesOverlap(clientStartDate, clientEndDate, rangeDates);
 
   if (!priceAvailability || overLap) {
     isAvailable = false;
-    message = "Car is not available for this chosen date and time";
+    message = "This car is not available for this chosen date and time";
   }
 
   if (!isPickupLocationAvailable || !isDropOffLocationAvailable) {
     isAvailable = false;
-    message = "Car is not available in chosen locations";
+    message = "This car is only available in:";
      pickupLocations=carPickLocations.map(el=>el.name).join(', ')
      dropOffLocations=carDropLocations.map(el=>el.name).join(', ')
   }
