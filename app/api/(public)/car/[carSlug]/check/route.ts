@@ -180,7 +180,7 @@ export const GET = async (
    
       kmIncluded: car.kmIncluded,
       deliveryFee:isDeliveryFee ? car.deleviryFee : null,
-      deposite: car.deposite,
+      deposit: car.deposite,
       price: totalPrice,
       duration: rentalPeriodDescription,
       location:locationName?.name,
