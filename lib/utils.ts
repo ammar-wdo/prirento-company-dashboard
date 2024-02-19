@@ -255,11 +255,24 @@ export function calculateTotalRentalPriceWithAvailability(
 } {
   const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
 
+  // Generate rental period description
+  let rentalPeriodDescription = ""
+
+  if (days > 0) {
+    rentalPeriodDescription += `${days} day${days > 1 ? "s" : ""}`;
+  }
+  if (extraHours > 0) {
+    rentalPeriodDescription +=
+      (days > 0 ? " and " : "") +
+      `${extraHours} hour${extraHours > 1 ? "s" : ""}`;
+  }
+
+
   if ((days > 0 && !pricings[days - 1]) || !hourlyPrice) {
     return {
       isAvailable: false,
       totalPrice: null,
-      rentalPeriodDescription: "Not available",
+      rentalPeriodDescription,
     };
   }
 
@@ -272,17 +285,9 @@ export function calculateTotalRentalPriceWithAvailability(
   // Sum day price and extra hours price to get total price
   const totalPrice = dayPrice + extraHoursPrice;
 
-  // Generate rental period description
-  let rentalPeriodDescription = "";
-  if (days > 0) {
-    rentalPeriodDescription += `${days} day${days > 1 ? "s" : ""}`;
-  }
-  if (extraHours > 0) {
-    rentalPeriodDescription +=
-      (days > 0 ? " and " : "") +
-      `${extraHours} hour${extraHours > 1 ? "s" : ""}`;
-  }
 
+  ;
+ 
   return { totalPrice, isAvailable: true, rentalPeriodDescription };
 }
 

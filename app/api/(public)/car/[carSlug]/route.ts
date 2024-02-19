@@ -1,15 +1,8 @@
 import prisma from "@/lib/prisma";
-import {
-  calculateTotalRentalPriceWithAvailability,
-  combineDateAndTimeToUTC,
-  doesOverlap,
-  formatDate,
-  isCarAvailable,
-} from "@/lib/utils";
-import { FilterOneCarSchema } from "@/schemas";
+
 
 import { NextRequest, NextResponse } from "next/server";
-import qs from "query-string";
+
 
 export const revalidate = 0;
 
@@ -32,43 +25,6 @@ export const GET = async (
         { status: 200 }
       );
     }
-
-    const searchParams = req.nextUrl.searchParams;
-
-    const queries = qs.parse(searchParams.toString());
-    const validQueries = FilterOneCarSchema.safeParse(queries);
-    if (!validQueries.success) {
-      for (const e of validQueries.error.errors) {
-        if (e.message === "Start date must be before end date") {
-          return NextResponse.json(
-            { error: "Date range error", success: false },
-            { status: 200 }
-          );
-        }
-      }
-
-      return NextResponse.json(
-        { error: "Invalid inputs", success: false },
-        { status: 200 }
-      );
-    }
-
-    const {
-      endDate,
-      endTime,
-      location,
-      startDate,
-      startTime,
-      dropOffLocation,
-    } = validQueries.data;
-
-    console.log('car location',location)
-
-    const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
-    const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
-
-
-
 
 
     const car = await prisma.car.findUnique({
@@ -109,67 +65,6 @@ export const GET = async (
         { status: 400 }
       );
 
-
-
-
-
-
-        // extract location name from sent slug
-      const locationName = await prisma.location.findUnique({
-        where:{
-          slug:location
-        },select:{
-          name:true
-        }
-      })
-
-
-
-
-
-
-    const {
-      totalPrice,
-      isAvailable: priceAvailability,
-      rentalPeriodDescription,
-    } = calculateTotalRentalPriceWithAvailability(
-      startDateObject,
-      endDateObject,
-      car.pricings,
-      car.hourPrice
-    );
-
-    // extract avalabilities and locations array to use in function
-    const rangeDates = car.availabilities.map((el) => ({
-      startDate: el.startDate,
-      endDate: el.endDate,
-    }));
-    const carPickLocations = car.pickupLocations.map((el) => ({
-      slug: el.slug,
-      name: el.name,
-    }));
-    const carDropLocations = car.dropoffLocations.map((el) => ({
-      slug: el.slug,
-      name: el.name,
-    }));
-
-
-
-    const { isAvailable, message, pickupLocations, dropOffLocations } =
-      isCarAvailable({
-        priceAvailability,
-        location,
-        dropOffLocation,
-        clientStartDate: startDateObject,
-        clientEndDate: endDateObject,
-        rangeDates,
-        carDropLocations,
-        carPickLocations,
-      });
-
-
-
-      const isDeliveryFee = (dropOffLocation && (dropOffLocation !== location)) || false
 
     const returnedCar = {
       id: car.id,
