@@ -6,20 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url= env("DATABASE_URL")
-  directUrl= env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
-
-
-
-
-
-
-
-
-
-
 
 model Company {
   id   String @id @default(uuid())
@@ -40,8 +30,8 @@ model Company {
 
   promoted Boolean
 
-  openingTime Json? 
-    away Boolean @default(false)
+  openingTime Json?
+  away        Boolean @default(false)
 
   terms String
 
@@ -54,18 +44,11 @@ model Company {
   updatedAt DateTime @updatedAt
 }
 
-
-
-
-
-
-
-
 model Location {
   id   String @id @default(uuid())
   name String
 
-  slug  String @unique
+  slug String @unique
 
   subLocations SubLocation[]
 
@@ -76,21 +59,11 @@ model Location {
   updatedAt DateTime @updatedAt
 }
 
-
-
-
-
-
-
-
-
-
-
 model SubLocation {
   id   String @id @default(uuid())
   name String
 
-  slug  String @unique
+  slug       String   @unique
   locationId String
   location   Location @relation(fields: [locationId], references: [id])
 
@@ -101,15 +74,6 @@ model SubLocation {
   updatedAt DateTime @updatedAt
 }
 
-
-
-
-
-
-
-
-
-
 model Category {
   id   String @id @default(uuid())
   name String
@@ -119,17 +83,6 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
-
-
-
-
-
-
-
-
-
 
 model CarBrand {
   id    String @id @default(uuid())
@@ -143,18 +96,6 @@ model CarBrand {
   updatedAt DateTime @updatedAt
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 model CarModel {
   id         String @id @default(uuid())
   name       String
@@ -166,18 +107,6 @@ model CarModel {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 model Car {
   id            String       @id @default(uuid())
@@ -193,7 +122,7 @@ model Car {
   gallary       String[]
   transmition   Transmission
   electric      Electric
-  carStatus     CarStatus @default(pending)
+  carStatus     CarStatus    @default(pending)
 
   slug String? @unique
 
@@ -228,22 +157,14 @@ model Car {
   superAdminRules SuperadminRule[]
   discounts       CarDiscount[]
 
-  availabilities CarAvailability[]
+  availabilities  CarAvailability[]
   carExtraOptions CarExtraOption[]
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-
-
-
-
-
-
-
-
 
 model CarAvailability {
   id String @id @default(uuid())
@@ -260,21 +181,10 @@ model CarAvailability {
   updatedAt DateTime @updatedAt
 }
 
-
-
-
-
-
-
-
-
-
-
-
 model CarDiscount {
   id        String @id @default(uuid())
   label     String
-  promocode String
+  promocode String @unique
 
   type  DiscountType @default(fixed)
   value Int
@@ -292,12 +202,6 @@ model CarDiscount {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
-
-
-
-
 
 model SuperadminRule {
   id String @id @default(uuid())
@@ -317,11 +221,6 @@ model SuperadminRule {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
-
-
-
 
 model CarExtraOption {
   id          String               @id @default(uuid())
@@ -366,12 +265,45 @@ model Blog {
   updatedUt DateTime @updatedAt
 }
 
+model Booking {
+  id String @id @default(uuid())
 
+  firstName          String
+  lastName           String
+  email              String
+  contactNumber      String
+  countryOfResidance String
 
+  billingAddress       String
+  billingFirstName     String
+  billingLastname      String
+  billingContactNumber String
+  billingCountry       String
+  billingCity          String
+  billingZipcode       String
 
+  business    Boolean?
+  companyName String?
+  campanyVat  String?
 
+  startDate DateTime
+  endDate   DateTime
 
+  subtotal       Int
+  extraOptions   Json[]
+  reservationFee Int
+  discount       Int
+  terms          Boolean       @default(true)
+  paymentMethod  PaymentMethod
+  paymentStatus  PaymentStatus
+  bookingStatus  BookingStatus
 
+  carId String
+  car   Car    @relation(fields: [carId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedUt DateTime @updatedAt
+}
 
 //ENUMS
 
@@ -438,4 +370,24 @@ enum SuperadminType {
 enum CarExtraOptionStatus {
   pending
   active
+}
+
+enum PaymentMethod {
+
+  CREDIT_CARD
+  PAYPAL
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  EXPIRED
+  CANCELED
+}
+
+enum BookingStatus {
+  ACTIVE
+  REFUND_REQUEST
+  REFUNDED
+  CANCELED
 }

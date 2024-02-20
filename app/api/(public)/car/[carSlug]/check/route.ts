@@ -18,8 +18,6 @@ export const GET = async (
   { params }: { params: { carSlug: string } }
 ) => {
   try {
-
-
     const apiSecret = req.headers.get("api-Secret");
 
     if (!apiSecret || apiSecret !== process.env.API_SECRET)
@@ -64,14 +62,8 @@ export const GET = async (
       dropOffLocation,
     } = validQueries.data;
 
-
-
     const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
     const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
-
-
-
-
 
     const car = await prisma.car.findUnique({
       where: {
@@ -103,32 +95,21 @@ export const GET = async (
       },
     });
 
-
-
     if (!car)
       return NextResponse.json(
         { error: "Car does not exist" },
         { status: 400 }
       );
 
-
-
-
-
-
-        // extract location name from sent slug
-      const locationName = await prisma.location.findUnique({
-        where:{
-          slug:location
-        },select:{
-          name:true
-        }
-      })
-
-
-
-
-
+    // extract location name from sent slug
+    const locationName = await prisma.location.findUnique({
+      where: {
+        slug: location,
+      },
+      select: {
+        name: true,
+      },
+    });
 
     const {
       totalPrice,
@@ -155,8 +136,6 @@ export const GET = async (
       name: el.name,
     }));
 
-
-
     const { isAvailable, message, pickupLocations, dropOffLocations } =
       isCarAvailable({
         priceAvailability,
@@ -169,21 +148,17 @@ export const GET = async (
         carPickLocations,
       });
 
-
-
-      const isDeliveryFee = (dropOffLocation && (dropOffLocation !== location)) || false
+    const isDeliveryFee =
+      (dropOffLocation && dropOffLocation !== location) || false;
 
     const availability = {
-
-  
-   
-   
       kmIncluded: car.kmIncluded,
-      deliveryFee:isDeliveryFee ? car.deleviryFee : null,
+      deliveryFee: isDeliveryFee ? car.deleviryFee : null,
       deposit: car.deposite,
+      slug: car.slug,
       price: totalPrice,
       duration: rentalPeriodDescription,
-      location:locationName?.name,
+      location: locationName?.name,
       startDate: startDateObject,
       endDate: endDateObject,
       availability: {
@@ -194,10 +169,7 @@ export const GET = async (
       },
     };
 
-    return NextResponse.json(
-      { availability, success: true },
-      { status: 200 }
-    );
+    return NextResponse.json({ availability, success: true }, { status: 200 });
   } catch (error: any) {
     let errorMessage = "Internal server Error";
 

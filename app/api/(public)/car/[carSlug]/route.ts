@@ -80,6 +80,7 @@ export const GET = async (
       description: car.description,
       gallary: car.gallary,
       specifications: car.additionalFeatures,
+      slug:car.slug
  
    
     };
