@@ -231,7 +231,7 @@ export function formatDate(
 export function calculateRentalPeriod(
   startDate: Date,
   endDate: Date
-): { days: number; extraHours: number } {
+): { days: number; extraHours: number ,hoursTotal:number} {
   // Calculate the total difference in milliseconds
   const diffMs = endDate.getTime() - startDate.getTime();
 
@@ -240,7 +240,7 @@ export function calculateRentalPeriod(
   const days = Math.floor(hoursTotal / 24);
   const extraHours = Math.floor(hoursTotal % 24);
 
-  return { days, extraHours };
+  return { days, extraHours,hoursTotal };
 }
 
 export function calculateTotalRentalPriceWithAvailability(
@@ -254,7 +254,7 @@ export function calculateTotalRentalPriceWithAvailability(
   isAvailable: boolean;
   rentalPeriodDescription: string;
 } {
-  const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
+  const { days, extraHours,hoursTotal } = calculateRentalPeriod(startDate, endDate);
 
   // Generate rental period description
   let rentalPeriodDescription = ""
@@ -269,7 +269,7 @@ export function calculateTotalRentalPriceWithAvailability(
   }
 
 
-  if(!!minimumHours && days===0 && extraHours < minimumHours){
+  if(!!minimumHours && minimumHours > hoursTotal){
     return {
       isAvailable: false,
       totalPrice: null,

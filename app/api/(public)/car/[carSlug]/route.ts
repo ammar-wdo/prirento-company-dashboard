@@ -80,7 +80,10 @@ export const GET = async (
       description: car.description,
       gallary: car.gallary,
       specifications: car.additionalFeatures,
-      slug:car.slug
+      slug:car.slug,
+      minimumHours:car.minimumHours || null,
+      pickupLocations:car.pickupLocations.map(el=>el.name),
+      dropoffLocations:car.dropoffLocations.map(el=>el.name)
  
    
     };
