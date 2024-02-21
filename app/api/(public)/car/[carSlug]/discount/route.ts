@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import {
+    calculateDiscount,
+  calculateReservationFee,
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
   doesOverlap,
@@ -76,6 +78,19 @@ export const POST = async (
 
     const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
     const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
+
+    const car = await prisma.car.findUnique({
+        where:{
+            slug:params.carSlug
+        }
+    })
+
+    if(!car)return NextResponse.json(
+        { discount: null, success: false, error: "Invalid promocode" },
+        { status: 200 ,headers: corsHeaders}
+      )
+
+
     
 
 
@@ -134,6 +149,31 @@ export const POST = async (
         error: "This discount is not applicable for this rental dates",
         discount: null,
       },{status:200,headers: corsHeaders});
+
+      const {isAvailable,totalPrice} = calculateTotalRentalPriceWithAvailability(startDateObject,endDateObject,car.pricings,car.hourPrice,car.minimumHours)
+
+      if(!isAvailable)return NextResponse.json(
+        { discount: null, success: false, error: "Invalid promocode" },
+        { status: 200 ,headers: corsHeaders}
+ )
+
+ const reservationFee = calculateReservationFee(car.reservationPercentage,car.reservationFlatFee,totalPrice as number)
+
+ if(reservationFee === false)  return NextResponse.json(
+    { discount: null, success: false, error: "Promocode is not applicable" },
+    { status: 200 ,headers: corsHeaders}
+
+
+)
+ const discountValue = calculateDiscount(reservationFee ,discount.type,discount.value)
+
+ if(discountValue >= reservationFee)return NextResponse.json(
+    { discount: null, success: false, error: "Promocode is not applicable" },
+    { status: 200 ,headers: corsHeaders}
+)
+
+
+
 
     const returnedDiscount = {
       id: discount.id,

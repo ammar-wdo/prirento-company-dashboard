@@ -119,7 +119,8 @@ export const GET = async (
       startDateObject,
       endDateObject,
       car.pricings,
-      car.hourPrice
+      car.hourPrice,
+      car.minimumHours
     );
 
     // extract avalabilities and locations array to use in function

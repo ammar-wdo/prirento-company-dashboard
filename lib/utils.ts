@@ -247,7 +247,8 @@ export function calculateTotalRentalPriceWithAvailability(
   startDate: Date,
   endDate: Date,
   pricings: number[],
-  hourlyPrice: number | null | undefined
+  hourlyPrice: number | null | undefined,
+  minimumHours:number | null
 ): {
   totalPrice: number | null;
   isAvailable: boolean;
@@ -265,6 +266,15 @@ export function calculateTotalRentalPriceWithAvailability(
     rentalPeriodDescription +=
       (days > 0 ? " and " : "") +
       `${extraHours} hour${extraHours > 1 ? "s" : ""}`;
+  }
+
+
+  if(!!minimumHours && days===0 && extraHours < minimumHours){
+    return {
+      isAvailable: false,
+      totalPrice: null,
+      rentalPeriodDescription,
+    }
   }
 
 
@@ -306,7 +316,8 @@ export function processCars(
         startDateObject,
         endDateObject,
         car.pricings,
-        car.hourPrice
+        car.hourPrice,
+        car.minimumHours
       );
 
     const notAvailable = !isAvailable || car.availabilities.length > 0;
@@ -446,3 +457,35 @@ export const isCarAvailable = ({
 
   return { isAvailable, message,pickupLocations,dropOffLocations };
 };
+
+
+
+
+export const calculateDiscount = (subtotal:number,type:'fixed'|'percentage',value:number)=>{
+  const val =
+    type === "fixed"
+      ? value
+      : (value * subtotal) / 100;
+
+      return val
+}
+
+export const calculateReservationFee = (reservationPercentage:number|null,reservationFlat:number|null,subtotal:number)=>{
+  let value:number | boolean
+
+if(!!reservationPercentage){
+   value = (reservationPercentage * subtotal) / 100
+}
+else if(!!reservationFlat){
+  if(reservationFlat >= subtotal) {
+    value = false
+  }else{
+    value =  reservationFlat
+  }
+
+}else {
+  value=false
+}
+
+return value
+}
