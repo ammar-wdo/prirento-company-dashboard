@@ -314,6 +314,8 @@ export function processCars(
   startDateObject: Date,
   endDateObject: Date
 ): { availableCars: CarPublicType[]; notAvailableCars: CarPublicType[] } {
+
+
   const allCars = cars.map((car) => {
     const { totalPrice, isAvailable, rentalPeriodDescription } =
       calculateTotalRentalPriceWithAvailability(
@@ -324,7 +326,11 @@ export function processCars(
        
       );
 
-    const notAvailable = !isAvailable || car.availabilities.length > 0;
+      const hours = calculateHours(startDateObject,endDateObject)
+      const minHoursValid = car.minimumHours ? car.minimumHours < hours : true
+
+
+    const notAvailable = !isAvailable || car.availabilities.length > 0 || !minHoursValid  ;
 
     return {
       id: car.id,
