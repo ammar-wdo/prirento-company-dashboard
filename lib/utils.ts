@@ -228,19 +228,29 @@ export function formatDate(
   return new Intl.DateTimeFormat(locale, mergedOptions).format(date);
 }
 
-export function calculateRentalPeriod(
-  startDate: Date,
-  endDate: Date
-): { days: number; extraHours: number ,hoursTotal:number} {
-  // Calculate the total difference in milliseconds
+export const calculateHours = ( startDate: Date,
+  endDate: Date)=>{
   const diffMs = endDate.getTime() - startDate.getTime();
 
   // Convert milliseconds to hours and days
   const hoursTotal = diffMs / (1000 * 60 * 60);
+
+  return hoursTotal
+}
+
+export function calculateRentalPeriod(
+  startDate: Date,
+  endDate: Date
+): { days: number; extraHours: number } {
+  // Calculate the total difference in milliseconds
+  const diffMs = endDate.getTime() - startDate.getTime();
+
+  // Convert milliseconds to hours and days
+  const hoursTotal = calculateHours(startDate,endDate);
   const days = Math.floor(hoursTotal / 24);
   const extraHours = Math.floor(hoursTotal % 24);
 
-  return { days, extraHours,hoursTotal };
+  return { days, extraHours };
 }
 
 export function calculateTotalRentalPriceWithAvailability(
@@ -248,13 +258,13 @@ export function calculateTotalRentalPriceWithAvailability(
   endDate: Date,
   pricings: number[],
   hourlyPrice: number | null | undefined,
-  minimumHours:number | null
+
 ): {
   totalPrice: number | null;
   isAvailable: boolean;
   rentalPeriodDescription: string;
 } {
-  const { days, extraHours,hoursTotal } = calculateRentalPeriod(startDate, endDate);
+  const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
 
   // Generate rental period description
   let rentalPeriodDescription = ""
@@ -269,13 +279,7 @@ export function calculateTotalRentalPriceWithAvailability(
   }
 
 
-  if(!!minimumHours && minimumHours > hoursTotal){
-    return {
-      isAvailable: false,
-      totalPrice: null,
-      rentalPeriodDescription,
-    }
-  }
+  
 
 
   if ((days > 0 && !pricings[days - 1]) || !hourlyPrice) {
@@ -317,7 +321,7 @@ export function processCars(
         endDateObject,
         car.pricings,
         car.hourPrice,
-        car.minimumHours
+       
       );
 
     const notAvailable = !isAvailable || car.availabilities.length > 0;
@@ -413,6 +417,7 @@ type IsCarAvailable = {
   rangeDates: { startDate: Date; endDate: Date }[] | [];
   clientStartDate: Date;
   clientEndDate: Date;
+  validHours:{valid:true,minimumHours:null} | {valid:false,minimumHours:number}
 };
 
 export const isCarAvailable = ({
@@ -424,6 +429,7 @@ export const isCarAvailable = ({
   clientStartDate,
   carPickLocations,
   carDropLocations,
+  validHours
 }: IsCarAvailable): { isAvailable: boolean; message: string ,pickupLocations:string,dropOffLocations:string} => {
   let isAvailable = true;
   let message = "";
@@ -446,6 +452,11 @@ export const isCarAvailable = ({
   if (!priceAvailability || overLap) {
     isAvailable = false;
     message = "This car is not available for this chosen date and time";
+  }
+
+  if(!validHours.valid) {
+    isAvailable = false;
+    message = `This car is available for minimum of  ${validHours.minimumHours} hour(s) rent`;
   }
 
   if (!isPickupLocationAvailable || !isDropOffLocationAvailable) {

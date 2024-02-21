@@ -81,6 +81,7 @@ export const GET = async (
       gallary: car.gallary,
       specifications: car.additionalFeatures,
       slug:car.slug,
+      kmIncluded:car.kmIncluded,
       minimumHours:car.minimumHours || null,
       pickupLocations:car.pickupLocations.map(el=>el.name),
       dropoffLocations:car.dropoffLocations.map(el=>el.name)

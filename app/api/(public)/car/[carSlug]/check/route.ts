@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import {
+  calculateHours,
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
   doesOverlap,
@@ -119,8 +120,7 @@ export const GET = async (
       startDateObject,
       endDateObject,
       car.pricings,
-      car.hourPrice,
-      car.minimumHours
+      car.hourPrice
     );
 
     // extract avalabilities and locations array to use in function
@@ -137,6 +137,18 @@ export const GET = async (
       name: el.name,
     }));
 
+    //check if chosen hours are bigger minimum hour rate for renting
+    let validHours:
+      | { valid: true; minimumHours: null }
+      | { valid: false; minimumHours: number } = {
+      valid: true,
+      minimumHours: null,
+    };
+    const hours = calculateHours(startDateObject, endDateObject);
+    if (car.minimumHours && hours < car.minimumHours) {
+      validHours = { valid: false, minimumHours: car.minimumHours};
+    }
+
     const { isAvailable, message, pickupLocations, dropOffLocations } =
       isCarAvailable({
         priceAvailability,
@@ -147,6 +159,7 @@ export const GET = async (
         rangeDates,
         carDropLocations,
         carPickLocations,
+        validHours,
       });
 
     const isDeliveryFee =

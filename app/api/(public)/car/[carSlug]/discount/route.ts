@@ -150,7 +150,7 @@ export const POST = async (
         discount: null,
       },{status:200,headers: corsHeaders});
 
-      const {isAvailable,totalPrice} = calculateTotalRentalPriceWithAvailability(startDateObject,endDateObject,car.pricings,car.hourPrice,car.minimumHours)
+      const {isAvailable,totalPrice} = calculateTotalRentalPriceWithAvailability(startDateObject,endDateObject,car.pricings,car.hourPrice)
 
       if(!isAvailable)return NextResponse.json(
         { discount: null, success: false, error: "Invalid promocode" },
