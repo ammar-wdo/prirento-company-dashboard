@@ -12,6 +12,7 @@ import {
   Company,
 } from "@prisma/client";
 import { CarPublicType } from "@/types";
+import { CustomError } from "@/costum-error";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -508,4 +509,89 @@ export const calculateReservationFee = (
   }
 
   return value;
+};
+
+export const checkDiscount = async (
+  promocode: string,
+  carSlug: string,
+  startDateObject: Date,
+  endDateObject: Date,
+  pricings: number[],
+  hourPrice: number|null,
+  reservationPercentage: number | null,
+  reservationFlatFee: number | null
+) => {
+  const discount = await prisma.carDiscount.findUnique({
+    where: {
+      promocode: promocode,
+    },
+    include: {
+      car: {
+        select: {
+          slug: true,
+        },
+      },
+    },
+  });
+console.log('promocode',promocode)
+  if (!discount) {
+    throw new CustomError("Invalid promocode");
+  }
+
+  if (!discount.applyToAll && discount.car?.slug !== carSlug) {
+    throw new CustomError("Discount is not applicable to this car");
+  }
+
+  if (
+    discount.discountApplyType === "created" &&
+    !(new Date() >= discount.startDate && new Date() <= discount.endDate)
+  ) {
+    throw new CustomError("This discount is not applicable for this rental dates");
+  }
+
+  if (
+    discount.discountApplyType === "booked" &&
+    !(
+      startDateObject <= discount.endDate && endDateObject >= discount.startDate
+    )
+  ) {
+    throw new CustomError("This discount is not applicable for this rental dates");
+  }
+
+  const { isAvailable, totalPrice } = calculateTotalRentalPriceWithAvailability(
+    startDateObject,
+    endDateObject,
+    pricings,
+    hourPrice
+  );
+
+  if (!isAvailable) {
+    throw new CustomError("Invalid promo code");
+  }
+
+  const reservationFee = calculateReservationFee(
+    reservationPercentage,
+    reservationFlatFee,
+    totalPrice as number
+  );
+
+  if (reservationFee === false) {
+    throw new CustomError("Promocode is not applicable");
+  }
+  const discountValue = calculateDiscount(
+    reservationFee,
+    discount.type,
+    discount.value
+  );
+
+  if (discountValue >= reservationFee) {
+    throw new CustomError("Promocode is not applicable");
+  }
+  return {
+    id: discount.id,
+    type: discount.type,
+    value: discount.value,
+    promocode: discount.promocode,
+    discountAppliedType: discount.discountApplyType,
+  };
 };

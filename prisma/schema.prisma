@@ -184,7 +184,7 @@ model CarAvailability {
 model CarDiscount {
   id        String @id @default(uuid())
   label     String
-  promocode String @unique
+  promocode String  @unique
 
   type  DiscountType @default(fixed)
   value Int
@@ -289,10 +289,16 @@ model Booking {
   startDate DateTime
   endDate   DateTime
 
-  subtotal       Int
+  pickupLocation  String
+  dropoffLocation String?
+
   extraOptions   Json[]
+  adminRules     Json[] 
+  subtotal       Int
   reservationFee Int
   discount       Int
+  deliveryFee    Int?
+  total          Int 
   terms          Boolean       @default(true)
   paymentMethod  PaymentMethod
   paymentStatus  PaymentStatus

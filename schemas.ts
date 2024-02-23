@@ -369,6 +369,9 @@ export const bookingSchema = z
 
     terms: z.boolean().refine(data=>data===true,'You should agree to Terms & Conditions to go further'),
     paymentMethod:z.enum(paymentMethod),
+    pickupLocation:requiredString,
+    dropoffLocation:z.string().optional(),
+ 
     
   })
   .and(timeSchema)

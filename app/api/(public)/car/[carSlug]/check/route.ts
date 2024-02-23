@@ -150,8 +150,8 @@ export const GET = async (
       validHours = { valid: false, minimumHours: car.minimumHours};
     }
 
-   
-const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.reservationFlatFee,totalPrice) : false
+  //check if fee bigger than car price  
+const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.reservationFlatFee,totalPrice) : false 
 
     const { isAvailable, message, pickupLocations, dropOffLocations } =
       isCarAvailable({
