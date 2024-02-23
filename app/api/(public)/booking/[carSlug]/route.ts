@@ -122,7 +122,7 @@ export const POST = async (
       },
     });
 
-    
+
     //if no car or not available or booked return not available
     if (!car || !!car.availabilities.length || !!car.bookings.length)
       throw new CustomError("Car is not available");
@@ -151,16 +151,16 @@ export const POST = async (
     );
     if (!reservationFee) throw new CustomError("Car is not available");
 
+
+
+    //check discount
     const returnedDiscount = discountCode
       ? await checkDiscount(
           discountCode,
           params.carSlug,
           startDateObject,
           endDateObject,
-          car.pricings,
-          car.hourPrice,
-          car.reservationPercentage,
-          car.reservationFlatFee
+          reservationFee
         )
       : null;
 

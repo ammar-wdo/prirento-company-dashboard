@@ -85,18 +85,33 @@ export const POST = async (
         { status: 200, headers: corsHeaders }
       );
 
+      const { isAvailable, totalPrice } = calculateTotalRentalPriceWithAvailability(
+        startDateObject,
+        endDateObject,
+        car.pricings,
+        car.hourPrice
+      );
+    
+      if (!isAvailable) {
+        throw new CustomError("Invalid promo code");
+      }
   
-
+      const reservationFee = calculateReservationFee(
+        car.reservationPercentage,
+        car.reservationFlatFee,
+        totalPrice as number
+      );
+    
+      if (reservationFee === false) {
+        throw new CustomError("Promocode is not applicable");
+      }
 
     const returnedDiscount =await  checkDiscount(
       promocode,
       params.carSlug,
       startDateObject,
       endDateObject,
-      car.pricings,
-      car.hourPrice,
-      car.reservationPercentage,
-      car.reservationFlatFee
+      reservationFee
     );
 
     return NextResponse.json(

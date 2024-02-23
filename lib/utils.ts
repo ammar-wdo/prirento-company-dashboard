@@ -516,10 +516,7 @@ export const checkDiscount = async (
   carSlug: string,
   startDateObject: Date,
   endDateObject: Date,
-  pricings: number[],
-  hourPrice: number|null,
-  reservationPercentage: number | null,
-  reservationFlatFee: number | null
+ reservationFee:number
 ) => {
 
 
@@ -560,26 +557,9 @@ console.log('promocode',promocode)
     throw new CustomError("This discount is not applicable for this rental dates");
   }
 
-  const { isAvailable, totalPrice } = calculateTotalRentalPriceWithAvailability(
-    startDateObject,
-    endDateObject,
-    pricings,
-    hourPrice
-  );
+  
 
-  if (!isAvailable) {
-    throw new CustomError("Invalid promo code");
-  }
 
-  const reservationFee = calculateReservationFee(
-    reservationPercentage,
-    reservationFlatFee,
-    totalPrice as number
-  );
-
-  if (reservationFee === false) {
-    throw new CustomError("Promocode is not applicable");
-  }
   const discountValue = calculateDiscount(
     reservationFee,
     discount.type,
