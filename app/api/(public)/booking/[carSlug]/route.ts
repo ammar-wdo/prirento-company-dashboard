@@ -44,7 +44,7 @@ export const POST = async (
 
 
     //extract values to parse
-    const { discountCode, values } = body;
+    const {carExtraOptionsIds ,discountCode, values } = body;
 
     const validData = bookingSchema.safeParse(values);
     if (!validData.success) {
@@ -165,7 +165,9 @@ export const POST = async (
       : null;
 
 
-      
+
+
+
 
     return NextResponse.json(
       {

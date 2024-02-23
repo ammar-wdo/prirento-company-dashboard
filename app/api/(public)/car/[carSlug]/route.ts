@@ -30,11 +30,9 @@ export const GET = async (
     const car = await prisma.car.findUnique({
       where: {
         slug: params.carSlug,
-        disabled: false,
-        carStatus: "active",
-        company: {
-          away: false,
-        },
+       
+       
+     
       },
       include: {
         carModel: {

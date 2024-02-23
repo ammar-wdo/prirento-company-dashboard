@@ -94,6 +94,11 @@ export const GET = async (
         pickupLocations: true,
         dropoffLocations: true,
         availabilities: true,
+        carExtraOptions:{
+          where:{
+            status:'active'
+          }
+        }
       },
     });
 
@@ -182,6 +187,7 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
       location: locationName?.name,
       startDate: startDateObject,
       endDate: endDateObject,
+      carExtraOptions:car.carExtraOptions,
       availability: {
         isAvailable,
         message,
