@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import {
   calculateHours,
+  calculateReservationFee,
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
   doesOverlap,
@@ -149,6 +150,9 @@ export const GET = async (
       validHours = { valid: false, minimumHours: car.minimumHours};
     }
 
+   
+const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.reservationFlatFee,totalPrice) : false
+
     const { isAvailable, message, pickupLocations, dropOffLocations } =
       isCarAvailable({
         priceAvailability,
@@ -160,6 +164,8 @@ export const GET = async (
         carDropLocations,
         carPickLocations,
         validHours,
+       fee
+        
       });
 
     const isDeliveryFee =
@@ -168,6 +174,7 @@ export const GET = async (
     const availability = {
       kmIncluded: car.kmIncluded,
       deliveryFee: isDeliveryFee ? car.deleviryFee : null,
+      fee:fee,
       deposit: car.deposite,
       slug: car.slug,
       price: totalPrice,

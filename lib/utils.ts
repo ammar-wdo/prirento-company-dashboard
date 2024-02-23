@@ -228,15 +228,14 @@ export function formatDate(
   return new Intl.DateTimeFormat(locale, mergedOptions).format(date);
 }
 
-export const calculateHours = ( startDate: Date,
-  endDate: Date)=>{
+export const calculateHours = (startDate: Date, endDate: Date) => {
   const diffMs = endDate.getTime() - startDate.getTime();
 
   // Convert milliseconds to hours and days
   const hoursTotal = diffMs / (1000 * 60 * 60);
 
-  return hoursTotal
-}
+  return hoursTotal;
+};
 
 export function calculateRentalPeriod(
   startDate: Date,
@@ -246,7 +245,7 @@ export function calculateRentalPeriod(
   const diffMs = endDate.getTime() - startDate.getTime();
 
   // Convert milliseconds to hours and days
-  const hoursTotal = calculateHours(startDate,endDate);
+  const hoursTotal = calculateHours(startDate, endDate);
   const days = Math.floor(hoursTotal / 24);
   const extraHours = Math.floor(hoursTotal % 24);
 
@@ -257,8 +256,7 @@ export function calculateTotalRentalPriceWithAvailability(
   startDate: Date,
   endDate: Date,
   pricings: number[],
-  hourlyPrice: number | null | undefined,
-
+  hourlyPrice: number | null | undefined
 ): {
   totalPrice: number | null;
   isAvailable: boolean;
@@ -267,7 +265,7 @@ export function calculateTotalRentalPriceWithAvailability(
   const { days, extraHours } = calculateRentalPeriod(startDate, endDate);
 
   // Generate rental period description
-  let rentalPeriodDescription = ""
+  let rentalPeriodDescription = "";
 
   if (days > 0) {
     rentalPeriodDescription += `${days} day${days > 1 ? "s" : ""}`;
@@ -277,10 +275,6 @@ export function calculateTotalRentalPriceWithAvailability(
       (days > 0 ? " and " : "") +
       `${extraHours} hour${extraHours > 1 ? "s" : ""}`;
   }
-
-
-  
-
 
   if ((days > 0 && !pricings[days - 1]) || !hourlyPrice) {
     return {
@@ -299,9 +293,6 @@ export function calculateTotalRentalPriceWithAvailability(
   // Sum day price and extra hours price to get total price
   const totalPrice = dayPrice + extraHoursPrice;
 
-
-  ;
- 
   return { totalPrice, isAvailable: true, rentalPeriodDescription };
 }
 
@@ -314,23 +305,21 @@ export function processCars(
   startDateObject: Date,
   endDateObject: Date
 ): { availableCars: CarPublicType[]; notAvailableCars: CarPublicType[] } {
-
-
   const allCars = cars.map((car) => {
     const { totalPrice, isAvailable, rentalPeriodDescription } =
       calculateTotalRentalPriceWithAvailability(
         startDateObject,
         endDateObject,
         car.pricings,
-        car.hourPrice,
-       
+        car.hourPrice
       );
 
-      const hours = calculateHours(startDateObject,endDateObject)
-      const minHoursValid = car.minimumHours ? car.minimumHours < hours : true
+    //check if chosen hours bigger than minimum hour rate
+    const hours = calculateHours(startDateObject, endDateObject);
+    const minHoursValid = car.minimumHours ? car.minimumHours < hours : true;
 
-
-    const notAvailable = !isAvailable || car.availabilities.length > 0 || !minHoursValid  ;
+    const notAvailable =
+      !isAvailable || car.availabilities.length > 0 || !minHoursValid;
 
     return {
       id: car.id,
@@ -417,13 +406,16 @@ export function doesOverlap(
 type IsCarAvailable = {
   priceAvailability: boolean;
   location: string;
-  carPickLocations: { slug: string,name:string }[] | [];
-  carDropLocations: { slug: string,name:string }[] | [];
+  carPickLocations: { slug: string; name: string }[] | [];
+  carDropLocations: { slug: string; name: string }[] | [];
   dropOffLocation: string | undefined;
   rangeDates: { startDate: Date; endDate: Date }[] | [];
   clientStartDate: Date;
   clientEndDate: Date;
-  validHours:{valid:true,minimumHours:null} | {valid:false,minimumHours:number}
+  validHours:
+    | { valid: true; minimumHours: null }
+    | { valid: false; minimumHours: number };
+  fee: number | false;
 };
 
 export const isCarAvailable = ({
@@ -435,24 +427,30 @@ export const isCarAvailable = ({
   clientStartDate,
   carPickLocations,
   carDropLocations,
-  validHours
-}: IsCarAvailable): { isAvailable: boolean; message: string ,pickupLocations:string,dropOffLocations:string} => {
+  validHours,
+  fee,
+}: IsCarAvailable): {
+  isAvailable: boolean;
+  message: string;
+  pickupLocations: string;
+  dropOffLocations: string;
+} => {
   let isAvailable = true;
   let message = "";
-  let pickupLocations=''
-  let dropOffLocations=''
-
+  let pickupLocations = "";
+  let dropOffLocations = "";
 
   const isPickupLocationAvailable = carPickLocations.some(
     (el) => el.slug.toLocaleLowerCase() === location.toLocaleLowerCase()
   );
 
-
   const isDropOffLocationAvailable = dropOffLocation
-    ? carDropLocations.some((el) => el.slug.toLocaleLowerCase() === dropOffLocation.toLocaleLowerCase())
+    ? carDropLocations.some(
+        (el) =>
+          el.slug.toLocaleLowerCase() === dropOffLocation.toLocaleLowerCase()
+      )
     : true;
 
- 
   const overLap = doesOverlap(clientStartDate, clientEndDate, rangeDates);
 
   if (!priceAvailability || overLap) {
@@ -460,7 +458,12 @@ export const isCarAvailable = ({
     message = "This car is not available for this chosen date and time";
   }
 
-  if(!validHours.valid) {
+  if (!!priceAvailability && fee === false) {
+    isAvailable = false;
+    message = `Car is not available`;
+  }
+
+  if (!validHours.valid) {
     isAvailable = false;
     message = `This car is available for minimum of  ${validHours.minimumHours} hour(s) rent`;
   }
@@ -468,41 +471,41 @@ export const isCarAvailable = ({
   if (!isPickupLocationAvailable || !isDropOffLocationAvailable) {
     isAvailable = false;
     message = "This car is only available in:";
-     pickupLocations=carPickLocations.map(el=>el.name).join(', ')
-     dropOffLocations=carDropLocations.map(el=>el.name).join(', ')
+    pickupLocations = carPickLocations.map((el) => el.name).join(", ");
+    dropOffLocations = carDropLocations.map((el) => el.name).join(", ");
   }
 
-  return { isAvailable, message,pickupLocations,dropOffLocations };
+  return { isAvailable, message, pickupLocations, dropOffLocations };
 };
 
+export const calculateDiscount = (
+  fee: number,
+  type: "fixed" | "percentage",
+  value: number
+) => {
+  const val = type === "fixed" ? value : (value * fee) / 100;
 
+  return val;
+};
 
+export const calculateReservationFee = (
+  reservationPercentage: number | null,
+  reservationFlat: number | null,
+  subtotal: number
+) => {
+  let value: number | boolean;
 
-export const calculateDiscount = (subtotal:number,type:'fixed'|'percentage',value:number)=>{
-  const val =
-    type === "fixed"
-      ? value
-      : (value * subtotal) / 100;
-
-      return val
-}
-
-export const calculateReservationFee = (reservationPercentage:number|null,reservationFlat:number|null,subtotal:number)=>{
-  let value:number | boolean
-
-if(!!reservationPercentage){
-   value = (reservationPercentage * subtotal) / 100
-}
-else if(!!reservationFlat){
-  if(reservationFlat >= subtotal) {
-    value = false
-  }else{
-    value =  reservationFlat
+  if (!!reservationPercentage) {
+    value = (reservationPercentage * subtotal) / 100;
+  } else if (!!reservationFlat) {
+    if (reservationFlat >= subtotal) {
+      value = false;
+    } else {
+      value = reservationFlat;
+    }
+  } else {
+    value = false;
   }
 
-}else {
-  value=false
-}
-
-return value
-}
+  return value;
+};
