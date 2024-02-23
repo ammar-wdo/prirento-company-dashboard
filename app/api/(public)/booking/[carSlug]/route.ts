@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { checkDiscount, combineDateAndTimeToUTC } from "@/lib/utils";
+import { calculateHours, calculateReservationFee, calculateTotalRentalPriceWithAvailability, checkDiscount, combineDateAndTimeToUTC } from "@/lib/utils";
 import { bookingSchema } from "@/schemas";
 import { NextResponse } from "next/server";
 
@@ -104,15 +104,44 @@ export const POST = async (
     });
 
     //if no car or not available or booked return not available
-    if (!car || !!car.availabilities.length || !!car.bookings.length)
-      return NextResponse.json({
-        success: false,
-        error: "This car is not available",
-      },{status:200,headers:corsHeaders});
+    if (!car || !!car.availabilities.length || !!car.bookings.length) throw new CustomError("Car is not available")
 
 
 
-      const returnedDiscount =await  checkDiscount(
+
+//check that price is available for chosen date
+     const {
+        totalPrice,
+        isAvailable,
+        rentalPeriodDescription,
+      } = calculateTotalRentalPriceWithAvailability(
+        startDateObject,
+        endDateObject,
+        car.pricings,
+        car.hourPrice
+      );
+
+      if(!isAvailable) throw new CustomError('Car is not available')    
+
+
+      //check that minimum hours are satisfied
+      const hours = calculateHours(startDateObject, endDateObject);
+      if (car.minimumHours && hours < car.minimumHours) throw new CustomError('Car is not available')  
+
+
+// check that reservation fee is not bigger than car price for chosen dates
+      const reservationFee = calculateReservationFee(
+        car.reservationPercentage,
+        car.reservationFlatFee,
+        totalPrice as number
+      );
+      if(!reservationFee) throw new CustomError('Car is not available')
+
+
+
+      
+
+      const returnedDiscount = discountCode ?  await  checkDiscount(
         discountCode,
         params.carSlug,
         startDateObject,
@@ -121,14 +150,16 @@ export const POST = async (
         car.hourPrice,
         car.reservationPercentage,
         car.reservationFlatFee
-      );
+      ) : null;
 
 
 
 
 
 
-      return NextResponse.json({success:true,url:returnedDiscount.promocode},{status:200,headers:corsHeaders})
+
+
+      return NextResponse.json({success:true,url:returnedDiscount?.promocode || 'Successfully booked' },{status:200,headers:corsHeaders})
   } catch (error) {
     console.log(error);
 

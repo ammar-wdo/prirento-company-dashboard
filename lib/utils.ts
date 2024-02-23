@@ -521,6 +521,8 @@ export const checkDiscount = async (
   reservationPercentage: number | null,
   reservationFlatFee: number | null
 ) => {
+
+
   const discount = await prisma.carDiscount.findUnique({
     where: {
       promocode: promocode,
