@@ -104,8 +104,8 @@ export const GET = async (
 
     if (!car)
       return NextResponse.json(
-        { error: "Car does not exist" },
-        { status: 400 }
+        { error: "Car is not Available", success: false },
+        { status: 200 }
       );
 
     // extract location name from sent slug
