@@ -44,6 +44,8 @@ export const GET = async (req: NextRequest) => {
       },
     });
 
+   
+
     const availableCars = carsRes.map((car) => {
         if (!car.pricings[0]) return null;
      
