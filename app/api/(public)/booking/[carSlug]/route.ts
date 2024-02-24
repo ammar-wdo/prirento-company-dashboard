@@ -1,11 +1,15 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
 import {
+  calculateDiscount,
+  calculateExtraOptionsAndPrice,
   calculateHours,
   calculateReservationFee,
   calculateTotalRentalPriceWithAvailability,
   checkDiscount,
   combineDateAndTimeToUTC,
+  extractPayments,
+  isDeliveryFee,
 } from "@/lib/utils";
 import { bookingSchema } from "@/schemas";
 import { NextResponse } from "next/server";
@@ -27,10 +31,7 @@ export const POST = async (
   { params }: { params: { carSlug: string } }
 ) => {
   try {
-
-
-
-    const apiSecret = req.headers.get("api-Secret");  //API secret key to prevent 3rd party requests
+    const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
     if (!apiSecret || apiSecret !== process.env.API_SECRET) {
       throw new CustomError("Unauthorized request");
@@ -42,15 +43,13 @@ export const POST = async (
 
     const body = await req.json();
 
-
     //extract values to parse
-    const {carExtraOptionsIds ,discountCode, values } = body;
+    const { carExtraOptionsIds, discountCode, values } = body;
 
     const validData = bookingSchema.safeParse(values);
     if (!validData.success) {
       throw new CustomError("Invalid inputs");
     }
-
 
     //parsing the incoming data
     const {
@@ -64,7 +63,6 @@ export const POST = async (
 
     const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
     const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
-
 
     //fetching the car using certain criteria
     const car = await prisma.car.findUnique({
@@ -122,7 +120,6 @@ export const POST = async (
       },
     });
 
-
     //if no car or not available or booked return not available
     if (!car || !!car.availabilities.length || !!car.bookings.length)
       throw new CustomError("Car is not available");
@@ -151,9 +148,7 @@ export const POST = async (
     );
     if (!reservationFee) throw new CustomError("Car is not available");
 
-
-
-    //check discount
+    //check discount if exist
     const returnedDiscount = discountCode
       ? await checkDiscount(
           discountCode,
@@ -163,6 +158,34 @@ export const POST = async (
           reservationFee
         )
       : null;
+
+    //calculate discount value if there is a discount
+    const discountValue = returnedDiscount
+      ? calculateDiscount(
+          reservationFee,
+          returnedDiscount.type,
+          returnedDiscount.value
+        )
+      : 0;
+
+    //extract car extra options and calculate price if any exists
+    const { carExtraOptions, carExtraOptionsPrice } =
+      await calculateExtraOptionsAndPrice(carExtraOptionsIds);
+
+    //check delivery fee
+    const deliveryFee = isDeliveryFee(dropoffLocation, pickupLocation)
+      ? car.deleviryFee
+      : 0;
+
+    //extract payments (totalAmount - checkoutPayment - laterPayment for company)
+     const { totalAmount, checkoutPayment, payLater } = extractPayments({
+      totalPrice: totalPrice as number,
+      carDeposit: car.deposite,
+      carExtraOptionsPrice,
+      deliveryFee,
+      discountValue,
+      reservationFee,
+    });
 
 
 

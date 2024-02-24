@@ -516,10 +516,8 @@ export const checkDiscount = async (
   carSlug: string,
   startDateObject: Date,
   endDateObject: Date,
- reservationFee:number
+  reservationFee: number
 ) => {
-
-
   const discount = await prisma.carDiscount.findUnique({
     where: {
       promocode: promocode,
@@ -532,7 +530,7 @@ export const checkDiscount = async (
       },
     },
   });
-console.log('promocode',promocode)
+  console.log("promocode", promocode);
   if (!discount) {
     throw new CustomError("Invalid promocode");
   }
@@ -545,7 +543,9 @@ console.log('promocode',promocode)
     discount.discountApplyType === "created" &&
     !(new Date() >= discount.startDate && new Date() <= discount.endDate)
   ) {
-    throw new CustomError("This discount is not applicable for this rental dates");
+    throw new CustomError(
+      "This discount is not applicable for this rental dates"
+    );
   }
 
   if (
@@ -554,11 +554,10 @@ console.log('promocode',promocode)
       startDateObject <= discount.endDate && endDateObject >= discount.startDate
     )
   ) {
-    throw new CustomError("This discount is not applicable for this rental dates");
+    throw new CustomError(
+      "This discount is not applicable for this rental dates"
+    );
   }
-
-  
-
 
   const discountValue = calculateDiscount(
     reservationFee,
@@ -576,4 +575,69 @@ console.log('promocode',promocode)
     promocode: discount.promocode,
     discountAppliedType: discount.discountApplyType,
   };
+};
+
+export const calculateExtraOptionsAndPrice = async (
+  carExtraOptionsIds: string[] | null
+) => {
+  let carExtraOptions = null;
+  let carExtraOptionsPrice = 0;
+  if (
+    !!carExtraOptionsIds &&
+    Array.isArray(carExtraOptionsIds) &&
+    !!carExtraOptionsIds.length
+  ) {
+    carExtraOptions = await prisma.carExtraOption.findMany({
+      where: {
+        id: {
+          in: carExtraOptionsIds,
+        },
+      },
+    });
+
+    carExtraOptionsPrice = carExtraOptions.reduce(
+      (acc, value) => acc + value.price,
+      0
+    );
+  }
+  return { carExtraOptions, carExtraOptionsPrice };
+};
+
+export const isDeliveryFee = (
+  dropOffLocation: string | undefined,
+  location: string
+) => (dropOffLocation && dropOffLocation !== location) || false;
+
+export const extractPayments = ({
+  totalPrice,
+  carDeposit,
+  carExtraOptionsPrice,
+  deliveryFee,
+  discountValue,
+  reservationFee,
+}: {
+  totalPrice: number;
+  carDeposit: number;
+  carExtraOptionsPrice:number,
+  deliveryFee:number
+  discountValue:number
+  reservationFee:number
+
+}) => {
+  //calculate total amount
+  const totalAmount =
+    (totalPrice as number) +
+    carDeposit +
+    carExtraOptionsPrice +
+    deliveryFee -
+    discountValue;
+
+  //calculate checkout payment
+  const checkoutPayment = reservationFee - discountValue;
+
+  //calculate the remaining value after substracting our value (the payNow value)
+  const payLater = totalAmount - checkoutPayment;
+
+
+  return {totalAmount,checkoutPayment,payLater}
 };

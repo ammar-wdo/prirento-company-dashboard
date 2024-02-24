@@ -7,6 +7,7 @@ import {
   doesOverlap,
   formatDate,
   isCarAvailable,
+  isDeliveryFee,
 } from "@/lib/utils";
 import { FilterOneCarSchema } from "@/schemas";
 
@@ -173,12 +174,12 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
         
       });
 
-    const isDeliveryFee =
-      (dropOffLocation && dropOffLocation !== location) || false;
+    const deliveryFeeExist =isDeliveryFee(dropOffLocation,location)
+     
 
     const availability = {
       kmIncluded: car.kmIncluded,
-      deliveryFee: isDeliveryFee ? car.deleviryFee : null,
+      deliveryFee: deliveryFeeExist ? car.deleviryFee : null,
       fee:fee,
       deposit: car.deposite,
       slug: car.slug,
