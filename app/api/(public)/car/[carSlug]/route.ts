@@ -64,8 +64,8 @@ export const GET = async (
 
     if (!car)
       return NextResponse.json(
-        { error: "Car does not exist" },
-        { status: 400 }
+        { error: "Car does not exist",success:true,car:null },
+        { status: 200 }
       );
 
 
@@ -99,6 +99,6 @@ export const GET = async (
   } catch (error: any) {
     let errorMessage = "Internal server Error";
 
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json({ error: errorMessage,success:false }, { status: 200 });
   }
 };
