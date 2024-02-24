@@ -218,7 +218,7 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
       },
     };
 
-    return NextResponse.json({ availability, success: true }, { status: 200 });
+    return NextResponse.json({ data:availability, success: true }, { status: 200 });
   } catch (error: any) {
     let errorMessage = "Internal server Error";
 
