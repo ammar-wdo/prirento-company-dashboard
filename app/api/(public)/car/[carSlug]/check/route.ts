@@ -4,8 +4,6 @@ import {
   calculateReservationFee,
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
-  doesOverlap,
-  formatDate,
   isCarAvailable,
   isDeliveryFee,
 } from "@/lib/utils";
@@ -99,7 +97,8 @@ export const GET = async (
           where:{
             status:'active'
           }
-        }
+        },
+     
       },
     });
 
@@ -174,8 +173,26 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
         
       });
 
+      //check if delivery fee exists
     const deliveryFeeExist =isDeliveryFee(dropOffLocation,location)
-     
+
+  const superAdminRules = await prisma.superadminRule.findMany({
+    where:{
+      OR:[{
+       carId:car.id
+      },
+    {
+      applyToAll:true
+    }]
+    }
+  })
+
+  const mandatorySuperAdminRules = superAdminRules.filter(rule=>rule.mandatory)
+  const optionalSuperAdminRules = superAdminRules.filter(rule=>!rule.mandatory)
+
+
+
+
 
     const availability = {
       kmIncluded: car.kmIncluded,
@@ -189,6 +206,8 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
       startDate: startDateObject,
       endDate: endDateObject,
       carExtraOptions:car.carExtraOptions,
+      mandatorySuperAdminRules,
+      optionalSuperAdminRules,
       availability: {
         isAvailable,
         message,

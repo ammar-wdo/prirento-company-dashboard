@@ -195,7 +195,7 @@ export const POST = async (
     return NextResponse.json(
       {
         success: true,
-        url: returnedDiscount?.promocode || "Successfully booked",
+        url: `total amount ${totalAmount}, checkout payment ${checkoutPayment}, later payment ${payLater}`,
       },
       { status: 200, headers: corsHeaders }
     );
