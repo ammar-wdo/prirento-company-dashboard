@@ -176,6 +176,8 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
       //check if delivery fee exists
     const deliveryFeeExist =isDeliveryFee(dropOffLocation,location)
 
+
+    //prepare super admin rules
   const superAdminRules = await prisma.superadminRule.findMany({
     where:{
       OR:[{
