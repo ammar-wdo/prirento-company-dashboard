@@ -44,14 +44,17 @@ export const POST = async (
     const body = await req.json();
 
     //extract values to parse
-    const { carExtraOptionsIds, discountCode, values } = body;
+    const { optionalSuperAdminRulesIds,carExtraOptionsIds, discountCode, values } = body;
 
+
+
+     //parsing the incoming data
     const validData = bookingSchema.safeParse(values);
     if (!validData.success) {
       throw new CustomError("Invalid inputs");
     }
 
-    //parsing the incoming data
+   
     const {
       startDate,
       startTime,

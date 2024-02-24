@@ -318,7 +318,7 @@ export function processCars(
     //check if chosen hours bigger than minimum hour rate
     const hours = calculateHours(startDateObject, endDateObject);
     const minHoursValid = car.minimumHours ? car.minimumHours < hours : true;
-
+  //check availability in case (price is not available for chosen dates - there are any availability blocking dates - minimum rentung hours are gigger than chosen date's hours)
     const notAvailable =
       !isAvailable || car.availabilities.length > 0 || !minHoursValid;
 
