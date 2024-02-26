@@ -412,3 +412,13 @@ export const bookingSchema = z
       path: ["endTime"],
     }
   );
+
+
+//contact from frontend
+  export const contactSchema = z.object({
+    firstName:requiredString,
+    lastName:requiredString,
+    email:requiredString.email('Invalid email address'),
+    subject:z.string().optional(),
+    message:requiredString
+  })
