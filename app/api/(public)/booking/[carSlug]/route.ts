@@ -9,6 +9,7 @@ import {
   checkDiscount,
   combineDateAndTimeToUTC,
   extractPayments,
+  extractSuperadminRulesAndPrices,
   isDeliveryFee,
 } from "@/lib/utils";
 import { bookingSchema } from "@/schemas";
@@ -30,6 +31,9 @@ export const POST = async (
   req: Request,
   { params }: { params: { carSlug: string } }
 ) => {
+
+
+
   try {
     const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
@@ -41,6 +45,10 @@ export const POST = async (
       throw new CustomError("Car slug is required");
     }
 
+
+
+
+    
     const body = await req.json();
 
     //extract values to parse
@@ -180,6 +188,12 @@ export const POST = async (
       ? car.deleviryFee
       : 0;
 
+
+
+      //extract super admin rules and its pricing...
+
+      const {superAdminMandatoryRules,mandatoryPrice,optionalSuperAdminRules} = await extractSuperadminRulesAndPrices(car.id,optionalSuperAdminRulesIds)
+
     //extract payments (totalAmount - checkoutPayment - laterPayment for company)
      const { totalAmount, checkoutPayment, payLater } = extractPayments({
       totalPrice: totalPrice as number,
@@ -198,7 +212,7 @@ export const POST = async (
     return NextResponse.json(
       {
         success: true,
-        url: `total amount ${totalAmount}, checkout payment ${checkoutPayment}, later payment ${payLater}`,
+        url: `super admin optional rules ${optionalSuperAdminRules.map(el=>el.label)}`,
       },
       { status: 200, headers: corsHeaders }
     );

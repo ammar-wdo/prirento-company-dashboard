@@ -18,8 +18,14 @@ export const GET = async(req:Request)=>{
                 select:{label:true}
             }
         }})
+
+        const blogsWithNowContent = blogs.map((blog)=>{
+           const {content,...rest}=blog
+
+           return {...rest}
+        })
        
-        return NextResponse.json({success:true,blogs},{status:200})
+        return NextResponse.json({success:true,blogs:blogsWithNowContent},{status:200})
 
 
 

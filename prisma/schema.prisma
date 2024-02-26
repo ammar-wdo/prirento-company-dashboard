@@ -184,7 +184,7 @@ model CarAvailability {
 model CarDiscount {
   id        String @id @default(uuid())
   label     String
-  promocode String  @unique
+  promocode String @unique
 
   type  DiscountType @default(fixed)
   value Int
@@ -292,23 +292,34 @@ model Booking {
   pickupLocation  String
   dropoffLocation String?
 
-  extraOptions   Json[]
-  adminRules     Json[] 
+  extraOptions Json[]
+  adminRules   Json[]
+
   subtotal       Int
   reservationFee Int
   discount       Int
   deliveryFee    Int?
-  total          Int 
-  terms          Boolean       @default(true)
-  paymentMethod  PaymentMethod
-  paymentStatus  PaymentStatus
-  bookingStatus  BookingStatus
+  total          Int
+
+  terms         Boolean       @default(true)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus
+  bookingStatus BookingStatus
 
   carId String
   car   Car    @relation(fields: [carId], references: [id])
 
   createdAt DateTime @default(now())
   updatedUt DateTime @updatedAt
+}
+
+model About {
+  id String @id @default("About")
+
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 //ENUMS
@@ -379,7 +390,6 @@ enum CarExtraOptionStatus {
 }
 
 enum PaymentMethod {
-
   CREDIT_CARD
   PAYPAL
 }

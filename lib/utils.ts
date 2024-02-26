@@ -641,3 +641,41 @@ export const extractPayments = ({
 
   return {totalAmount,checkoutPayment,payLater}
 };
+
+
+
+
+export const extractSuperadminRulesAndPrices = async(carId:string,ids:null|string[])=>{
+
+  const superAdminMandatoryRules = await prisma.superadminRule.findMany({
+    where:{
+      OR:[{
+       carId:carId
+      },
+    {
+      applyToAll:true
+    }],
+    mandatory:true
+    }
+  })
+
+
+  const mandatoryPrice = superAdminMandatoryRules.reduce((acc,el)=>acc + el.value,0)
+  
+
+  const optionalSuperAdminRules = ids ? await prisma.superadminRule.findMany({
+    where:{
+      id:{
+        in:ids
+      }
+    }
+  }) : []
+
+
+
+
+  return {superAdminMandatoryRules,mandatoryPrice,optionalSuperAdminRules}
+
+  
+
+}
