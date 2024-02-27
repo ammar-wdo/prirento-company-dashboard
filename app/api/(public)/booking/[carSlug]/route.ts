@@ -14,6 +14,7 @@ import {
   generateBookingCode,
   isDeliveryFee,
 } from "@/lib/utils";
+import { paymentMethodMap } from "@/mappting";
 import { bookingSchema } from "@/schemas";
 import { NextResponse } from "next/server";
 
@@ -247,10 +248,14 @@ include:{
     })
 
     console.log("booking id",booking.id)
-
+// generate car name
     const carName = `${car.carModel.carBrand.brand} ${car.carModel.name}`
 
-    const session = await startStripeSession({id:booking.id},booking.email,'card',carName,rentalPeriodDescription,checkoutPayment,booking.id)
+    //map payment method 
+
+    const paymentMethod = paymentMethodMap[booking.paymentMethod]
+//initiate a stripe session
+    const session = await startStripeSession({id:booking.id},booking.email,paymentMethod,carName,rentalPeriodDescription,checkoutPayment,booking.id)
 
 
 
