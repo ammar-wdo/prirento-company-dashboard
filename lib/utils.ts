@@ -712,3 +712,36 @@ export const extractSuperadminRulesAndPrices = async (
     optionalRulesPrice,
   };
 };
+
+
+//generate booking code function 
+export function generateCode() {
+  const numbers = Math.floor(Math.random() * 90000000) + 10000000; // Ensure 8 digits
+  const code = 'A' + numbers;
+  return code;
+}
+
+
+//check the boooking code uniqness
+export const generateBookingCode = async()=>{
+
+  let bookingCode = generateCode();
+  let existingBooking = await prisma.booking.findFirst({
+    where: {
+      bookingCode: bookingCode,
+    },
+    select: { bookingCode: true },
+  });
+
+  while (existingBooking) {
+    bookingCode = generateCode();
+    existingBooking = await prisma.booking.findFirst({
+      where: {
+        bookingCode: bookingCode,
+      },
+      select: { bookingCode: true },
+    });
+  }
+
+  return bookingCode
+}

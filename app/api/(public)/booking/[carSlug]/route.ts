@@ -1,5 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
+import { startStripeSession } from "@/lib/stripe";
 import {
   calculateDiscount,
   calculateExtraOptionsAndPrice,
@@ -10,6 +11,7 @@ import {
   combineDateAndTimeToUTC,
   extractPayments,
   extractSuperadminRulesAndPrices,
+  generateBookingCode,
   isDeliveryFee,
 } from "@/lib/utils";
 import { bookingSchema } from "@/schemas";
@@ -31,6 +33,9 @@ export const POST = async (
   req: Request,
   { params }: { params: { carSlug: string } }
 ) => {
+
+
+  let booking
   try {
     const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
@@ -65,7 +70,7 @@ export const POST = async (
       endTime,
       pickupLocation,
       dropoffLocation,
-    } = validData.data;
+    ...rest} = validData.data;
 
     const startDateObject = combineDateAndTimeToUTC(startDate, startTime);
     const endDateObject = combineDateAndTimeToUTC(endDate, endTime);
@@ -89,6 +94,13 @@ export const POST = async (
         }),
       },
       include: {
+        carModel:{
+include:{
+  carBrand:{
+    select:{brand:true}
+  }
+}
+        },
         availabilities: {
           where: {
             AND: [
@@ -208,14 +220,56 @@ export const POST = async (
       optionalRulesPrice,
     });
 
+//generate unique booking code
+    const bookingCode = await generateBookingCode()
+
+    //create new booking
+
+     booking = await prisma.booking.create({
+      data:{
+        ...rest,
+        carId:car.id,
+        email:validData.data.email.toLowerCase(),
+        pickupLocation:pickupLocation,
+        ...(dropoffLocation && {dropoffLocation}),
+        bookingCode,
+        startDate:startDateObject,
+        endDate:endDateObject,
+        discount:discountValue,
+        extraOptions:carExtraOptions || [],
+        adminRules:[...refinedMandaturyRules,...refinedOptionalRules],
+        subtotal:totalAmount,
+        total:totalAmount,
+        payLater:payLater,
+        payNow:checkoutPayment,
+        reservationFee
+      }
+    })
+
+    console.log("booking id",booking.id)
+
+    const carName = `${car.carModel.carBrand.brand} ${car.carModel.name}`
+
+    const session = await startStripeSession({},booking.email,'card',carName,rentalPeriodDescription,checkoutPayment,booking.id)
+
+
+
+
+
+
     return NextResponse.json(
       {
         success: true,
-        url: ` total amount ${totalAmount} - checkout payment ${checkoutPayment} - payLater ${payLater}`,
+        url:session.url,
       },
       { status: 200, headers: corsHeaders }
     );
   } catch (error) {
+    // await prisma.booking.delete({
+    //   where:{
+    //     id:booking?.id 
+    //   }
+    // })
     console.log(error);
 
     let errorMessage = "Internal server error";
