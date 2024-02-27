@@ -449,11 +449,13 @@ export const isCarAvailable = ({
   message: string;
   pickupLocations: string;
   dropOffLocations: string;
+  reservationDates:{startDate:Date,endDate:Date}[]
 } => {
   let isAvailable = true;
   let message = "";
   let pickupLocations = "";
   let dropOffLocations = "";
+  let reservationDates:{startDate:Date,endDate:Date}[] =[]
 
   const isPickupLocationAvailable = carPickLocations.some(
     (el) => el.slug.toLocaleLowerCase() === location.toLocaleLowerCase()
@@ -476,7 +478,8 @@ export const isCarAvailable = ({
 
   if (!!bookingsRangeDates.length) {
     isAvailable = false;
-    message = "This car is already booked for this chosen date and time";
+    message = "This car is already booked for these dates:";
+    reservationDates = bookingsRangeDates
   }
 
   if (!!priceAvailability && fee === false) {
@@ -496,7 +499,7 @@ export const isCarAvailable = ({
     dropOffLocations = carDropLocations.map((el) => el.name).join(", ");
   }
 
-  return { isAvailable, message, pickupLocations, dropOffLocations };
+  return { isAvailable, message, pickupLocations, dropOffLocations, reservationDates };
 };
 
 export const calculateDiscount = (

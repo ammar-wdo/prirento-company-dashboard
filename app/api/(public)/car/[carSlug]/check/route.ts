@@ -200,7 +200,7 @@ export const GET = async (
   //check if fee bigger than car price  
 const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.reservationFlatFee,totalPrice) : false 
 
-    const { isAvailable, message, pickupLocations, dropOffLocations } =
+    const { isAvailable, message, pickupLocations, dropOffLocations,reservationDates } =
       isCarAvailable({
         priceAvailability,
         location,
@@ -263,6 +263,7 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
         message,
         pickupLocations,
         dropOffLocations,
+        reservationDates
       },
     };
 

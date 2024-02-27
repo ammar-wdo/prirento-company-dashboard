@@ -33,7 +33,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
   },
 
   {
-    accessorKey:'payNow',
+    accessorKey:'payLater',
     header: "Price",
     cell:({row})=> <span>{row.original.payLater} AED</span>
     
