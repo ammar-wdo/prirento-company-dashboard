@@ -550,7 +550,8 @@ export const checkDiscount = async (
       },
     },
   });
-  console.log("promocode", promocode);
+  const currentDatePlus4Hours = new Date(new Date().getTime() + 4 * 60 * 60 * 1000)
+  console.log("date",currentDatePlus4Hours);
   if (!discount) {
     throw new CustomError("Invalid promocode");
   }
@@ -561,7 +562,7 @@ export const checkDiscount = async (
 
   if (
     discount.discountApplyType === "created" &&
-    !(new Date() >= discount.startDate && new Date() <= discount.endDate)
+    !(currentDatePlus4Hours >= discount.startDate && currentDatePlus4Hours <= discount.endDate)
   ) {
     throw new CustomError(
       "This discount is not applicable for this rental dates"
