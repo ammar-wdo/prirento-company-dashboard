@@ -250,7 +250,7 @@ include:{
 
     const carName = `${car.carModel.carBrand.brand} ${car.carModel.name}`
 
-    const session = await startStripeSession({},booking.email,'card',carName,rentalPeriodDescription,checkoutPayment,booking.id)
+    const session = await startStripeSession({id:booking.id},booking.email,'card',carName,rentalPeriodDescription,checkoutPayment,booking.id)
 
 
 
