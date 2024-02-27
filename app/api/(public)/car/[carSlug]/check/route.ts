@@ -4,6 +4,7 @@ import {
   calculateReservationFee,
   calculateTotalRentalPriceWithAvailability,
   combineDateAndTimeToUTC,
+  extractsuperadminRuleWithValueToPay,
   isCarAvailable,
   isDeliveryFee,
 } from "@/lib/utils";
@@ -189,8 +190,13 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
     }
   })
 
+
+  //filter mandatory from optional
   const mandatorySuperAdminRules = superAdminRules.filter(rule=>rule.mandatory)
   const optionalSuperAdminRules = superAdminRules.filter(rule=>!rule.mandatory)
+//recalculate arrays to add value to pay field to each
+  const refinedMandatoryRules = mandatorySuperAdminRules.map(el=>extractsuperadminRuleWithValueToPay(el,totalPrice as number))
+  const refinedOptionalRules = optionalSuperAdminRules.map(el=>extractsuperadminRuleWithValueToPay(el,totalPrice as number))
 
 
 
@@ -208,8 +214,8 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
       startDate: startDateObject,
       endDate: endDateObject,
       carExtraOptions:car.carExtraOptions,
-      mandatorySuperAdminRules,
-      optionalSuperAdminRules,
+      mandatorySuperAdminRules:refinedMandatoryRules,
+      optionalSuperAdminRules:refinedOptionalRules,
       availability: {
         isAvailable,
         message,

@@ -10,6 +10,7 @@ import {
   CarBrand,
   CarModel,
   Company,
+  SuperadminRule,
 } from "@prisma/client";
 import { CarPublicType } from "@/types";
 import { CustomError } from "@/costum-error";
@@ -318,7 +319,7 @@ export function processCars(
     //check if chosen hours bigger than minimum hour rate
     const hours = calculateHours(startDateObject, endDateObject);
     const minHoursValid = car.minimumHours ? car.minimumHours < hours : true;
-  //check availability in case (price is not available for chosen dates - there are any availability blocking dates - minimum rentung hours are gigger than chosen date's hours)
+    //check availability in case (price is not available for chosen dates - there are any availability blocking dates - minimum rentung hours are gigger than chosen date's hours)
     const notAvailable =
       !isAvailable || car.availabilities.length > 0 || !minHoursValid;
 
@@ -615,20 +616,25 @@ export const extractPayments = ({
   deliveryFee,
   discountValue,
   reservationFee,
+  mandatoryRulesPrice,
+  optionalRulesPrice,
 }: {
   totalPrice: number;
   carDeposit: number;
-  carExtraOptionsPrice:number,
-  deliveryFee:number
-  discountValue:number
-  reservationFee:number
-
+  carExtraOptionsPrice: number;
+  deliveryFee: number;
+  discountValue: number;
+  reservationFee: number;
+  mandatoryRulesPrice: number;
+  optionalRulesPrice: number;
 }) => {
   //calculate total amount
   const totalAmount =
     (totalPrice as number) +
     carDeposit +
     carExtraOptionsPrice +
+    mandatoryRulesPrice +
+    optionalRulesPrice +
     deliveryFee -
     discountValue;
 
@@ -638,44 +644,71 @@ export const extractPayments = ({
   //calculate the remaining value after substracting our value (the payNow value)
   const payLater = totalAmount - checkoutPayment;
 
-
-  return {totalAmount,checkoutPayment,payLater}
+  return { totalAmount, checkoutPayment, payLater };
 };
 
+//return super admin rule with the value property to pay
+export const extractsuperadminRuleWithValueToPay = (
+  superAdminRule: SuperadminRule,
+  priceValue: number
+) => {
+  const valueToPay =
+    superAdminRule.type === "percentage"
+      ? (superAdminRule.value * priceValue) / 100
+      : superAdminRule.value;
 
+  return { ...superAdminRule, valueToPay };
+};
 
-
-export const extractSuperadminRulesAndPrices = async(carId:string,ids:null|string[])=>{
-
+//extract admin rules arrays (mandatory and optional) and the accumulated price for each
+export const extractSuperadminRulesAndPrices = async (
+  carId: string,
+  ids: null | string[],
+  priceValue: number
+) => {
   const superAdminMandatoryRules = await prisma.superadminRule.findMany({
-    where:{
-      OR:[{
-       carId:carId
-      },
-    {
-      applyToAll:true
-    }],
-    mandatory:true
-    }
-  })
+    where: {
+      OR: [
+        {
+          carId: carId,
+        },
+        {
+          applyToAll: true,
+        },
+      ],
+      mandatory: true,
+    },
+  });
 
+  const refinedMandaturyRules = superAdminMandatoryRules.map((el) =>
+    extractsuperadminRuleWithValueToPay(el, priceValue)
+  );
 
-  const mandatoryPrice = superAdminMandatoryRules.reduce((acc,el)=>acc + el.value,0)
-  
+  const optionalSuperAdminRules = ids
+    ? await prisma.superadminRule.findMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      })
+    : [];
 
-  const optionalSuperAdminRules = ids ? await prisma.superadminRule.findMany({
-    where:{
-      id:{
-        in:ids
-      }
-    }
-  }) : []
+  const refinedOptionalRules = optionalSuperAdminRules.map((el) =>
+    extractsuperadminRuleWithValueToPay(el, priceValue)
+  );
 
+  const mandatoryRulesPrice = !!refinedMandaturyRules.length
+    ? refinedMandaturyRules.reduce((acc, el) => acc + el.valueToPay, 0)
+    : 0;
+  const optionalRulesPrice = !!refinedOptionalRules.length
+    ? refinedOptionalRules.reduce((acc, el) => acc + el.valueToPay, 0)
+    : 0;
 
-
-
-  return {superAdminMandatoryRules,mandatoryPrice,optionalSuperAdminRules}
-
-  
-
-}
+  return {
+    refinedMandaturyRules,
+    refinedOptionalRules,
+    mandatoryRulesPrice,
+    optionalRulesPrice,
+  };
+};

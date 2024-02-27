@@ -31,9 +31,6 @@ export const POST = async (
   req: Request,
   { params }: { params: { carSlug: string } }
 ) => {
-
-
-
   try {
     const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
@@ -45,24 +42,22 @@ export const POST = async (
       throw new CustomError("Car slug is required");
     }
 
-
-
-
-    
     const body = await req.json();
 
     //extract values to parse
-    const { optionalSuperAdminRulesIds,carExtraOptionsIds, discountCode, values } = body;
+    const {
+      optionalSuperAdminRulesIds,
+      carExtraOptionsIds,
+      discountCode,
+      values,
+    } = body;
 
-
-
-     //parsing the incoming data
+    //parsing the incoming data
     const validData = bookingSchema.safeParse(values);
     if (!validData.success) {
       throw new CustomError("Invalid inputs");
     }
 
-   
     const {
       startDate,
       startTime,
@@ -188,31 +183,35 @@ export const POST = async (
       ? car.deleviryFee
       : 0;
 
+    //extract super admin rules and its pricing...
 
-
-      //extract super admin rules and its pricing...
-
-      const {superAdminMandatoryRules,mandatoryPrice,optionalSuperAdminRules} = await extractSuperadminRulesAndPrices(car.id,optionalSuperAdminRulesIds)
+    const {
+      mandatoryRulesPrice,
+      optionalRulesPrice,
+      refinedMandaturyRules,
+      refinedOptionalRules,
+    } = await extractSuperadminRulesAndPrices(
+      car.id,
+      optionalSuperAdminRulesIds,
+      totalPrice as number
+    );
 
     //extract payments (totalAmount - checkoutPayment - laterPayment for company)
-     const { totalAmount, checkoutPayment, payLater } = extractPayments({
+    const { totalAmount, checkoutPayment, payLater } = extractPayments({
       totalPrice: totalPrice as number,
       carDeposit: car.deposite,
       carExtraOptionsPrice,
       deliveryFee,
       discountValue,
       reservationFee,
+      mandatoryRulesPrice,
+      optionalRulesPrice,
     });
-
-
-
-
-
 
     return NextResponse.json(
       {
         success: true,
-        url: `super admin optional rules ${optionalSuperAdminRules.map(el=>el.label)}`,
+        url: ` total amount ${totalAmount} - checkout payment ${checkoutPayment} - payLater ${payLater}`,
       },
       { status: 200, headers: corsHeaders }
     );
