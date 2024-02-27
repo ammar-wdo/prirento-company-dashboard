@@ -93,11 +93,48 @@ export const GET = async (
         },
         pickupLocations: true,
         dropoffLocations: true,
-        availabilities: true,    //could be inhanced to fetch only overlaping
-        bookings:{where:{
-          paymentStatus:{in:['PENDING','SUCCEEDED']},    //could be inhanced to fetch only overlaping
-          bookingStatus:'ACTIVE'
-        }},
+        availabilities: {
+          where: {
+            AND: [
+              {
+                startDate: {
+                  lte: endDateObject,
+                },
+              },
+              {
+                endDate: {
+                  gte: startDateObject,
+                },
+              },
+            ],
+          },
+          select:{
+            startDate:true,
+            endDate:true
+          }
+        },
+        bookings: {
+          where: {
+            AND: [
+              { bookingStatus: "ACTIVE" },
+              { paymentStatus: { in: ["PENDING", "SUCCEEDED"] } },
+              {
+                startDate: {
+                  lte: endDateObject,
+                },
+              },
+              {
+                endDate: {
+                  gte: startDateObject,
+                },
+              },
+            ],
+          },
+          select:{
+            startDate:true,
+            endDate:true
+          }
+        },
         carExtraOptions:{
           where:{
             status:'active'
@@ -135,15 +172,9 @@ export const GET = async (
     );
 
     // extract avalabilities and locations array to use in function
-    const availabilityRangeDates = car.availabilities.map((el) => ({
-      startDate: el.startDate,
-      endDate: el.endDate,
-    }));
+    const availabilityRangeDates = car.availabilities
 
-    const bookingsRangeDates = car.bookings.map((el) => ({
-      startDate: el.startDate,
-      endDate: el.endDate,
-    }))
+    const bookingsRangeDates = car.bookings
 
     const carPickLocations = car.pickupLocations.map((el) => ({
       slug: el.slug,

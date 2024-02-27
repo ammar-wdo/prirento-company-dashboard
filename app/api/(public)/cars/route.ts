@@ -136,6 +136,32 @@ export const GET = async (req: NextRequest) => {
               },
             ],
           },
+          select:{
+            startDate:true,
+            endDate:true
+          }
+        },
+        bookings: {
+          where: {
+            AND: [
+              { bookingStatus: "ACTIVE" },
+              { paymentStatus: { in: ["PENDING", "SUCCEEDED"] } },
+              {
+                startDate: {
+                  lte: endDateObject,
+                },
+              },
+              {
+                endDate: {
+                  gte: startDateObject,
+                },
+              },
+            ],
+          },
+          select:{
+            startDate:true,
+            endDate:true
+          }
         },
       },
     });

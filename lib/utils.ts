@@ -5,11 +5,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from "./prisma";
 import {
+
   Car,
-  CarAvailability,
-  CarBrand,
+
+
   CarModel,
-  Company,
+
   SuperadminRule,
 } from "@prisma/client";
 import { CarPublicType } from "@/types";
@@ -300,7 +301,14 @@ export function calculateTotalRentalPriceWithAvailability(
 
 export function processCars(
   cars: (Car & {
-    availabilities: CarAvailability[];
+    availabilities: {
+      startDate: Date;
+      endDate: Date;
+    }[];
+    bookings: {
+      startDate: Date;
+      endDate: Date;
+    }[];
     carModel: CarModel & { carBrand: { brand: string } };
     company: { logo: string };
   })[],
@@ -321,7 +329,10 @@ export function processCars(
     const minHoursValid = car.minimumHours ? car.minimumHours < hours : true;
     //check availability in case (price is not available for chosen dates - there are any availability blocking dates - minimum rentung hours are gigger than chosen date's hours)
     const notAvailable =
-      !isAvailable || car.availabilities.length > 0 || !minHoursValid;
+      !isAvailable ||
+      car.availabilities.length > 0 ||
+      car.bookings.length > 0 ||
+      !minHoursValid;
 
     return {
       id: car.id,
@@ -455,17 +466,17 @@ export const isCarAvailable = ({
       )
     : true;
 
-  const availabilityOverLap = doesOverlap(clientStartDate, clientEndDate, availabilityRangeDates);
-  const bookingsOverLap = doesOverlap(clientStartDate, clientEndDate, bookingsRangeDates);
+  // const availabilityOverLap = doesOverlap(clientStartDate, clientEndDate, availabilityRangeDates);
+  // const bookingsOverLap = doesOverlap(clientStartDate, clientEndDate, bookingsRangeDates);
 
-  if (!priceAvailability || availabilityOverLap) {
+  if (!priceAvailability || !!availabilityRangeDates.length) {
     isAvailable = false;
     message = "This car is not available for this chosen date and time";
   }
 
-  if(bookingsOverLap) {
+  if (!!bookingsRangeDates.length) {
     isAvailable = false;
-    message = "This car booked already in this date range";
+    message = "This car is already booked for this chosen date and time";
   }
 
   if (!!priceAvailability && fee === false) {
@@ -721,18 +732,15 @@ export const extractSuperadminRulesAndPrices = async (
   };
 };
 
-
-//generate booking code function 
+//generate booking code function
 export function generateCode() {
   const numbers = Math.floor(Math.random() * 90000000) + 10000000; // Ensure 8 digits
-  const code = 'A' + numbers;
+  const code = "A" + numbers;
   return code;
 }
 
-
 //check the boooking code uniqness
-export const generateBookingCode = async()=>{
-
+export const generateBookingCode = async () => {
   let bookingCode = generateCode();
   let existingBooking = await prisma.booking.findFirst({
     where: {
@@ -751,5 +759,5 @@ export const generateBookingCode = async()=>{
     });
   }
 
-  return bookingCode
-}
+  return bookingCode;
+};
