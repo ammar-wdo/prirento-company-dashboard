@@ -13,7 +13,8 @@ export const startStripeSession = async (
   period: string,
 
   payNow: number,
-  bookingId: string
+  bookingId: string,
+  image:string
 ) => {
   const session = await stripe.checkout.sessions.create({
     customer_email: email,
@@ -31,9 +32,11 @@ export const startStripeSession = async (
           product_data: {
             name: carName,
             description: `booked for ${period}`,
+            images:[image]
           },
           unit_amount: Math.round(payNow * 100),
         },
+        
         quantity: 1,
       },
     ],
