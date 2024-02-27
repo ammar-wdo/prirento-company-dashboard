@@ -93,7 +93,11 @@ export const GET = async (
         },
         pickupLocations: true,
         dropoffLocations: true,
-        availabilities: true,
+        availabilities: true,    //could be inhanced to fetch only overlaping
+        bookings:{where:{
+          paymentStatus:{in:['PENDING','SUCCEEDED']},    //could be inhanced to fetch only overlaping
+          bookingStatus:'ACTIVE'
+        }},
         carExtraOptions:{
           where:{
             status:'active'
@@ -131,10 +135,16 @@ export const GET = async (
     );
 
     // extract avalabilities and locations array to use in function
-    const rangeDates = car.availabilities.map((el) => ({
+    const availabilityRangeDates = car.availabilities.map((el) => ({
       startDate: el.startDate,
       endDate: el.endDate,
     }));
+
+    const bookingsRangeDates = car.bookings.map((el) => ({
+      startDate: el.startDate,
+      endDate: el.endDate,
+    }))
+
     const carPickLocations = car.pickupLocations.map((el) => ({
       slug: el.slug,
       name: el.name,
@@ -166,7 +176,8 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
         dropOffLocation,
         clientStartDate: startDateObject,
         clientEndDate: endDateObject,
-        rangeDates,
+        availabilityRangeDates,
+        bookingsRangeDates,
         carDropLocations,
         carPickLocations,
         validHours,

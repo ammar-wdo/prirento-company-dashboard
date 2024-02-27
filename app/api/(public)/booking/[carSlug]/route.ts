@@ -270,11 +270,11 @@ include:{
       { status: 200, headers: corsHeaders }
     );
   } catch (error) {
-    // await prisma.booking.delete({
-    //   where:{
-    //     id:booking?.id 
-    //   }
-    // })
+    await prisma.booking.delete({
+      where:{
+        id:booking?.id 
+      }
+    })
     console.log(error);
 
     let errorMessage = "Internal server error";

@@ -26,8 +26,8 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
 
   {
     accessorKey:'payNow',
-    header: "Paid",
-    cell:({row})=> <span>{row.original.payNow} AED</span>
+    header: "Price",
+    cell:({row})=> <span>{row.original.payLater} AED</span>
     
     
   },

@@ -411,7 +411,8 @@ type IsCarAvailable = {
   carPickLocations: { slug: string; name: string }[] | [];
   carDropLocations: { slug: string; name: string }[] | [];
   dropOffLocation: string | undefined;
-  rangeDates: { startDate: Date; endDate: Date }[] | [];
+  availabilityRangeDates: { startDate: Date; endDate: Date }[] | [];
+  bookingsRangeDates: { startDate: Date; endDate: Date }[] | [];
   clientStartDate: Date;
   clientEndDate: Date;
   validHours:
@@ -424,7 +425,8 @@ export const isCarAvailable = ({
   priceAvailability,
   location,
   dropOffLocation,
-  rangeDates,
+  availabilityRangeDates,
+  bookingsRangeDates,
   clientEndDate,
   clientStartDate,
   carPickLocations,
@@ -453,11 +455,17 @@ export const isCarAvailable = ({
       )
     : true;
 
-  const overLap = doesOverlap(clientStartDate, clientEndDate, rangeDates);
+  const availabilityOverLap = doesOverlap(clientStartDate, clientEndDate, availabilityRangeDates);
+  const bookingsOverLap = doesOverlap(clientStartDate, clientEndDate, bookingsRangeDates);
 
-  if (!priceAvailability || overLap) {
+  if (!priceAvailability || availabilityOverLap) {
     isAvailable = false;
     message = "This car is not available for this chosen date and time";
+  }
+
+  if(bookingsOverLap) {
+    isAvailable = false;
+    message = "This car booked already in this date range";
   }
 
   if (!!priceAvailability && fee === false) {
