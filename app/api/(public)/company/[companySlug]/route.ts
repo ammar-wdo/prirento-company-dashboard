@@ -24,6 +24,7 @@ export const GET = async (
         name:true,
         content:true,
         openingTime:true, 
+        gallary:true
       }
     
     });
