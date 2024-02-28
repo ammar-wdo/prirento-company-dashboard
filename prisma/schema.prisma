@@ -307,7 +307,7 @@ model Booking {
 
   terms         Boolean       @default(true)
 
-  
+
   paymentMethod PaymentMethod
   paymentStatus PaymentStatus @default(PENDING)
   bookingStatus BookingStatus @default(ACTIVE)
@@ -321,6 +321,24 @@ model Booking {
 
 model About {
   id String @id @default("About")
+
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Terms {
+  id String @id @default("Terms")
+
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Privacy {
+  id String @id @default("Privacy")
 
   content String
 

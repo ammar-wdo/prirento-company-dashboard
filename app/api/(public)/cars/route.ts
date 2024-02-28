@@ -115,6 +115,7 @@ export const GET = async (req: NextRequest) => {
         company: {
           select: {
             logo: true,
+            slug:true
           },
         },
         availabilities: {

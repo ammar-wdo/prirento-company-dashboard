@@ -38,7 +38,8 @@ export const GET = async (req: NextRequest) => {
         },
         company:{
             select:{
-                logo:true
+                logo:true,
+                slug:true
             }
         }
       },
@@ -61,6 +62,7 @@ export const GET = async (req: NextRequest) => {
         transmition: car.transmition,
         oneDayPrice: car.pricings[0],
         companyLogo:car.company.logo,
+        companySlug:car.company.slug,
         slug:car.slug
       };
     });

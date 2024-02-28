@@ -422,3 +422,13 @@ export const bookingSchema = z
     subject:z.string().optional(),
     message:requiredString
   })
+
+
+  export const clientLoginSchema = z.object({
+    email:requiredString.email('Invalid email address'),
+    bookingCode:requiredString.min(9,'At least 9 characters').max(9,"Maximum 9 characters").startsWith('A',"Starts only with capital A")
+  })
+
+
+
+  

@@ -310,7 +310,7 @@ export function processCars(
       endDate: Date;
     }[];
     carModel: CarModel & { carBrand: { brand: string } };
-    company: { logo: string };
+    company: { logo: string,slug:string };
   })[],
   startDateObject: Date,
   endDateObject: Date
@@ -345,6 +345,7 @@ export function processCars(
       transmition: car.transmition,
       availablePrice: totalPrice,
       companyLogo: car.company.logo,
+      companySlug:car.company.slug,
       notAvailable,
       period: rentalPeriodDescription,
       slug: car.slug as string,
@@ -471,10 +472,6 @@ export const isCarAvailable = ({
   // const availabilityOverLap = doesOverlap(clientStartDate, clientEndDate, availabilityRangeDates);
   // const bookingsOverLap = doesOverlap(clientStartDate, clientEndDate, bookingsRangeDates);
 
-  if (!priceAvailability || !!availabilityRangeDates.length) {
-    isAvailable = false;
-    message = "This car is not available for this chosen date and time";
-  }
 
   if (!!bookingsRangeDates.length) {
     isAvailable = false;
@@ -482,14 +479,24 @@ export const isCarAvailable = ({
     reservationDates = bookingsRangeDates
   }
 
+
+  if (!priceAvailability || !!availabilityRangeDates.length) {
+    isAvailable = false;
+    message = "This car is not available for this chosen date and time";
+    reservationDates=[]
+  }
+
+
   if (!!priceAvailability && fee === false) {
     isAvailable = false;
     message = `Car is not available`;
+    reservationDates=[]
   }
 
   if (!validHours.valid) {
     isAvailable = false;
     message = `This car is available for minimum of  ${validHours.minimumHours} hour(s) rent`;
+    reservationDates=[]
   }
 
   if (!isPickupLocationAvailable || !isDropOffLocationAvailable) {
@@ -497,6 +504,7 @@ export const isCarAvailable = ({
     message = "This car is only available in:";
     pickupLocations = carPickLocations.map((el) => el.name).join(", ");
     dropOffLocations = carDropLocations.map((el) => el.name).join(", ");
+    reservationDates=[]
   }
 
   return { isAvailable, message, pickupLocations, dropOffLocations, reservationDates };
