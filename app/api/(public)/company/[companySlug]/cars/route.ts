@@ -2,6 +2,10 @@ import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+
+
+//fetch cars related to certain company
+
 export const GET = async (
   req: Request,
   { params }: { params: { companySlug: string } }
