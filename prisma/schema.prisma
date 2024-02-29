@@ -40,6 +40,8 @@ model Company {
 
   cars Car[]
 
+  reviews Review[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -161,6 +163,8 @@ model Car {
   carExtraOptions CarExtraOption[]
 
   bookings Booking[]
+
+  reviews Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -303,10 +307,9 @@ model Booking {
   payNow         Int
   payLater       Int
 
-  bookingCode   String @unique
+  bookingCode String @unique
 
-  terms         Boolean       @default(true)
-
+  terms Boolean @default(true)
 
   paymentMethod PaymentMethod
   paymentStatus PaymentStatus @default(PENDING)
@@ -314,6 +317,9 @@ model Booking {
 
   carId String
   car   Car    @relation(fields: [carId], references: [id])
+
+
+  reviews Review[]
 
   createdAt DateTime @default(now())
   updatedUt DateTime @updatedAt
@@ -328,7 +334,6 @@ model About {
   updatedAt DateTime @updatedAt
 }
 
-
 model Terms {
   id String @id @default("Terms")
 
@@ -337,6 +342,7 @@ model Terms {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 model Privacy {
   id String @id @default("Privacy")
 
@@ -353,6 +359,27 @@ model Faq {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+
+model Review {
+  id        String  @id @default(uuid())
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  carId  String
+  car    Car  @relation(fields: [carId], references: [id])
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  reviewContent String?
+  rate          Float
+
+  status     ReviewStatus     @default(PENDING)
+  visibility ReviewVisibility
+
+  createdAt DateTime @default(now())
+  updatedUt DateTime @updatedAt
 }
 
 //ENUMS
@@ -439,4 +466,15 @@ enum BookingStatus {
   REFUND_REQUEST
   REFUNDED
   CANCELED
+}
+
+enum ReviewStatus {
+  PENDING
+  ACTIVE
+}
+
+enum ReviewVisibility {
+  FIRSTNAME
+  FULLNAME
+  ANOUNYMOS
 }
