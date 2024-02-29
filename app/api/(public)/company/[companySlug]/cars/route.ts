@@ -32,7 +32,9 @@ export const GET = async (
       where: {
         company: {
             slug:params.companySlug
-        }
+        },
+        carStatus:'active',
+        disabled:false
       },
      
           select: {

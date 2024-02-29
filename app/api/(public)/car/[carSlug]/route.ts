@@ -52,6 +52,8 @@ export const GET = async (
         company: {
           select: {
             logo: true,
+            terms:true,
+            name:true
           },
         },
         pickupLocations: true,
@@ -87,7 +89,10 @@ export const GET = async (
       kmIncluded:car.kmIncluded,
       minimumHours:car.minimumHours || null,
       pickupLocations:car.pickupLocations.map(el=>el.name),
-      dropoffLocations:car.dropoffLocations.map(el=>el.name)
+      dropoffLocations:car.dropoffLocations.map(el=>el.name),
+      terms:car.company.terms,
+      companyName:car.company.name
+      
  
    
     };
