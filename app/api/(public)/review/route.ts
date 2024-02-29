@@ -1,10 +1,10 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const revalidate = 0
 
-export const GET = async(req:Request)=>{
+export const GET = async(req:NextRequest)=>{
 
     try {
         const apiSecret = req.headers.get('api-Secret')
@@ -12,10 +12,17 @@ export const GET = async(req:Request)=>{
         if(!apiSecret || apiSecret !== process.env.API_SECRET) throw new CustomError('Unauthorized request')
 
 
+        const searchParams = req.nextUrl.searchParams
+        const companySlug = searchParams.get('companySlug')
+
+
 
 
 const reviews = await prisma.review.findMany({
     where:{
+        ...(companySlug && {company:{
+            slug:companySlug
+        }}),
         status:'ACTIVE',
         reviewContent:{
             not:''
