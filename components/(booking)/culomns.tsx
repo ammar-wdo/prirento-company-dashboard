@@ -37,18 +37,19 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     cell:({row})=><Link className="text-blue-500 underline pl-6" href={`/dashboard/bookings/${row.original.id}`}>{row.original.bookingCode}</Link>
   },
   {
-    accessorKey: "email",
+    accessorKey: "contactNumber",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Contanct number
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
+    cell:({row})=><p>+{row.original.contactNumber}</p>
   },
   {
   
