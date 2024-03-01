@@ -72,7 +72,7 @@ const page = async ({ params }: Props) => {
   return (
     <div>
     
-    <div className="flex gap-1">
+    <div className="flex gap-2 items-center">
     <GoBackButton url='/dashboard/bookings'/>  <Heading
         title={`Booking - ${booking.bookingCode}`}
         description={`Booking details`}
@@ -204,7 +204,13 @@ const page = async ({ params }: Props) => {
             title="car rental price:"
             description={"AED " + booking.subtotal.toFixed(2)}
           />
-       
+ 
+        <KeyValueCard
+            title="reservation fee:"
+            description={"AED " + booking.reservationFee.toFixed(2)}
+          />
+
+  
      
            <KeyValueCard
             title="refundable deposit:"
