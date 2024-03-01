@@ -25,7 +25,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
-        className=""
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -41,6 +41,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -57,6 +58,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -75,6 +77,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -92,6 +95,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -115,6 +119,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -132,6 +137,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+         className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -149,6 +155,7 @@ export const columns: ColumnDef<Booking & {car :{carModel:{name:string,carBrand:
     header: ({ column }) => {
       return (
         <Button
+        className="hover:bg-transparent hover:text-white" 
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
