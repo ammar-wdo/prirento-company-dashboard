@@ -8,13 +8,15 @@ import { DataTable } from "./booking-table";
 import { columns } from "./culomns";
 
 type Props = {
-  bookingCode:string | undefined,page:string | undefined
+  bookingCode:string | undefined,page?:string | undefined
+  mainDashboard?:boolean
 };
 
-const BookingFeed = async ({bookingCode,page}: Props) => {
+const BookingFeed = async ({bookingCode,page,mainDashboard}: Props) => {
   const email = await getCompanyEmail();
 
   const bookings = await prisma.booking.findMany({
+...(mainDashboard && {take:10}),
     where: {
       ...(bookingCode && {bookingCode}),
       car: {

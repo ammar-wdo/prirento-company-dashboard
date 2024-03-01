@@ -5,9 +5,11 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 
-type Props = {}
+type Props = {
+  mainDahsboard?:boolean
+}
 
-const FilterComponent = (props: Props) => {
+const FilterComponent = ({mainDahsboard}: Props) => {
     const [searchValue, setSearchValue] = useState('')
     const router = useRouter()
 
@@ -17,7 +19,7 @@ setSearchValue('')
     }
 
     const handleReset = ()=>{
-        router.push('/dashboard/bookings')
+        router.push(mainDahsboard ? '/dashboard' : '/dashboard/bookings')
         setSearchValue('')
     }
 
