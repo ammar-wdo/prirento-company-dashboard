@@ -39,7 +39,7 @@ const page = async ({ params }: Props) => {
   return (
     <div>
       <div className="flex items-center gap-2">
-      <GoBackButton url="/dashboard/cars" />
+      <GoBackButton  />
       <Heading
         title={
           extraOption
