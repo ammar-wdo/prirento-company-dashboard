@@ -1,5 +1,6 @@
 import BookingFeed from '@/components/(booking)/booking-feed'
 import FilterComponent from '@/components/filter-component'
+import GoBackButton from '@/components/go-back-button'
 import Heading from '@/components/heading'
 import { Skeleton } from '@/components/ui/skeleton'
 import React, { Suspense } from 'react'
@@ -12,7 +13,11 @@ export const revalidate = 0
 const page = ({searchParams}: Props) => {
   return (
     <div>
+ 
       <Heading title='Bookings' description='Manage your bookings'/>
+
+
+  
 
       <div className='mt-12  rounded-xl '>
         <div className='mb-3 w-fit'>

@@ -1,4 +1,5 @@
 import CarAvailabilityForm from '@/components/(car availability)/car-availability-form'
+import GoBackButton from '@/components/go-back-button'
 import Heading from '@/components/heading'
 import prisma from '@/lib/prisma'
 import { getCompany } from '@/lib/utils'
@@ -40,7 +41,11 @@ const page = async({params}: Props) => {
 
   return (
     <div>
+        <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
         <Heading title={car ? `${car.carModel.carBrand.brand} ${car.carModel.name} - Availability` : 'Availability'} description='Manage your car availability' />
+        <GoBackButton url='/dashboard/cars'/>
+        </div>
+  
         <div className='max-w-5xl mt-12 p-6 border rounded-md bg-white'>
             <CarAvailabilityForm carAvailability={availability}/>
         </div>

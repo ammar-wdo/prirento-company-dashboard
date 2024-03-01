@@ -1,4 +1,5 @@
 import CarExtraOptionsForm from "@/components/(extra options)/carExtraOptions-form";
+import GoBackButton from "@/components/go-back-button";
 import Heading from "@/components/heading";
 import prisma from "@/lib/prisma";
 import { getCompany } from "@/lib/utils";
@@ -37,6 +38,7 @@ const page = async ({ params }: Props) => {
   if (!extraOption && params.extraOptionId !== "new") notFound();
   return (
     <div>
+      <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
       <Heading
         title={
           extraOption
@@ -47,6 +49,10 @@ const page = async ({ params }: Props) => {
           extraOption ? `Update ${extraOption.label} extra option` : "Create extra options"
         }
       />
+      <GoBackButton url="/dashboard/cars" />
+
+      </div>
+    
 
       <div className="mt-12 bg-white p-4 border rounded-md max-w-5xl">
         <CarExtraOptionsForm extraOption={extraOption}/>

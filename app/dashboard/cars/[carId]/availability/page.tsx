@@ -1,4 +1,5 @@
 import CarAvailabilityFeed from '@/components/(car availability)/car-availability-feed'
+import GoBackButton from '@/components/go-back-button'
 import Heading from '@/components/heading'
 import NavigatorButton from '@/components/navigator-button'
 import prisma from '@/lib/prisma'
@@ -31,9 +32,15 @@ const page = async({params}: Props) => {
    
   return (
     <div>
-      <div className='flex items-center justify-between'>
+     
+  
+      <div className='flex md:justify-between md:flex-row flex-col gap-3 w-full'>
       <Heading title={car ? `${car.carModel.carBrand.brand} ${car.carModel.name} - Availability` : 'Availability'} description='Manage your car availability' />
+      <div className='flex flex-col gap-2'>
       <NavigatorButton href={`/dashboard/cars/${params.carId}/availability/new`} ><Plus className='mr-2 h-3 w-3' /> Add new date </NavigatorButton>
+      <GoBackButton url='/dashboard/cars'/>
+      </div>
+    
       </div>
       <div className='mt-12'>
         <CarAvailabilityFeed carId={params.carId} />

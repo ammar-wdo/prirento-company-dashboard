@@ -1,4 +1,5 @@
 import ExtraOptionsFeed from '@/components/(extra options)/extra-options-feed'
+import GoBackButton from '@/components/go-back-button'
 import Heading from '@/components/heading'
 import NavigatorButton from '@/components/navigator-button'
 import prisma from '@/lib/prisma'
@@ -31,7 +32,7 @@ const page = async({params}: Props) => {
   })
   return (
     <div>
-      <div className='flex items-center justify-between'>
+      <div className='flex md:justify-between md:flex-row flex-col gap-3 w-full'>
       <Heading
         title={
           
@@ -42,7 +43,11 @@ const page = async({params}: Props) => {
        "Create extra options"
         }
       />
+      <div className='flex flex-col gap-2'>
       <NavigatorButton href={`/dashboard/cars/${params.carId}/extra-options/new`}><Plus className='mr-2 h-3 w-3' /> Create extra option</NavigatorButton>
+      <GoBackButton url='/dashboard/cars'/>
+      </div>
+    
       </div>
        
 

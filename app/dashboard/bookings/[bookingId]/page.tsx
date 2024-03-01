@@ -1,6 +1,7 @@
 
 import BookingCard from "@/components/(booking)/booking-card";
 import KeyValueCard from "@/components/(booking)/key-value-card";
+import GoBackButton from "@/components/go-back-button";
 import Heading from "@/components/heading";
 import prisma from "@/lib/prisma";
 import { formatDate, getCompanyEmail } from "@/lib/utils";
@@ -70,10 +71,14 @@ const page = async ({ params }: Props) => {
 
   return (
     <div>
+      <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
       <Heading
         title={`Booking - ${booking.bookingCode}`}
         description={`Booking details`}
       />
+      <GoBackButton url='/dashboard/bookings'/>
+      </div>
+     
 
       <section className="mt-12 grid grid-cols-1 md:grid-cols-2  2xl:grid-cols-4   gap-4">
         {/* Driver Details */}
