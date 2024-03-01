@@ -34,7 +34,7 @@ export const POST = async (req: Request) => {
     const { email, bookingCode } = validDate.data;
     const booking = await prisma.booking.findUnique({
       where: {
-        email,
+        email:email.toLocaleLowerCase(),
         bookingCode,
         paymentStatus:'SUCCEEDED',
 
