@@ -24,8 +24,8 @@ setSearchValue('')
   return (
     <div className='flex items-center gap-2'>
         <Input placeholder='Booking Code' value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} />
-        <Button onClick={handlePush} disabled={!searchValue} >Search</Button>
-        <Button onClick={handleReset}>Reset</Button>
+        <Button variant={'site'} onClick={handlePush} disabled={!searchValue} >Search</Button>
+        <Button variant={'siteSecondary'} onClick={handleReset}>Reset</Button>
 
     </div>
   )

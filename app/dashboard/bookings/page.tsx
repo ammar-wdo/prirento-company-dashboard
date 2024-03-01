@@ -18,9 +18,13 @@ const page = ({searchParams}: Props) => {
         <div className='mb-3 w-fit'>
           <FilterComponent/>
         </div>
+        <div className='bg-white'>
         <Suspense key={searchParams.bookingCode} fallback={<Skeleton className="min-h-[600px] bg-muted-foreground"/>}>
           <BookingFeed bookingCode={searchParams.bookingCode} page={searchParams.page} />
           </Suspense>
+        </div>
+
+      
      
       </div>
     </div>
