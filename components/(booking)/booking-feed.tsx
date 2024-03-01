@@ -39,6 +39,9 @@ const BookingFeed = async ({bookingCode,page}: Props) => {
         },
       },
     },
+    orderBy:{
+      createdAt:'desc'
+    }
   });
 
   return <DataTable columns={columns} data={bookings} />;
