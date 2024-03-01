@@ -299,6 +299,7 @@ model Booking {
   extraOptions Json[]
   adminRules   Json[]
 
+  deposit        Float
   subtotal       Float
   reservationFee Float
   discount       Float

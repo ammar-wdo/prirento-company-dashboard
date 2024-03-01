@@ -234,6 +234,7 @@ include:{
         pickupLocation:pickupLocation,
         ...(dropoffLocation && {dropoffLocation}),
         bookingCode,
+        deposit:car.deposite,
         startDate:startDateObject,
         endDate:endDateObject,
         discount:discountValue,
@@ -243,7 +244,8 @@ include:{
         total:totalAmount,
         payLater:payLater,
         payNow:checkoutPayment,
-        reservationFee
+        reservationFee,
+        ...(deliveryFee  && {deliveryFee})
       }
     })
 
