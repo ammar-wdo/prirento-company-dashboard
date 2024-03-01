@@ -239,7 +239,7 @@ include:{
         discount:discountValue,
         extraOptions:carExtraOptions || [],
         adminRules:[...refinedMandaturyRules,...refinedOptionalRules],
-        subtotal:totalAmount,
+        subtotal:totalPrice as number,
         total:totalAmount,
         payLater:payLater,
         payNow:checkoutPayment,

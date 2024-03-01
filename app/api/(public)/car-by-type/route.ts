@@ -69,12 +69,12 @@ export const GET = async (req: NextRequest) => {
 
     const cars = availableCars.filter(Boolean)
 
-    return NextResponse.json({ cars }, { status: 200 });
+    return NextResponse.json({ cars,success:true }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+      { error: "Internal server error",success:false },
+      { status: 200 }
     );
   }
 };

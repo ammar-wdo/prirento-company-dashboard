@@ -623,7 +623,9 @@ export const calculateExtraOptionsAndPrice = async (
       where: {
         id: {
           in: carExtraOptionsIds,
+          
         },
+        status:'active'
       },
     });
 

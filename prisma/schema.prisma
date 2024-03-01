@@ -299,13 +299,13 @@ model Booking {
   extraOptions Json[]
   adminRules   Json[]
 
-  subtotal       Int
-  reservationFee Int
-  discount       Int
-  deliveryFee    Int?
-  total          Int
-  payNow         Int
-  payLater       Int
+  subtotal       Float
+  reservationFee Float
+  discount       Float
+  deliveryFee    Float?
+  total          Float
+  payNow         Float
+  payLater       Float
 
   bookingCode String @unique
 
