@@ -82,8 +82,7 @@ const page = async ({ params }: Props) => {
           <div className="w-full border-b my-2"/>
           <KeyValueCard title="Last name:" description={booking.lastName} />
           <div className="w-full border-b my-2"/>
-          <KeyValueCard title="Email:" description={booking.email} />
-          <div className="w-full border-b my-2"/>
+        
           <KeyValueCard
             title="contact number:"
             description={`+${booking.contactNumber}`}
@@ -123,9 +122,9 @@ const page = async ({ params }: Props) => {
             title="postcode:"
             description={booking.billingZipcode}
           />
-           <div className="w-full border-b my-2"/>
+         
            {booking.companyName && (
-            <div><KeyValueCard
+            <div>  <div className="w-full border-b my-2"/><KeyValueCard
             title="company name"
             description={booking.companyName}
           /> <div className="w-full border-b my-2"/></div>
@@ -198,11 +197,7 @@ const page = async ({ params }: Props) => {
             description={"AED " + booking.subtotal.toFixed(2)}
           />
        
-          <KeyValueCard
-            title="reservation fee:"
-            description={"AED " + booking.reservationFee.toFixed(2)}
-          />
-           <div className="w-full border-b my-2"/>
+     
            <KeyValueCard
             title="refundable deposit:"
             description={"AED " + booking.deposit.toFixed(2)}

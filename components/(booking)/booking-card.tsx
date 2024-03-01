@@ -7,9 +7,9 @@ type Props = {
 
 const BookingCard = ({children,title}: Props) => {
   return (
-    <article className='p-4 rounded-xl bg-white w-full'>
-    <h3 className='font-semibold capitalize text-xl '>{title}</h3>
-    <div className='mt-2'>
+    <article className='rounded-xl bg-white w-full overflow-hidden'>
+    <h3 className='p-4  font-semibold capitalize text-xl bg-secondaryGreen text-white'>{title}</h3>
+    <div className='p-4  mt-2'>
         {children}
     </div>
                 </article>
