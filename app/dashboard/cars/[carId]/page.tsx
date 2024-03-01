@@ -45,12 +45,13 @@ const page = async ({ params }: Props) => {
   if (!car && params.carId !== "new") notFound();
 
   return <div>
-      <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
+      <div className="flex gap-2 items-center">
+      <GoBackButton url='/dashboard/cars'/>
       <Heading title={car ?  `${car?.carModel.carBrand.brand} ${car?.carModel.name}` : 'Car'} description={car ? 'Update your car' : 'Create new car'} />
-    <GoBackButton url='/dashboard/cars'/>
+  
     </div>
 
-    <div className="mt-16 max-w-5xl">
+    <div className="mt-8 md:mt-12 max-w-5xl">
       <CarForm car={car} locations={locations}  models={models}/>
       </div>
 

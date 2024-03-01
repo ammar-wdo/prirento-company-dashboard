@@ -33,7 +33,9 @@ const page = async({params}: Props) => {
   return (
     <div>
       <div className='flex md:justify-between md:flex-row flex-col gap-3 w-full'>
-      <Heading
+        <div className='flex items-center gap-2'>
+        <GoBackButton url='/dashboard/cars'/>
+        <Heading
         title={
           
            `${car?.carModel.carBrand.brand} ${car?.carModel.name} - Extra options`
@@ -43,10 +45,12 @@ const page = async({params}: Props) => {
        "Create extra options"
         }
       />
-      <div className='flex flex-col gap-2'>
+        </div>
+    
+    
       <NavigatorButton href={`/dashboard/cars/${params.carId}/extra-options/new`}><Plus className='mr-2 h-3 w-3' /> Create extra option</NavigatorButton>
-      <GoBackButton url='/dashboard/cars'/>
-      </div>
+ 
+  
     
       </div>
        

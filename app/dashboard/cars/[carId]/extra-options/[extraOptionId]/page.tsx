@@ -38,7 +38,8 @@ const page = async ({ params }: Props) => {
   if (!extraOption && params.extraOptionId !== "new") notFound();
   return (
     <div>
-      <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
+      <div className="flex items-center gap-2">
+      <GoBackButton url="/dashboard/cars" />
       <Heading
         title={
           extraOption
@@ -49,7 +50,7 @@ const page = async ({ params }: Props) => {
           extraOption ? `Update ${extraOption.label} extra option` : "Create extra options"
         }
       />
-      <GoBackButton url="/dashboard/cars" />
+  
 
       </div>
     

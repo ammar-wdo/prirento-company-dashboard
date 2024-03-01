@@ -34,12 +34,16 @@ const page = async({params}: Props) => {
     <div>
      
   
-      <div className='flex md:justify-between md:flex-row flex-col gap-3 w-full'>
-      <Heading title={car ? `${car.carModel.carBrand.brand} ${car.carModel.name} - Availability` : 'Availability'} description='Manage your car availability' />
-      <div className='flex flex-col gap-2'>
+      <div className='flex md:justify-between md:flex-row flex-col gap-8 w-full'>
+        <div className='flex items-center gap-2'>
+        <GoBackButton url='/dashboard/cars'/>
+        <Heading title={car ? `${car.carModel.carBrand.brand} ${car.carModel.name} - Availability` : 'Availability'} description='Manage your car availability' />
+        </div>
+
+ 
       <NavigatorButton href={`/dashboard/cars/${params.carId}/availability/new`} ><Plus className='mr-2 h-3 w-3' /> Add new date </NavigatorButton>
-      <GoBackButton url='/dashboard/cars'/>
-      </div>
+   
+
     
       </div>
       <div className='mt-12'>

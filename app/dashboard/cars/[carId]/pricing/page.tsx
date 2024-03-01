@@ -28,14 +28,14 @@ const page = async({params}: Props) => {
   if(!car) notFound()
   return (
     <div>
-        <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
-        <Heading title={`${car.carModel.carBrand.brand} ${car.carModel.name}`} description='Manage pricings for each day'/>
+        <div className="flex gap-2 items-center">
         <GoBackButton url='/dashboard/cars' />
+        <Heading title={`${car.carModel.carBrand.brand} ${car.carModel.name}`} description='Manage pricings for each day'/>
         </div>
        
 
 
-        <div className="mt-16 max-w-5xl bg-white p-6 border rounded-md">
+        <div className="mt-8 md:mt-12 max-w-5xl bg-white p-6 border rounded-md">
         <CarPricingsForm pricings={car.pricings} hourPrice={car.hourPrice} id={params.carId} />
       </div>
     </div>

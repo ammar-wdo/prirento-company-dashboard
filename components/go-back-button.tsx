@@ -11,10 +11,11 @@ const GoBackButton = ({url}: Props) => {
     const router = useRouter()
 
     const handleClick = ()=>{
-router.push(url)
+router.back()
+router.refresh()
     }
   return (
-    <Button onClick={handleClick} ><ArrowLeft className='mr-2'/> Go Back</Button>
+    <Button className='rounded-full w-8 h-8 bg-transparent text-black hover:bg-transparent p-0' onClick={handleClick} ><ArrowLeft className='mr-2 w-5 h-5'/> </Button>
   )
 }
 

@@ -71,13 +71,16 @@ const page = async ({ params }: Props) => {
 
   return (
     <div>
-      <div className="flex md:justify-between md:flex-row flex-col gap-3 w-full">
-      <Heading
+    
+    <div className="flex gap-1">
+    <GoBackButton url='/dashboard/bookings'/>  <Heading
         title={`Booking - ${booking.bookingCode}`}
         description={`Booking details`}
       />
-      <GoBackButton url='/dashboard/bookings'/>
-      </div>
+    </div>
+   
+   
+
      
 
       <section className="mt-12 grid grid-cols-1 md:grid-cols-2  2xl:grid-cols-4   gap-4">
