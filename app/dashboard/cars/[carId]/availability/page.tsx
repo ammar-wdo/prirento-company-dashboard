@@ -55,7 +55,7 @@ const page = async({params}: Props) => {
         </Suspense>
 
       </div>
-      <div className='mt-20 overflow-x-auto '>
+      <div className='mt-20 overflow-x-auto bg-white p-4 rounded-xl'>
         <Suspense fallback={<Skeleton className='min-h-[700px] '/>}>
         <FullCalendarServerWrapper carId={params.carId}/>
         </Suspense>
