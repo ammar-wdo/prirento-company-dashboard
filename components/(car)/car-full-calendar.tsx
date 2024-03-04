@@ -21,7 +21,7 @@ const FullCalendarComponent = ({bookings,availabilities}:Props) =>
     borderColor:'#f43f5e'}))
 
 
-    return <div className="min-h-[700p] min-w-[1200px]">
+    return <div className="min-h-[700px] md:w-[1750px] w-[1150px]  bg-white p-4 rounded-xl">
         <div className="my-10">
             <div className="flex items-center gap-3 font-medium capitalize">booking ranges <span className="bg-secondaryGreen w-4 h-4 rounded-sm"></span></div>
             <div className="flex items-center gap-3 font-medium capitalize">Blocking ranges <span className="bg-rose-500 w-4 h-4 rounded-sm"></span></div>
@@ -50,6 +50,7 @@ const FullCalendarComponent = ({bookings,availabilities}:Props) =>
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       }}
       slotDuration='01:00:00'
+      
     
     />
   </div>}

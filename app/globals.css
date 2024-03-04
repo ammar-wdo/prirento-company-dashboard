@@ -85,7 +85,14 @@
 
 
 .fc-event-title, .fc-event-time {
-  font-size: 10px;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+
+@media (max-width: 600px) {
+  .fc-event-title, .fc-event-time {
+    font-size: 10px !important; /* Make text smaller on small screens */
+  }
 }
 
 .fc-button {
