@@ -812,7 +812,7 @@ export const revenueMessage = (revenuePreviousMonth: number, revenueCurrentMonth
     } else {
       // Both previous and current month's revenues are 0
       return {
-        message: "No Change (No revenue in both months)",
+        message: " (No revenue)",
         status: 'noChange',
         color: 'text-muted-foreground', 
       };
@@ -846,7 +846,7 @@ export const bookingChangeMessage = (totalBookingsPreviousMonth: number, totalBo
       color = 'text-green-500';
     } else {
       // No bookings in both the previous and current month
-      bookingChangeMessage = "No Change (No bookings in both months)";
+      bookingChangeMessage = "(No bookings)";
       status = 'noChange';
       color = 'text-muted-foreground';
     }

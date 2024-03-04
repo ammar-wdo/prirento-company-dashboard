@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import prisma from '@/lib/prisma'
 import { getCompany } from '@/lib/utils'
 import { Plus } from 'lucide-react'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React, { Suspense } from 'react'
 
@@ -44,7 +45,7 @@ const page = async({params}: Props) => {
         </div>
 
  
-      <NavigatorButton href={`/dashboard/cars/${params.carId}/availability/new`} ><Plus className='mr-2 h-3 w-3' /> Add new date </NavigatorButton>
+      <Link className='flex items-center justify-center text-white bg-black px-4 py-3 shrink-0 w-full md:w-fit  self-start rounded-lg' href={`/dashboard/cars/${params.carId}/availability/new`} ><Plus className='mr-2 h-3 w-3' /> Add new date </Link>
    
 
     

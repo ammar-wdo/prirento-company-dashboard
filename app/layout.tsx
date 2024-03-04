@@ -4,6 +4,7 @@ import "./globals.css";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { Toaster } from "sonner";
 import ModalProvider from "@/providers/modal-provider";
+import NextTopLoader from 'nextjs-toploader';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,7 +23,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
       <EdgeStoreProvider>
+      <NextTopLoader
+color="#C6A046"
 
+/>
 
        
         {children}

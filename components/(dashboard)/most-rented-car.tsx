@@ -57,7 +57,7 @@ const MostRentedCar = async (props: Props) => {
 
     const totalAmount = await prisma.booking.aggregate({
       _sum: {
-        payLater: true, // Assuming 'total' is the field that stores the booking's amount
+        payLater: true, 
       },
       where: {
         carId: carId,
@@ -78,7 +78,7 @@ const MostRentedCar = async (props: Props) => {
     });
 
     return (
-      <Widjet title="Most rented car for this month">
+        carDetails ?  <Widjet title="Most rented car for this month">
         {carDetails ? (
           <div>
             <Link href={`/dashboard/cars/${carDetails.id}` } className="capitalize">
@@ -92,7 +92,7 @@ const MostRentedCar = async (props: Props) => {
         ) : (
           <p>N/A</p>
         )}
-      </Widjet>
+      </Widjet> : null
     );
   }
 };

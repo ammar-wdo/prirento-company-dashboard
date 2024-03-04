@@ -18,6 +18,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import SignoutButton from "./signout-button";
+import Link from "next/link";
 
 export type CompanyType = "cars" | "yacths";
 type Props = {
@@ -66,8 +67,9 @@ const AsideLinks = ({ companyType }: Props) => {
     <div className=" flex flex-col w-full flex-1 gap-y-3">
       {links.map(({ label, href, active, icon, type }) => {
         if(type && companyType!==type) return
-        return  <button
-        onClick={() => {router.push(href)}}
+        return  <Link
+        href={href}
+        // onClick={() => {router.push(href)}}
         className={cn(
           "flex items-center gap-3 p-2 text-lg font-medium hover:bg-white/10 rounded-xl text-white transition cursor-pointer w-full",
           active && "bg-white text-main hover:bg-white"
@@ -77,7 +79,7 @@ const AsideLinks = ({ companyType }: Props) => {
         {icon}
         <span className="text-sm font-medium "> {label}</span>
        
-      </button>
+      </Link>
       })}
       <div className="mt-auto md:mb-0 mb-16 w-full">
         <SignoutButton />

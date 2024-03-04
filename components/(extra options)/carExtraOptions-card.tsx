@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { statusMap } from '../mapping'
 import { deleteCarExtraOption } from '@/actions/car-extraOptions-actions'
 import NavigatorButton from '../navigator-button'
+import Link from 'next/link'
 
 
 type Props = {
@@ -34,12 +35,12 @@ const CarExtraoptionCard = ({extraOption}: Props) => {
       <p className=" text-sm ">AED {extraOption.price}</p>
       <div className={cn('uppercase p-2 text-sm my-6 w-fit',statusMap[extraOption.status])}>{extraOption.status}</div>
       <div className="mt-auto w-full flex gap-1">
-        <NavigatorButton
-        className='w-full'
+        <Link
+        className='w-full bg-black text-white flex items-center justify-center rounded-lg'
         href={`/dashboard/cars/${extraOption.carId}/extra-options/${extraOption.id}`}
         >
           Edit
-        </NavigatorButton>
+        </Link>
         <ClientModalButton
         className='w-full'
         destructive

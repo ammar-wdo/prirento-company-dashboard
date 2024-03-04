@@ -7,6 +7,7 @@ import NavigatorButton from "../navigator-button";
 import ToolTip from "../tool-tip";
 import { CheckCircle, Edit, HandCoins, Settings } from "lucide-react";
 import SwiperComponent from "../swiper-component";
+import Link from "next/link";
 
 type Props = {
   car: Car & { carModel: CarModel & { carBrand: { brand: string } } };
@@ -38,14 +39,14 @@ const CarCard = ({ car }: Props) => {
             title="Edit"
             description="edit your car"
           >
-            <NavigatorButton
-              variant={"siteSecondary"}
-              className="w-full rounded-full"
+            <Link
+            className="w-full rounded-full flex items-center justify-center bg-secondaryGreen text-white py-2"
+ 
               href={`/dashboard/cars/${car.id}`}
             >
               <p className="sm:hidden text-xs">Edit</p>
               <Edit className="w-5 h-5 hidden sm:block"/>
-            </NavigatorButton>
+            </Link>
           </ToolTip>
           <ToolTip
             border="border-black"
@@ -55,14 +56,14 @@ const CarCard = ({ car }: Props) => {
             title="Pricings"
             description="Manage pricings for each day"
           >
-            <NavigatorButton
-              variant={"siteSecondary"}
-              className="w-full rounded-full"
+            <Link
+                className="w-full rounded-full flex items-center justify-center bg-secondaryGreen text-white py-2"
+              
               href={`/dashboard/cars/${car.id}/pricing`}
             >
                <p className="sm:hidden text-xs">Pricings</p>
               <HandCoins className="w-5 h-5 hidden sm:block"/>
-            </NavigatorButton>
+            </Link>
           </ToolTip>
           <ToolTip
             border="border-black"
@@ -72,14 +73,14 @@ const CarCard = ({ car }: Props) => {
             title="Availability"
             description="Control your car availability for renting"
           >
-            <NavigatorButton
-              variant={"siteSecondary"}
-              className="w-full rounded-full"
+            <Link
+               className="w-full rounded-full flex items-center justify-center bg-secondaryGreen text-white py-2"
+          
               href={`/dashboard/cars/${car.id}/availability`}
             >
                <p className="sm:hidden text-xs">Availability</p>
               <CheckCircle  className="w-5 h-5 hidden sm:block"/>
-            </NavigatorButton>
+            </Link>
           </ToolTip>
           <ToolTip
             border="border-black"
@@ -89,14 +90,14 @@ const CarCard = ({ car }: Props) => {
             title="Extra options"
             description="Add extra options to your car"
           >
-            <NavigatorButton
-              variant={"siteSecondary"}
-              className="w-full rounded-full"
+            <Link
+      
+              className="w-full rounded-full flex items-center justify-center bg-secondaryGreen text-white py-2"
               href={`/dashboard/cars/${car.id}/extra-options`}
             >
                <p className="sm:hidden text-xs">Extra options</p>
               <Settings  className="w-5 h-5 hidden sm:block"/>
-            </NavigatorButton>
+            </Link>
           </ToolTip>
         </div>
       </div>
