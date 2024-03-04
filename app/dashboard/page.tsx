@@ -17,7 +17,7 @@ const page = ({ searchParams }: Props) => {
       <Heading title="Dashboard" description="General statistics" />
       <div className="mt-12  rounded-xl ">
         {/* widjets */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
+        <div className="grid grid-cols-1   lg:grid-cols-2  2xl:grid-cols-3  gap-4">
           <Suspense fallback={<Skeleton className="h-[150px]"/>}>
           <MonthlyRevenue/>
           </Suspense>

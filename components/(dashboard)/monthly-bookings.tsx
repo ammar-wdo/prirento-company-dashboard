@@ -58,9 +58,9 @@ const MonthlyBookings = async (props: Props) => {
   );
   return (
     <Widjet title="bookings for this month">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between md:items-center md:flex-row flex-col gap-1">
         <span>{totalBookingsThisMonth} booking(s)</span>
-        <p className={cn("flex items-center gap-1", color)}>
+        <p className={cn("flex items-center gap-1 text-sm", color)}>
           {status === "increase" ? (
             <ArrowUp />
           ) : status === "decrease" ? (

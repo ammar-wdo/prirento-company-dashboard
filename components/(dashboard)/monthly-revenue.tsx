@@ -64,9 +64,9 @@ const {message,color,status} = revenueMessage(revenuePreviousMonth,revenueCurren
 
   return (
    <Widjet title='Monthly Revenue'>
-    <div className='flex justify-between items-center'>
+    <div className='flex justify-between md:items-center md:flex-row flex-col gap-1'>
     <div className='flex items-center gap-4'><span className='font-bold'>AED</span> {currentMonthRevenue._sum.payLater?.toFixed(2)}</div> 
-    <p className={cn('flex items-center gap-1',color)}>{status==='increase' ? <ArrowUp/> : status ==='decrease' ? <ArrowDown/> :''}{message}</p>
+    <p className={cn('flex items-center gap-1 text-sm',color)}>{status==='increase' ? <ArrowUp/> : status ==='decrease' ? <ArrowDown/> :''}{message}</p>
     </div>
  
     </Widjet>
