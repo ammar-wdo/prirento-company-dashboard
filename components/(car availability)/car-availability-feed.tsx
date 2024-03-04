@@ -34,8 +34,12 @@ car:{companyId:company?.id}
     if(!availabilities) notFound()
   return (
     <div>
+
+<h3 className='mt-12  font-medium capitalize'>Availability blocking dates</h3>
         {!availabilities.length && <NoResult title='No blocking dates added' />}
-        {!!availabilities.length && <div className='bg-white  mt-12 border rounded-md'><Table >
+        {!!availabilities.length && <div className='bg-white  mt-2 border rounded-md'>
+       
+          <Table >
  
   <TableHeader>
     <TableRow>
