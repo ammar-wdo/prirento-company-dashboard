@@ -1,12 +1,15 @@
 import CarAvailabilityFeed from '@/components/(car availability)/car-availability-feed'
+import FullCalendarComponent from '@/components/(car)/car-full-calendar'
+import FullCalendarServerWrapper from '@/components/(car)/full-calendar-server-wrapper'
 import GoBackButton from '@/components/go-back-button'
 import Heading from '@/components/heading'
 import NavigatorButton from '@/components/navigator-button'
+import { Skeleton } from '@/components/ui/skeleton'
 import prisma from '@/lib/prisma'
 import { getCompany } from '@/lib/utils'
 import { Plus } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 type Props = {
   params:{carId:string}
@@ -47,7 +50,16 @@ const page = async({params}: Props) => {
     
       </div>
       <div className='mt-12'>
+        <Suspense fallback={<Skeleton className='min-h-[700px]'/>}>
         <CarAvailabilityFeed carId={params.carId} />
+        </Suspense>
+
+      </div>
+      <div className='mt-20 overflow-x-auto '>
+        <Suspense fallback={<Skeleton className='min-h-[700px] '/>}>
+        <FullCalendarServerWrapper carId={params.carId}/>
+        </Suspense>
+
       </div>
        
     </div>

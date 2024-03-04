@@ -84,6 +84,24 @@
 
 
 
+.fc-event-title, .fc-event-time {
+  font-size: 10px;
+}
+
+.fc-button {
+  background-color: #0C460E !important;
+  color: #fff !important;
+  border-color: #0C460E !important;
+  transition: all 0.3s !important;
+}
+.fc-button:hover {
+  background-color: #0C460E !important;
+  opacity: 0.8 !important
+}
+
+
+
+
 
 
 
