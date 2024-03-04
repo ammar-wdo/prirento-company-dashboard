@@ -775,3 +775,91 @@ export const generateBookingCode = async () => {
 
   return bookingCode;
 };
+
+export const currentMonthRange = ()=>{
+  const now = new Date();
+const firstDayOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+const firstDayOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+return {firstDayOfCurrentMonth,firstDayOfNextMonth}
+}
+
+
+export const previousMonthRange = ()=>{
+
+  const { firstDayOfCurrentMonth, firstDayOfNextMonth } = currentMonthRange();
+
+const firstDayOfPreviousMonth = new Date(firstDayOfCurrentMonth);
+firstDayOfPreviousMonth.setMonth(firstDayOfCurrentMonth.getMonth() - 1);
+const lastDayOfPreviousMonth = new Date(firstDayOfCurrentMonth)
+
+return {firstDayOfPreviousMonth,lastDayOfPreviousMonth}
+}
+
+
+export const revenueMessage = (revenuePreviousMonth: number, revenueCurrentMonth: number):{color:string,message:string,status:"increase" | "noChange" | "decrease"} => {
+
+  let color;
+  let status :"increase" | "noChange" | "decrease"
+
+  if (revenuePreviousMonth === 0) {
+    if (revenueCurrentMonth > 0) {
+  
+      return {
+        message: "100% Increase (Previous month had no revenue)",
+        status: 'increase',
+        color: 'text-green-500', 
+      };
+    } else {
+      // Both previous and current month's revenues are 0
+      return {
+        message: "No Change (No revenue in both months)",
+        status: 'noChange',
+        color: 'text-muted-foreground', 
+      };
+    }
+  } else {
+    // Calculate the percentage change when previous month's revenue is not zero
+    const percentageChange = ((revenueCurrentMonth - revenuePreviousMonth) / revenuePreviousMonth) * 100;
+    status = percentageChange > 0 ? 'increase' : percentageChange < 0 ? 'decrease' : 'noChange';
+    color = percentageChange > 0 ? 'text-green-500' : percentageChange < 0 ? 'text-rose-500' : 'text-muted-foreground'; // Choose color based on increase or decrease
+
+    return {
+      message: `Revenue Percentage Change: ${percentageChange.toFixed(2)}%`,
+   status,
+      color,
+    };
+  }
+}
+
+
+
+export const bookingChangeMessage = (totalBookingsPreviousMonth: number, totalBookingsThisMonth: number):{color:string,message:string,status:"increase" | "noChange" | "decrease"} => {
+  let bookingChangeMessage;
+  let status:"increase" | "noChange" | "decrease"
+  let color; 
+
+  if (totalBookingsPreviousMonth === 0) {
+    if (totalBookingsThisMonth > 0) {
+      // Previous month had no bookings, and this month has bookings
+      bookingChangeMessage = "100%  Increase (Previous month had no bookings)";
+      status = 'increase';
+      color = 'text-green-500';
+    } else {
+      // No bookings in both the previous and current month
+      bookingChangeMessage = "No Change (No bookings in both months)";
+      status = 'noChange';
+      color = 'text-muted-foreground';
+    }
+  } else {
+    const percentageChange = ((totalBookingsThisMonth - totalBookingsPreviousMonth) / totalBookingsPreviousMonth) * 100;
+    status = percentageChange > 0 ? 'increase' : percentageChange < 0 ? 'decrease' : 'noChange';
+    color = percentageChange > 0 ? 'text-green-500' : percentageChange < 0 ? 'text-rose-500' : 'text-muted-foreground';
+    bookingChangeMessage = `Booking Percentage Change: ${percentageChange.toFixed(2)}% (${status})`;
+  }
+
+  return {
+    message: bookingChangeMessage,
+    status,
+    color,
+  };
+};

@@ -1,4 +1,7 @@
 import BookingFeed from "@/components/(booking)/booking-feed";
+import MonthlyBookings from "@/components/(dashboard)/monthly-bookings";
+import MonthlyRevenue from "@/components/(dashboard)/monthly-revenue";
+import MostRentedCar from "@/components/(dashboard)/most-rented-car";
 import FilterComponent from "@/components/filter-component";
 import Heading from "@/components/heading";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,9 +16,25 @@ const page = ({ searchParams }: Props) => {
     <div>
       <Heading title="Dashboard" description="General statistics" />
       <div className="mt-12  rounded-xl ">
-{/* last 10 bookings */}
+        {/* widjets */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
+          <Suspense fallback={<Skeleton className="h-[150px]"/>}>
+          <MonthlyRevenue/>
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-[150px]"/>}>
+          <MostRentedCar />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-[150px]"/>}>
+          <MonthlyBookings />
+          </Suspense>
+   
+        </div>
+  
 
-        <h3 className="mb-2 font-medium capitalize text-lg">
+        
+{/* last 10 bookings */}
+<div className="mt-12">
+<h3 className="mb-2 font-medium capitalize text-lg">
           Last 10 bookings
         </h3>
         <div className="mb-3 w-fit">
@@ -25,7 +44,7 @@ const page = ({ searchParams }: Props) => {
           <Suspense
             key={searchParams.bookingCode}
             fallback={
-              <Skeleton className="min-h-[600px] bg-muted-foreground" />
+              <Skeleton className="min-h-[600px]" />
             }
           >
             <BookingFeed
@@ -34,6 +53,9 @@ const page = ({ searchParams }: Props) => {
             />
           </Suspense>
         </div>
+</div>
+
+
       </div>
     </div>
   );
