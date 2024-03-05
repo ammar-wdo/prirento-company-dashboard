@@ -6,6 +6,7 @@ import { Input } from "../ui/input";
 import NoResult from "../no-result";
 import NavigatorButton from "../navigator-button";
 import { Plus, Search } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   cars: (Car & {
@@ -35,9 +36,9 @@ const CarClientFilter = ({ cars }: Props) => {
   return (
     <div className="">
         <div className="flex flex-col gap-2 w-full md:flex-row md:justify-between md:items-center">
-        <NavigatorButton href="/dashboard/cars/new" variant={"site"}>
+        <Link href="/dashboard/cars/new" className=" bg-main text-white px-4 py-2 rounded-lg flex items-center justify-center">
           <Plus  className="mr-2 w-4 h-4"/>Create New Car
-        </NavigatorButton>
+        </Link>
         <div className="md:w-[300px] w-full relative border rounded-md p-1 bg-white  pl-5">
             <Search className="absolute left-2 top-1/2 -translate-y-[50%] w-5 h-5"/>
             <Input className="border-0 bg-transparent  focus-visible:ring-0 focus-visible:ring-transparent" value={filterCarName} onChange={(e)=>setFilterCarName(e.target.value)} placeholder="Search by brand or model "/>
