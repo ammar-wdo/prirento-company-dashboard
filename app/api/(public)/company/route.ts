@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 
-
+export const revalidate = 0
 //fetch  all companys for seo
 
 export const GET = async (
