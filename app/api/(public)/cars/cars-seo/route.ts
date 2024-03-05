@@ -19,7 +19,7 @@ export const GET = async (
 
   
 
-    const cars = await prisma.car.findMany({
+    const cars = await prisma.car.findMany({ 
     
       select:{
         id:true,
