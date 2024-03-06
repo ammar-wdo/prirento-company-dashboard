@@ -14,6 +14,7 @@ export const startStripeSession = async (
 
   payNow: number,
   bookingId: string,
+  bookingCode:string,
   image:string
 ) => {
   const session = await stripe.checkout.sessions.create({
@@ -45,7 +46,7 @@ export const startStripeSession = async (
     metadata: metaData,
 
     success_url: `${process.env
-      .NEXT_PUBLIC_FRONTEND!}/checkout-result?success=${bookingId}`,
+      .NEXT_PUBLIC_FRONTEND!}/checkout-result?bookingCode=${bookingCode}`,
     cancel_url: `${process.env.NEXT_PUBLIC_FRONTEND!}/checkout-result?canceled=true`,
   });
 

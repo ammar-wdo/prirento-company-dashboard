@@ -257,7 +257,7 @@ include:{
 
     const paymentMethod = paymentMethodMap[booking.paymentMethod]
 //initiate a stripe session
-    const session = await startStripeSession({id:booking.id},booking.email,paymentMethod,carName,rentalPeriodDescription,checkoutPayment,booking.id,car.gallary[0])
+    const session = await startStripeSession({id:booking.id},booking.email,paymentMethod,carName,rentalPeriodDescription,checkoutPayment,booking.id,booking.bookingCode,car.gallary[0])
 
 
 
