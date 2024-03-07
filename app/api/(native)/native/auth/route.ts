@@ -71,6 +71,7 @@ console.log('native try')
         const user = {
             email:company.email,
             logo:company.logo,
+            name:company.name,
             token
         }
 
