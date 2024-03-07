@@ -14,7 +14,7 @@ const NotFound = (props: Props) => {
         </div>
         <h3 className='text-muted-foreground text-sm'>The requested page does not exist!</h3>
         <div className=' flex items-center gap-4'>
-<Button asChild variant={'site'}><Link href={'/'}>Home Page</Link></Button>
+<Button asChild variant={'site'}><Link href={'/'}>Home Page</Link></Button> 
 
 
         </div>

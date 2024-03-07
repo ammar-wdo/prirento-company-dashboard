@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from "./prisma";
+import jwt from 'jsonwebtoken';
 import {
 
   Car,
@@ -863,3 +864,20 @@ export const bookingChangeMessage = (totalBookingsPreviousMonth: number, totalBo
     color,
   };
 };
+
+
+
+
+export const signToken = (payload:{email:string}) => {
+  return jwt.sign(payload, process.env.TOKEN_KEY as string); // No expiration set
+}
+
+
+export const verifyToken = (token: string): {email:string} | null => {
+  try {
+    return jwt.verify(token, process.env.TOKEN_KEY as string) as {email:string}
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    return null;
+  }
+}
