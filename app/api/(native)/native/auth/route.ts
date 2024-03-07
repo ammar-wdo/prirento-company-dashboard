@@ -30,7 +30,7 @@ export const GET = ()=>{
 
 export const POST = async(req:Request)=>{
     try {
-console.log('native try')
+
         const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
         if (!apiSecret || apiSecret !== process.env.API_SECRET) {
@@ -38,13 +38,13 @@ console.log('native try')
         }
 
         const body = await req.json()
-        console.log('body',body)
+     
 
         const validData = loginSchema.safeParse(body)
         if(!validData.success)  throw new CustomError("Invalid inputs");
         const {email,password} = validData.data
 
-        console.log('credentials',email,password)
+      
 
         const company = await prisma.company.findUnique({
             where:{
