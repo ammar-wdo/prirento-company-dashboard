@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { signToken } from "@/lib/utils";
+import { comparePasswords, signToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -46,11 +46,21 @@ console.log('native try')
 
         const company = await prisma.company.findUnique({
             where:{
-                password,email
+               email
             }
         })
 
         if(!company) throw new CustomError("Invalid credentials")
+
+
+        
+
+          const passwordMatch = await comparePasswords(password, company.password);
+
+          if (!passwordMatch) throw new CustomError("Invalid credentials")
+
+        if(!company) throw new CustomError("Invalid credentials")
+        
 
         const token = signToken({email:company.email})
 
