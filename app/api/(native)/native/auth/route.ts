@@ -44,11 +44,14 @@ console.log('native try')
         if(!validData.success)  throw new CustomError("Invalid inputs");
         const {email,password} = validData.data
 
+        console.log('credentials',email,password)
+
         const company = await prisma.company.findUnique({
             where:{
                email
             }
         })
+        console.log('company',company?.name)
 
         if(!company) throw new CustomError("Invalid credentials")
 
@@ -56,11 +59,12 @@ console.log('native try')
         
 
           const passwordMatch = await comparePasswords(password, company.password);
+          console.log('match',passwordMatch)
 
           if (!passwordMatch) throw new CustomError("Invalid credentials")
 
-        if(!company) throw new CustomError("Invalid credentials")
-        
+   
+
 
         const token = signToken({email:company.email})
 
@@ -69,6 +73,8 @@ console.log('native try')
             logo:company.logo,
             token
         }
+
+        console.log(token)
 
         return NextResponse.json({success:true,user},{status:200})
         
