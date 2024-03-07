@@ -17,9 +17,11 @@ export const GET = async (req:Request)=>{
         }
 
         const authHeader = req.headers.get('Authorization')
+        console.log('header',authHeader)
         if (!authHeader || !authHeader.startsWith('Bearer ')) throw new CustomError('Not Authorized')
 
         const token = authHeader.split(' ')[1];
+        
         const decoded = verifyToken(token)
 
         if(!decoded) throw new CustomError('Not Authorized')
