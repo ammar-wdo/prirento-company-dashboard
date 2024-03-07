@@ -25,6 +25,7 @@ export const GET = async (req:Request)=>{
         const decoded = verifyToken(token)
 
         if(!decoded) throw new CustomError('Not Authorized')
+        console.log('email',decoded.email)
 const currentDate = new Date()
 
         const cars = await prisma.car.findMany({
