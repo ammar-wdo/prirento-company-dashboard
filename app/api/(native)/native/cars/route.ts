@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async (req:Request)=>{
 
-
+console.log('hi')
     try {
 
         const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
