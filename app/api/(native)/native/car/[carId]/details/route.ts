@@ -59,6 +59,7 @@ export const GET = async (
       id: car.id,
       carName: `${car.carModel.carBrand.brand} ${car.carModel.name}`,
       brand: car.carModel.carBrand.brand,
+      model: car.carModel.name,
       year: car.year,
       transmition: car.transmition,
       engine: car.engine,
@@ -72,12 +73,21 @@ export const GET = async (
       slug: car.slug,
       kmIncluded: car.kmIncluded,
       minimumHours: car.minimumHours || null,
-      pickupLocations: car.pickupLocations.map((el) => el.name),
-      dropoffLocations: car.dropoffLocations.map((el) => el.name),
+      pickupLocations: car.pickupLocations.map((el) => ({
+        id: el.id,
+        name: el.name,
+      })),
+      dropoffLocations: car.dropoffLocations.map((el) => ({
+        id: el.id,
+        name: el.name,
+      })),
       companyName: car.company.name,
     };
 
-    return NextResponse.json({ success: true, car:returnedCar }, { status: 200 });
+    return NextResponse.json(
+      { success: true, car: returnedCar },
+      { status: 200 }
+    );
   } catch (error) {
     let message = "Internal server error";
 
