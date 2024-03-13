@@ -23,10 +23,6 @@ export async function OPTIONS() {
 }
 
 
-export const GET = ()=>{
-
-    return NextResponse.json({success:true})
-}
 
 export const POST = async(req:Request)=>{
     try {

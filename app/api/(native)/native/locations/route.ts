@@ -1,14 +1,18 @@
+import { NextResponse } from "next/server";
+
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
 import { verifyToken } from "@/lib/utils";
-import { NextResponse } from "next/server";
+
 
 export const GET = async (
   req: Request,
 
 ) => {
-  console.log("hi");
+
   try {
+
+    
     const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
     if (!apiSecret || apiSecret !== process.env.API_SECRET) {
@@ -29,24 +33,19 @@ export const GET = async (
     if (!decoded) throw new CustomError("Not Authorized");
     console.log("email", decoded.email);
 
-    const models = await prisma.carModel.findMany({
+    const locations = await prisma.location.findMany({
      orderBy:{createdAt:'desc'},
      select:{
        id:true,
        name:true,
-       carBrand:{
-        select:{
-            brand:true,
-            logo:true
-        }
-       }
+    
      }
       
     });
 
   
 
-    return NextResponse.json({ success: true, models:models }, { status: 200 });
+    return NextResponse.json({ success: true, locations }, { status: 200 });
 
 
   } catch (error) {

@@ -6,6 +6,7 @@ import { companySchema } from "@/schemas";
 import { getServerSession } from "next-auth";
 
 import { checkEmail, hashPassword, newPasswordCheck } from "@/lib/utils";
+import { CustomError } from "@/costum-error";
 
 
 
@@ -84,7 +85,7 @@ export const editCompany = async (data: any, id: string) => {
     return { success: "Successfully updated" };
   } catch (error) {
     let message = "Something went wrong";
-    if (error instanceof Error) {
+    if (error instanceof CustomError) {
       message = error.message;
     }
     console.log(error);

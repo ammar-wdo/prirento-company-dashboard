@@ -1,6 +1,7 @@
 "use server";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
 import { areIdsValid, checkSlug, getCompany, isIdValid } from "@/lib/utils";
 import {  carSchema } from "@/schemas";
@@ -55,7 +56,7 @@ export const addCar = async (data: any) => {
     return { success: "Successfully added" };
   } catch (error) {
     let message = "Something went wrong";
-    if (error instanceof Error) {
+    if (error instanceof CustomError) {
       message = error.message;
     }
     console.log(error);
@@ -128,7 +129,7 @@ export const editCar = async (data: any, id: string) => {
     return { success: "Successfully updated" };
   } catch (error) {
     let message = "Something went wrong";
-    if (error instanceof Error) {
+    if (error instanceof CustomError) {
       message = error.message;
     }
     console.log(error);

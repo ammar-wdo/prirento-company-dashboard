@@ -60,11 +60,14 @@ export const GET = async (
       carName: `${car.carModel.carBrand.brand} ${car.carModel.name}`,
       brand: car.carModel.carBrand.brand,
       model: car.carModel.name,
+      carModelId:car.carModelId,
       year: car.year,
       transmition: car.transmition,
       engine: car.engine,
       doors: car.doors,
       electric: car.electric,
+      colors:car.colors,
+      interiorColor:car.interiorColor,
       carType: car.carType,
       seats: car.seats,
       description: car.description,
@@ -82,6 +85,11 @@ export const GET = async (
         name: el.name,
       })),
       companyName: car.company.name,
+      deposite:car.deposite,
+      deleviryFee:car.deleviryFee,
+      coolDown:car.coolDown,
+      pricings:car.pricings,
+      hourlyPrice:car.hourPrice
     };
 
     return NextResponse.json(

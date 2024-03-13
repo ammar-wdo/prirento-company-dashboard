@@ -74,7 +74,7 @@ export async function areIdsValid(
     });
   }
   if (count !== ids.length) {
-    throw new Error(`${model} IDs are not valid`);
+    throw new CustomError(`${model} IDs are not valid`);
   }
 }
 
@@ -82,7 +82,7 @@ export async function isIdValid(id: string, model: "company") {
   if (model === "company") {
     const company = await prisma.company.findUnique({ where: { id } });
     if (!company) {
-      throw new Error("Company ID is invalid");
+      throw new CustomError("Company ID is invalid");
     }
   }
 }
@@ -97,7 +97,7 @@ export const checkSlug = async (
       where: { slug, ...(id && { NOT: { id } }) },
     });
     if (car) {
-      throw new Error("Slug already exists");
+      throw new CustomError("Slug already exists");
     }
   }
   if (model === "company") {
@@ -105,7 +105,7 @@ export const checkSlug = async (
       where: { slug, ...(id && { NOT: { id } }) },
     });
     if (company) {
-      throw new Error("Slug already exists");
+      throw new CustomError("Slug already exists");
     }
   }
 };
@@ -124,7 +124,7 @@ export const checkEmail = async (
     });
 
     if (company) {
-      throw new Error("Email already exists");
+      throw new CustomError("Email already exists");
     }
   }
 };
