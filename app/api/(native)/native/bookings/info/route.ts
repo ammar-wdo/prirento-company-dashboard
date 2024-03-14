@@ -34,7 +34,7 @@ export const GET = async (
     if (!decoded) throw new CustomError("Not Authorized");
 
     const searchParams = req.nextUrl.searchParams
-    const take  = searchParams.get('take')
+
 
 
   
@@ -47,6 +47,12 @@ const bookings =await prisma.booking.findMany({
                 email:decoded.email
             }
         },
+ 
+     startDate: {
+              gte: firstDayOfCurrentMonth,
+              lte: firstDayOfNextMonth,
+              
+            },
         
     },
     orderBy:{
@@ -54,54 +60,25 @@ const bookings =await prisma.booking.findMany({
             
         
     },
-    ...(take && { take:+take }),
+ 
     select:{
-        id:true,
-        firstName:true,
-        lastName:true,
-        createdAt:true,
-        bookingCode:true,
-        carId:true,
-        car:{
-            select:{
-                carModel:{
-                    select:{
-                        name:true,
-                        carBrand:{
-                            select:{
-                                brand:true
-                            }
-                        }
-                    }
-                },
-                gallary:true
-               
-            }
-        },
-        payLater:true,
-        pickupLocation:true,
-        dropoffLocation:true
+  payLater:true,
+  createdAt:true,
+  startDate:true,
+  endDate:true,
+
     }
 })
 
-const returnedBookings = (await bookings).map(booking=>({
+const total = bookings.reduce((acc,val)=>acc + val.payLater,0)
+const count = bookings.length
 
-    id:booking.id,
-    carId:booking.carId,
-    carName:`${booking.car.carModel.carBrand.brand} ${booking.car.carModel.name}`,
-    carImage:booking.car.gallary[0],
-    total:booking.payLater,
-    name:`${booking.firstName} ${booking.lastName}`,
-    bookingCode:booking.bookingCode,
-    pickupLocation:booking.pickupLocation,
-    dropoffLocation:booking.dropoffLocation,
-    createdAt:booking.createdAt
-}))
+
 
 
     
 
-    return  NextResponse.json({success:true,bookings:returnedBookings},{status:201});
+    return  NextResponse.json({success:true,bookingsInfo:{total,count,bookings}},{status:201});
   } catch (error) {
 
     let message = "Something went wrong...";
