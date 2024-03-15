@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import { verifyToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
+
+export const revalidate = 0
+
 export const GET = async (
   req: Request,
   { params }: { params: { carId: string } }
