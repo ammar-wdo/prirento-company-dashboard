@@ -118,8 +118,8 @@ const currentDate = new Date()
           
          
         }})
-
-        console.log('refined cars',refinedCars)
+console.log(currentDate)
+     cars.forEach(car=>{console.log(`${car.carModel.carBrand.brand} ${car.carModel.name}`);console.log(car.bookings)})
 
         return NextResponse.json({success:true,cars:refinedCars},{status:200})
 
