@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import { verifyToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
+
+export const revalidate = 0
+
 export const GET = async (
   req: Request,
 
@@ -56,7 +59,7 @@ export const GET = async (
     if (error instanceof CustomError) message = error.message;
 
     return NextResponse.json(
-      { success: false, error: JSON.stringify(error) },
+      { success: false, error:message },
       { status: 200 }
     );
   }
