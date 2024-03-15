@@ -85,7 +85,7 @@ const returnedBooking = {
 
     
 
-    return  NextResponse.json({success:true,booking:returnedBooking},{status:201});
+    return  NextResponse.json({success:true,bookingDetails:returnedBooking},{status:201});
   } catch (error) {
 
     let message = "Something went wrong...";
