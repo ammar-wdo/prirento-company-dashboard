@@ -104,6 +104,8 @@ const currentDate = new Date()
 
             const status = booked ? 'Booked' :
             blocked ? 'Blocked' : 'Available'
+
+        
             
             
             return{
@@ -116,6 +118,8 @@ const currentDate = new Date()
           
          
         }})
+
+        console.log('refined cars',refinedCars)
 
         return NextResponse.json({success:true,cars:refinedCars},{status:200})
 
