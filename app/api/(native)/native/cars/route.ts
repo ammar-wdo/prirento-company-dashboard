@@ -4,7 +4,7 @@ import { verifyToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 
-
+export const revalidate = 0
 export const GET = async (req:Request)=>{
 
 console.log('hi')
