@@ -881,3 +881,5 @@ export const verifyToken = (token: string): {email:string} | null => {
     return null;
   }
 }
+
+export const dubaiTimeZone  =()=>new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dubai" }))

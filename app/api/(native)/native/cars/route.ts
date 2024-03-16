@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { verifyToken } from "@/lib/utils";
+import { dubaiTimeZone, verifyToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 
@@ -26,7 +26,7 @@ console.log('hi')
 
         if(!decoded) throw new CustomError('Not Authorized')
         console.log('email',decoded.email)
-const currentDate = new Date()
+const currentDate = dubaiTimeZone()
 
         const cars = await prisma.car.findMany({
             where:{
