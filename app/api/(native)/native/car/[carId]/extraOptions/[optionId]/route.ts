@@ -69,7 +69,7 @@ export const GET = async (
       message = error.message;
     }
     console.log(error);
-    return NextResponse.json({success:false,message});
+    return NextResponse.json({success:false,error:message});
   }
 
 
