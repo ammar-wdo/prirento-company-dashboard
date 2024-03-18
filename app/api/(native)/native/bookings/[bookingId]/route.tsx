@@ -43,7 +43,8 @@ const booking = await prisma.booking.findUnique({
         car:{
             company:{
                 email:decoded.email
-            }
+            },
+            
         }
     }
     ,
