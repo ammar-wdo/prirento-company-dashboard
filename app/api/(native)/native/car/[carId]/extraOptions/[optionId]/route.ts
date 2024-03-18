@@ -42,7 +42,7 @@ export const GET = async (
 
     const extraOption = await prisma.carExtraOption.findUnique({
       where:{
-      carId:params.carId,
+
       id:params.optionId,
       car:{
         company:{
@@ -52,6 +52,8 @@ export const GET = async (
        
       }
     })
+
+    if(!extraOption) throw new CustomError('Unauthorized')
 
     
 
