@@ -53,7 +53,7 @@ export const GET = async (
       }
     })
 
-    if(!extraOption) throw new CustomError('Unauthorized')
+
 
     
 
