@@ -83,7 +83,8 @@ const bookings =await prisma.booking.findMany({
         pickupLocation:true,
         dropoffLocation:true,
         startDate:true,
-        endDate:true
+        endDate:true,
+        paymentStatus:true
     }
 })
 
@@ -100,7 +101,8 @@ const returnedBookings =  bookings.map(booking=>({
     dropoffLocation:booking.dropoffLocation,
     createdAt:booking.createdAt,
     startDate:booking.startDate,
-    endDate:booking.endDate
+    endDate:booking.endDate,
+    paymentStatus:booking.paymentStatus
 }))
 
 
