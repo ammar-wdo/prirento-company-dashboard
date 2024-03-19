@@ -1,15 +1,16 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { dubaiTimeZone, verifyToken } from "@/lib/utils";
+import { verifyToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 
-export const revalidate = 0
-export const GET = async (req:Request)=>{
+export const GET = async (req:Request,{params}:{params:{bookingId:string}}) =>{
 
-console.log('hi')
+
+    console.log('hi')
     try {
 
+        if(!params.bookingId) throw new CustomError("Bookin Id is required")
         const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
         if (!apiSecret || apiSecret !== process.env.API_SECRET) {
@@ -27,32 +28,19 @@ console.log('hi')
         if(!decoded) throw new CustomError('Not Authorized')
         console.log('email',decoded.email)
 
-const notifications = await prisma.notification.findMany({
+
+
+await prisma.notification.updateMany({
     where:{
-        company:{
-            email:decoded.email
-        }
+        bookingId:params.bookingId
     },
-    select:{
-        id:true,
-        message:true,
-        carName:true,
-        type:true,
-        isRead:true,
-        booking:{
-            select:{
-                id:true
-            }
-        },
-        createdAt:true
-    },
-    orderBy:{
-        createdAt:'desc'
+    data:{
+        isRead:true
     }
 })
      
 
-        return NextResponse.json({success:true,notifications},{status:200})
+        return NextResponse.json({success:true},{status:200})
 
 
 
