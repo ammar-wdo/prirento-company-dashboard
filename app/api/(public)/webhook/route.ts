@@ -113,16 +113,7 @@ export async function POST(req: Request) {
           },
         });
 
-        //trigger notification
-        await prisma.notification.create({
-          data: {
-            bookingId: order.id,
-            companyId: order.car.company.id,
-            message: `Checkout session expired, an attempt to book`,
-            type: "EXPIRE",
-            carName:` ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`
-          },
-        });
+     
       } catch (error) {
         console.log(error);
       }
