@@ -47,6 +47,7 @@ const bookings =await prisma.booking.findMany({
                 email:decoded.email
             }
         },
+        paymentStatus:'SUCCEEDED'
         
     },
     orderBy:{
