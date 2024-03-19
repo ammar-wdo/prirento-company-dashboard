@@ -61,7 +61,7 @@ export async function POST(req: Request) {
             },
           });
 
-          
+
    //trigger notification
           await prisma.notification.create({
             data: {
@@ -117,8 +117,8 @@ export async function POST(req: Request) {
           data: {
             bookingId: order.id,
             companyId: order.car.company.id,
-            message: `Someone booked ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`,
-            type: "BOOKING",
+            message: `Someone tried to book ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}, but the checkout session expired!`,
+            type: "EXPIRE",
           },
         });
       } catch (error) {
