@@ -49,6 +49,7 @@ const cars = await prisma.car.findMany({
             gte: firstDayOfCurrentMonth,
             lte: firstDayOfNextMonth,
           },
+          paymentStatus:'SUCCEEDED'
         },
       },
     },
