@@ -38,6 +38,7 @@ const notifications = await prisma.notification.findMany({
         message:true,
         carName:true,
         type:true,
+        isRead:true,
         booking:{
             select:{
                 id:true
