@@ -42,7 +42,8 @@ const notifications = await prisma.notification.findMany({
             select:{
                 id:true
             }
-        }
+        },
+        createdAt:true
     }
 })
      
