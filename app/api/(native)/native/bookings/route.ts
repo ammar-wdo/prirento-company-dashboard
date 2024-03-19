@@ -47,7 +47,7 @@ const bookings =await prisma.booking.findMany({
                 email:decoded.email
             }
         },
-        paymentStatus:'SUCCEEDED'
+      
         
     },
     orderBy:{
@@ -87,7 +87,7 @@ const bookings =await prisma.booking.findMany({
     }
 })
 
-const returnedBookings = (await bookings).map(booking=>({
+const returnedBookings =  bookings.map(booking=>({
 
     id:booking.id,
     carId:booking.carId,
