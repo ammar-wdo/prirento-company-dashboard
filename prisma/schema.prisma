@@ -395,6 +395,7 @@ booking Booking @relation(fields: [bookingId],references: [id])
 companyId String
 company Company @relation(fields: [companyId],references: [id])
 
+carName String
 
 isRead Boolean @default(false)
 type NotificationsType 

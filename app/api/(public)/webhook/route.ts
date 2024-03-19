@@ -67,8 +67,9 @@ export async function POST(req: Request) {
             data: {
               bookingId: order.id,
               companyId: order.car.company.id,
-              message: `Someone booked ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`,
+              message: `Someone booked`,
               type: "BOOKING",
+              carName:`${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`
             },
           });
         }
@@ -117,8 +118,9 @@ export async function POST(req: Request) {
           data: {
             bookingId: order.id,
             companyId: order.car.company.id,
-            message: `Someone tried to book ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}, but the checkout session expired!`,
+            message: `Checkous session expired, an attempt to book`,
             type: "EXPIRE",
+            carName:` ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`
           },
         });
       } catch (error) {
