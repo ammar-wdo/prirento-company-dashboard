@@ -36,6 +36,7 @@ const notifications = await prisma.notification.findMany({
     select:{
         id:true,
         message:true,
+        carName:true,
         type:true,
         booking:{
             select:{
@@ -46,7 +47,7 @@ const notifications = await prisma.notification.findMany({
 })
      
 
-        return NextResponse.json({success:true,notifications:[]},{status:200})
+        return NextResponse.json({success:true,notifications},{status:200})
 
 
 
