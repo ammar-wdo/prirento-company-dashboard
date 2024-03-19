@@ -47,6 +47,7 @@ const bookings =await prisma.booking.findMany({
                 email:decoded.email
             }
         },
+        paymentStatus:'SUCCEEDED'
       
         
     },
@@ -102,7 +103,7 @@ const returnedBookings =  bookings.map(booking=>({
     createdAt:booking.createdAt,
     startDate:booking.startDate,
     endDate:booking.endDate,
-    paymentStatus:booking.paymentStatus
+  
 }))
 
 
