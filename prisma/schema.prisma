@@ -39,7 +39,7 @@ model Company {
   category   Category @relation(fields: [categoryId], references: [id])
 
   cars Car[]
-
+  notifications Notification[]
   reviews Review[]
 
   createdAt DateTime @default(now())
@@ -321,6 +321,7 @@ model Booking {
 
 
   reviews Review[]
+  notifications Notification[]
 
   createdAt DateTime @default(now())
   updatedUt DateTime @updatedAt
@@ -380,6 +381,25 @@ model Review {
   visibility ReviewVisibility
 
   createdAt DateTime @default(now())
+  updatedUt DateTime @updatedAt
+}
+
+
+model Notification {
+id        String  @id @default(uuid())
+message String
+
+bookingId String
+booking Booking @relation(fields: [bookingId],references: [id])
+
+companyId String
+company Company @relation(fields: [companyId],references: [id])
+
+
+isRead Boolean @default(false)
+type NotificationsType 
+
+ createdAt DateTime @default(now())
   updatedUt DateTime @updatedAt
 }
 
@@ -478,4 +498,9 @@ enum ReviewVisibility {
   FIRSTNAME
   FULLNAME
   ANOUNYMOS
+}
+
+enum NotificationsType {
+  BOOKING
+  EXPIRE
 }
