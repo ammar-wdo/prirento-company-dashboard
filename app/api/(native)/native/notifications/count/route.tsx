@@ -39,7 +39,8 @@ export const GET = async (
   
         company:{
           email:decoded.email
-        },isRead:false
+        },
+        isRead:false
         
          
         }
