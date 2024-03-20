@@ -8,7 +8,7 @@ export const revalidate = 0
 
 export const GET = async (
     req: Request,
-    { params }: { params: { carId: string } }
+  
   ) => {
   
     try {
@@ -17,8 +17,7 @@ export const GET = async (
       if (!apiSecret || apiSecret !== process.env.API_SECRET) {
         throw new CustomError("Unauthorized request");
       }
-  
-      if (!params.carId) throw new CustomError("Car Id is required");
+ 
     
   
       const authHeader = req.headers.get("Authorization");
