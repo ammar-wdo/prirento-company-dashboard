@@ -61,6 +61,11 @@ const company = await prisma.company.findUnique({
 
 if(!company) throw new CustomError("Unauthorized")
 
+await Promise.all([
+    areIdsValid(pickupLocations, "location"),
+    areIdsValid(dropoffLocations, "location"),
+  ])
+
     const car = await prisma.car.create({
       data:{
      ...rest,
@@ -72,15 +77,9 @@ if(!company) throw new CustomError("Unauthorized")
       }
     })
 
-    if(!car) throw new CustomError('Unauthorized')
+ 
 
-    await Promise.all([
-      areIdsValid(pickupLocations, "location"),
-      areIdsValid(dropoffLocations, "location"),
-     
-     
-    
-    ])
+   
 
 
 
