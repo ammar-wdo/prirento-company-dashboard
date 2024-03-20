@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async (
     req: Request,
-    { params }: { params: { carId: string ,optionId:string} }
+    { params }: { params: { carId: string } }
   ) => {
   
     try {
