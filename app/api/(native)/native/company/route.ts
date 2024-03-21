@@ -49,21 +49,6 @@ const company = await prisma.company.findUnique({
 })
 
 if(!company) throw new CustomError("company does not exist")
-
-
-
-
-
-
-
- 
-
-   
-
-
-
-
-
     return  NextResponse.json({success:true,company},{status:201});
   } catch (error) {
     let message = "Something went wrong";
@@ -75,4 +60,60 @@ if(!company) throw new CustomError("company does not exist")
   }
 
 
+}
+
+
+export const POST = async (req:Request)=>{
+
+
+    try{
+    const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
+
+    if (!apiSecret || apiSecret !== process.env.API_SECRET) {
+      throw new CustomError("Unauthorized request");
+    }
+
+
+
+    const authHeader = req.headers.get("Authorization");
+    console.log("header", authHeader);
+    if (!authHeader || !authHeader.startsWith("Bearer "))
+      throw new CustomError("Not Authorized");
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = verifyToken(token);
+
+    if (!decoded) throw new CustomError("Not Authorized");
+
+    const data = await req.json()
+
+    const validData = companySchema.safeParse(data);
+    if (!validData.success) throw new CustomError('Invalid inputs');
+    
+
+
+    const updatedCompany = await prisma.company.update({
+      where: {
+        email:decoded.email,
+      },
+      data: {
+     ...validData.data,
+     email:validData.data.email.toLocaleLowerCase(),
+
+      },
+    });
+
+    if(decoded.email !== updatedCompany.email)
+   return NextResponse.json({success:true,logout:true},{status:201})
+
+   return NextResponse.json({success:true,logout:false},{status:201})
+  } catch (error) {
+    let message = "Something went wrong";
+    if (error instanceof CustomError) {
+      message = error.message;
+    }
+    console.log(error);
+    return NextResponse.json({success:false,error:message},{status:200});
+  }
 }

@@ -58,16 +58,6 @@ export const editCompany = async (data: any, id: string) => {
 
 
 
-
-  
-
-  
-    
-
-
-
-
-
     const updatedCompany = await prisma.company.update({
       where: {
         id,
