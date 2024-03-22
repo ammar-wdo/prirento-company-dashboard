@@ -44,7 +44,7 @@ export const POST = async(req:Request)=>{
 
         const company = await prisma.company.findUnique({
             where:{
-               email
+               email:email.toLowerCase()
             }
         })
         console.log('company',company?.name)
