@@ -112,7 +112,7 @@ const currentDate = dubaiTimeZone()
             id: car.id,
             carName: `${car.carModel.carBrand.brand} ${car.carModel.name}`,
             year: car.year,
-            isPending:car.carStatus,
+            isPending:car.carStatus === 'pending',
           image:car.gallary[0],
           status
 
