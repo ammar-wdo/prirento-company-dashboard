@@ -105,7 +105,7 @@ export const POST = async (req:Request)=>{
     });
 
     if(decoded.email !== updatedCompany.email)
-   return NextResponse.json({success:true,logout:true},{status:201})
+ {  return NextResponse.json({success:true,logout:true},{status:201})}
 
    return NextResponse.json({success:true,logout:false},{status:201})
   } catch (error) {

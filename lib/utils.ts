@@ -29,7 +29,7 @@ export async function comparePasswords(
     const passwordMatch = await bcrypt.compare(plainPassword, hashedPassword);
     return passwordMatch;
   } catch (error) {
-    throw new Error("Error comparing passwords");
+    throw new CustomError("Error comparing passwords");
   }
 }
 

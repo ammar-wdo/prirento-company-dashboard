@@ -446,5 +446,18 @@ export const bookingSchema = z
 
 
 
+    
+  export const passwordSchema = z.object({
+    password: requiredString.min(8, "At least 8 characters"),
+    newPassword: requiredString.min(8, 'At least 8 characters'),
+    confirmPassword: requiredString,
+  }).refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // Specify the path of the field this error message is associated with
+  });
+
+
+
+
 
   
