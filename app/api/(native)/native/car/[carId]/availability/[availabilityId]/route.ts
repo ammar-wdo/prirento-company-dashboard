@@ -63,7 +63,7 @@ export const POST = async (
           id:params.carId
         },select:{id:true}
       })
-      if(!carExist) return {error:'Car does not exist'}
+      if(!carExist) throw new CustomError('Car does not exist')
   
       const {startDate,endDate,startTime,endTime,...rest} = validData.data
       const startDateObject = combineDateAndTimeToUTC(startDate,startTime)
