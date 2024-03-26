@@ -129,8 +129,8 @@ const numericValues = z.object({
     .optional()
     .or(z.literal(undefined)),
   deleviryFee: requiredNumber
-    .refine((val) => val, "Required field")
-    .refine((val) => val > 0, "Enter positive value"),
+   
+  .refine((val) => (!val || val >= 0), "Enter positive value"),
   coolDown: requiredNumber
     .refine((val) => val, "Required field")
     .refine((val) => val > 0, "Enter positive value"),

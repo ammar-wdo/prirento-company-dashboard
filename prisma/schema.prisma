@@ -137,7 +137,7 @@ model Car {
   hourPrice Int?
 
   minimumHours Int?
-  deleviryFee  Int
+  deleviryFee  Int @default(0)
   coolDown     Int
 
   additionalFeatures Json[]
