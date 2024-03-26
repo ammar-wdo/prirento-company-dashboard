@@ -50,6 +50,7 @@ export const usePricings = ({ pricings, hourPrice, id }: Props) => {
       } else {
         toast.success(res.success);
         router.refresh()
+        router.back()
 
       }
     } catch (error) {
