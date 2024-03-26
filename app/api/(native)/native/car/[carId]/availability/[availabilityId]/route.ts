@@ -56,7 +56,7 @@ export const POST = async (
 
       const validData = carAvailabilitySchema.safeParse(body)
 
-      if(!validData.success) throw new CustomError(JSON.stringify(validData.error.errors))
+      if(!validData.success) throw new CustomError("Invalid Inputs")
   
       const carExist = await prisma.car.findUnique({
         where:{
