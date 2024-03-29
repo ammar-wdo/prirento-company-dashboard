@@ -75,7 +75,7 @@ export async function POST(req: Request) {
             },
           });
           //send push notification to native app
-if(order.car.company.pushNotificationToken){
+if(!!order.car.company.pushNotificationToken){
   await sendPushNotification(order.car.company.pushNotificationToken,'New Booking',`Someone booked ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`)
 }
        
