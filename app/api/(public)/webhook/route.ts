@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 import { stripe } from "@/lib/stripe";
 import prisma from "@/lib/prisma";
+import { sendPushNotification } from "@/lib/utils";
 
 export async function POST(req: Request) {
   console.log("webhook");
@@ -54,6 +55,7 @@ export async function POST(req: Request) {
                   company: {
                     select: {
                       id: true,
+                      pushNotificationToken:true
                     },
                   },
                 },
@@ -72,6 +74,11 @@ export async function POST(req: Request) {
               carName:`${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`
             },
           });
+          //send push notification to native app
+if(order.car.company.pushNotificationToken){
+  await sendPushNotification(order.car.company.pushNotificationToken,'New Booking',`Someone booked ${order.car.carModel.carBrand.brand} ${order.car.carModel.name}`)
+}
+       
         }
       } catch (error) {
         console.log(error);
