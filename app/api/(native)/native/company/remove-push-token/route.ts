@@ -46,7 +46,7 @@ export const GET = async (req:Request)=>{
         email:decoded.email,
       },
       data: {
-  pushNotificationToken:undefined
+  pushNotificationToken:null
 
       },
     });
