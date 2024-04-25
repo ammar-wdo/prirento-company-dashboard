@@ -68,7 +68,8 @@ export const POST = async(req:Request)=>{
             email:company.email,
             logo:company.logo,
             name:company.name,
-            token
+            token,
+            pushToken:company.pushNotificationToken
         }
 
         console.log(token)

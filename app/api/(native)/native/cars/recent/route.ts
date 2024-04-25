@@ -90,7 +90,9 @@ const cars = await prisma.car.findMany({
     take: 6,
     orderBy: {
       bookings: {
+      
         _count: 'desc',
+      
       },
     },
   });
