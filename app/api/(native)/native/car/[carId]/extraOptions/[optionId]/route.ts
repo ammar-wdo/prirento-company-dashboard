@@ -190,7 +190,7 @@ select:{
 
       if(option?.car.company.email !== decoded.email) throw new CustomError("Unauthorized")
 
-      await prisma.carAvailability.delete({
+      await prisma.carExtraOption.delete({
         where:{
           id:params.optionId
         }
