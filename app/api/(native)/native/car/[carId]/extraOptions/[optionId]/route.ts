@@ -143,3 +143,71 @@ export const POST = async (
     }
   
 }
+
+
+
+export const DELETE = async (req:Request,{params}:{params:{carId:string,optionId:string}})=>{
+
+  try {
+    const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
+  
+    if (!apiSecret || apiSecret !== process.env.API_SECRET) {
+      throw new CustomError("Unauthorized request");
+    }
+
+    if (!params.carId) throw new CustomError("Car Id is required");
+    if (!params.optionId) throw new CustomError("availability Id Id is required");
+
+
+    const authHeader = req.headers.get("Authorization");
+  
+    if (!authHeader || !authHeader.startsWith("Bearer "))
+      throw new CustomError("Not Authorized");
+    const token = authHeader.split(" ")[1];
+  
+      const decoded = verifyToken(token);
+  
+      if (!decoded) throw new CustomError("Not Authorized");
+
+      const option = await prisma.carExtraOption.findUnique({
+where:{
+  id:params.optionId,
+  
+},
+select:{
+  car:{
+    select:{
+      company:{
+        select:{
+          email:true
+        }
+      }
+    }
+  }
+}
+      })
+
+
+      if(option?.car.company.email !== decoded.email) throw new CustomError("Unauthorized")
+
+      await prisma.carAvailability.delete({
+        where:{
+          id:params.optionId
+        }
+      })
+
+      return NextResponse.json({success:true,message:"Successfully deleted"},{status:200})
+
+
+    
+  } catch (error) {
+    let message = "Something went wrong";
+    if (error instanceof CustomError) {
+      message = error.message;
+    }
+    console.log(error);
+    return NextResponse.json({success:false,error:message});
+  }
+
+
+}

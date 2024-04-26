@@ -121,7 +121,8 @@ export const DELETE = async (req:Request,{params}:{params:{carId:string,availabi
 
       const availability = await prisma.carAvailability.findUnique({
 where:{
-  id:params.availabilityId
+  id:params.availabilityId,
+  
 },
 select:{
   car:{
