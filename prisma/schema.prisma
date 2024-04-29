@@ -369,12 +369,18 @@ model Faq {
 
 model Review {
   id        String  @id @default(uuid())
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id])
+  bookingId String?  @unique
+  booking   Booking? @relation(fields: [bookingId], references: [id])
   carId  String
   car    Car  @relation(fields: [carId], references: [id])
   companyId String
   company   Company @relation(fields: [companyId], references: [id])
+
+  firstName String?
+  lastName String?
+  email String
+
+  placeholderDate DateTime?
 
   reviewContent String?
   rate          Float

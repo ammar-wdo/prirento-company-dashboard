@@ -53,20 +53,16 @@ const reviews = await prisma.review.findMany({
                 logo:true
             }
         },
-        booking:{
-            select:{
-                firstName:true,lastName:true,email:true
-            }
-        }
+    
     },
     
 })
 
 const returnedReviews = reviews.map(review=>{
 
-    const {car,company,booking,visibility,status,...rest} = review
+    const {car,company,firstName,lastName,visibility,status,...rest} = review
 
-    const user = visibility==='FULLNAME' ? `${booking.firstName} ${booking.lastName}`:visibility==='FIRSTNAME' ? booking.firstName : 'Anounymos'
+    const user = visibility==='FULLNAME' ? `${firstName} ${lastName}`:visibility==='FIRSTNAME' ? firstName : 'Anounymos'
 
     return {...rest,
     companyName:company.name,
