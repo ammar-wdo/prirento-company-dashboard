@@ -39,6 +39,9 @@ export const POST = async(req:Request,{params}:{params:{bookingId:string}})=>{
         },select:{
             id:true,
             carId:true,
+            firstName:true,
+            lastName:true,
+            email:true,
             car:{
             select:{
                 companyId:true
@@ -64,6 +67,9 @@ export const POST = async(req:Request,{params}:{params:{bookingId:string}})=>{
             bookingId:bookingExist.id,
             carId:bookingExist.carId,
             companyId:bookingExist.car.companyId,
+            firstName:bookingExist.firstName,
+            lastName:bookingExist.lastName,
+            email:bookingExist.email,
             ...validData.data
         }
     })
