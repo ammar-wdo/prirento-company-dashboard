@@ -26,12 +26,6 @@ try {
                 },
                 orderBy:{
                     createdAt:'desc'
-                },include:{
-                    booking:{
-                        select:{
-                            firstName:true,lastName:true,email:true
-                        }
-                    }
                 }
             },
             company:{
@@ -59,9 +53,9 @@ const reviews = carWithReviews.reviews
 //refactor reviews for frontend
 const returnedReviews = reviews.map(review=>{
 
-    const {booking,visibility,status,...rest} = review
+    const {firstName,lastName,email,visibility,status,...rest} = review
 
-    const user = visibility==='FULLNAME' ? `${booking.firstName} ${booking.lastName}`:visibility==='FIRSTNAME' ? booking.firstName : 'Anounymos'
+    const user = visibility==='FULLNAME' ? `${firstName} ${lastName}`:visibility==='FIRSTNAME' ? firstName : 'Anounymos'
 
     return {...rest,
     companyName:carWithReviews.company.name,
