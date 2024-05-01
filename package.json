@@ -30,6 +30,7 @@
     "@tanstack/react-table": "^8.12.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/uuid": "^9.0.8",
+    "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

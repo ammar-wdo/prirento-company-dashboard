@@ -1,6 +1,8 @@
 import { CustomError } from "@/costum-error";
 import { contactSchema } from "@/schemas";
 import { NextResponse } from "next/server";
+import axios from 'axios'
+
 
 export const revalidate = 0;
 
@@ -27,9 +29,11 @@ export const POST = async (req: Request) => {
     const validData = contactSchema.safeParse(body);
     if (!validData.success) throw new CustomError("Invalid inputs");
 
+   await axios.post("https://webhooks.integrately.com/a/webhooks/16d9df74283b4cf8b2ac5da7d8b8e8c7",validData.data)
+
     return NextResponse.json({
       success: true,
-      message: `${validData.data.firstName}- ${validData.data.lastName} - ${validData.data.email}`,
+      message:'Successfully sent',
     });
   } catch (error) {
     console.log(error);
