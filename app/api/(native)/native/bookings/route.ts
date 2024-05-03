@@ -31,7 +31,8 @@ export const GET = async (
 
     const decoded = verifyToken(token);
 
-    if (!decoded) throw new CustomError("Not Authorized");
+    if (!decoded) throw new CustomError("Not Authorized Token, recent bookings and bookings");
+    
 
     const searchParams = req.nextUrl.searchParams
     const take  = searchParams.get('take')

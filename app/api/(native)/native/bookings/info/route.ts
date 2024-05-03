@@ -30,8 +30,11 @@ export const GET = async (
     const token = authHeader.split(" ")[1];
 
     const decoded = verifyToken(token);
+    
+   
 
-    if (!decoded) throw new CustomError("Not Authorized");
+    if (decoded) throw new CustomError("Not Authorized Token, bookinginfo");
+    
 
     const searchParams = req.nextUrl.searchParams
 

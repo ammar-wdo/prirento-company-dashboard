@@ -31,7 +31,7 @@ export const GET = async (
 
     const decoded = verifyToken(token);
 
-    if (!decoded) throw new CustomError("Not Authorized");
+    if (!decoded) throw new CustomError("Not Authorized Token, recent cars");
 
 
   
