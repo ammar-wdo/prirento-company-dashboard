@@ -33,56 +33,61 @@ export const GET = async (
     
    
 
-    if (decoded) throw new CustomError("Not Authorized Token, bookinginfo");
+
+
+    if (!decoded) throw new CustomError("Not Authorized Token, bookinginfo");
+
+    return NextResponse.json({success:false,error:'test'},{status:200})
+  
     
 
-    const searchParams = req.nextUrl.searchParams
+
 
 
 
   
-const {firstDayOfCurrentMonth,firstDayOfNextMonth} = currentMonthRange()
-const bookings =await prisma.booking.findMany({
+// const {firstDayOfCurrentMonth,firstDayOfNextMonth} = currentMonthRange()
+// const bookings =await prisma.booking.findMany({
 
-    where:{
-        car:{
-            company:{
-                email:decoded.email
-            }
-        },
-        paymentStatus:'SUCCEEDED',
+//     where:{
+//         car:{
+//             company:{
+//                 email:decoded.email
+//             }
+//         },
+//         paymentStatus:'SUCCEEDED',
  
-     startDate: {
-              gte: firstDayOfCurrentMonth,
-              lte: firstDayOfNextMonth,
+//      startDate: {
+//               gte: firstDayOfCurrentMonth,
+//               lte: firstDayOfNextMonth,
               
-            },
+//             },
         
-    },
-    orderBy:{
-        createdAt:'desc'
+//     },
+//     orderBy:{
+//         createdAt:'desc'
             
         
-    },
+//     },
  
-    select:{
-  payLater:true,
-  createdAt:true,
-  startDate:true,
-  endDate:true,
+//     select:{
+//   payLater:true,
+//   createdAt:true,
+//   startDate:true,
+//   endDate:true,
 
-    }
-})
+//     }
+// })
 
-const total = bookings.reduce((acc,val)=>acc + val.payLater,0)
-const count = bookings.length
+// const total = bookings.reduce((acc,val)=>acc + val.payLater,0)
+// const count = bookings.length
 
 
 
 
     
 
-    return  NextResponse.json({success:true,bookingsInfo:{total,count,bookings}},{status:201});
+//     return  NextResponse.json({success:true,bookingsInfo:{total,count,bookings}},{status:201});
   } catch (error) {
 
     let message = "Something went wrong...";
