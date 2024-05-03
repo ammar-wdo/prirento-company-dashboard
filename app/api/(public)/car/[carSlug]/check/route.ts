@@ -89,6 +89,7 @@ export const GET = async (
         company: {
           select: {
             logo: true,
+            slug:true,
           },
         },
         pickupLocations: true,
@@ -250,6 +251,7 @@ const fee = totalPrice ?  calculateReservationFee(car.reservationPercentage,car.
       fee:fee,
       deposit: car.deposite,
       slug: car.slug,
+      companySlug:car.company.slug,
       price: totalPrice,
       duration: rentalPeriodDescription,
       location: locationName?.name,
