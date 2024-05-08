@@ -112,6 +112,8 @@ export const POST = async (
   
       if (!decoded) throw new CustomError("Not Authorized");
   
+      const toLogOut = await logOut(decoded.email)
+if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
   
       const body = await req.json()
 
