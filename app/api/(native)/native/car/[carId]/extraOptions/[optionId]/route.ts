@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { areIdsValid, verifyToken } from "@/lib/utils";
+import { areIdsValid, logOut, verifyToken } from "@/lib/utils";
 import { carExtraOptionsSchema, carSchema } from "@/schemas";
 import { NextResponse } from "next/server";
 
@@ -45,8 +45,9 @@ export const GET = async (
 
     if (!decoded) throw new CustomError("Not Authorized");
 
-
-
+// check if company's email changed to make a logout
+const toLogOut = await logOut(decoded.email)
+if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
 
 
 
@@ -107,7 +108,9 @@ export const POST = async (
   
       if (!decoded) throw new CustomError("Not Authorized");
   
-  
+  // check if company's email changed to make a logout
+  const toLogOut = await logOut(decoded.email)
+  if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
       const body = await req.json()
 
       const validData = carExtraOptionsSchema.safeParse(body)
@@ -168,7 +171,9 @@ export const DELETE = async (req:Request,{params}:{params:{carId:string,optionId
       const decoded = verifyToken(token);
   
       if (!decoded) throw new CustomError("Not Authorized");
-
+// check if company's email changed to make a logout
+const toLogOut = await logOut(decoded.email)
+if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
       const option = await prisma.carExtraOption.findUnique({
 where:{
   id:params.optionId,

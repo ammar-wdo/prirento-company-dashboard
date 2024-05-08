@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { verifyToken } from "@/lib/utils";
+import { logOut, verifyToken } from "@/lib/utils";
 import { carPricingsSchema } from "@/schemas";
 import { NextResponse } from "next/server";
 
@@ -41,6 +41,12 @@ export const POST = async (
     const decoded = verifyToken(token);
 
     if (!decoded) throw new CustomError("Not Authorized");
+
+
+// check if company's email changed to make a logout
+const toLogOut = await logOut(decoded.email)
+if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
+
 
 const data = await req.json()
     const validData = carPricingsSchema.safeParse(data);

@@ -911,3 +911,13 @@ try {
 }
 
 }
+
+
+export const logOut = async (email:string)=>{
+
+
+  const company = await prisma.company.findUnique({where:{email}})
+
+  if(!company) return true
+ return false
+}

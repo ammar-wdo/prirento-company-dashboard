@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { areIdsValid, combineDateAndTimeToUTC, verifyToken } from "@/lib/utils";
+import { areIdsValid, combineDateAndTimeToUTC, logOut, verifyToken } from "@/lib/utils";
 import { carAvailabilitySchema, carExtraOptionsSchema, carSchema } from "@/schemas";
 import { NextResponse } from "next/server";
 
@@ -50,7 +50,9 @@ export const POST = async (
       const decoded = verifyToken(token);
   
       if (!decoded) throw new CustomError("Not Authorized");
-  
+  // check if company's email changed to make a logout
+  const toLogOut = await logOut(decoded.email)
+  if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
   
       const body = await req.json()
 
@@ -119,6 +121,10 @@ export const DELETE = async (req:Request,{params}:{params:{carId:string,availabi
   
       if (!decoded) throw new CustomError("Not Authorized");
 
+
+      // check if company's email changed to make a logout
+    const toLogOut = await logOut(decoded.email)
+    if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
       const availability = await prisma.carAvailability.findUnique({
 where:{
   id:params.availabilityId,

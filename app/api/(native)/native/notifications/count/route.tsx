@@ -1,6 +1,6 @@
 import { CustomError } from "@/costum-error";
 import prisma from "@/lib/prisma";
-import { verifyToken } from "@/lib/utils";
+import { logOut, verifyToken } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 
@@ -33,7 +33,9 @@ export const GET = async (
   
   
   
-  
+  // check if company's email changed to make a logout
+  const toLogOut = await logOut(decoded.email)
+  if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
   
   
       const count = await prisma.notification.count({
