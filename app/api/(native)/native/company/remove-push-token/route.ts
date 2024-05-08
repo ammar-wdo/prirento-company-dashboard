@@ -37,9 +37,7 @@ export const GET = async (req:Request)=>{
 
 
 
-// check if company's email changed to make a logout
-const toLogOut = await logOut(decoded.email)
-if(!!toLogOut) return NextResponse.json({success:false,logout:true},{status:200})
+
     
 
 
