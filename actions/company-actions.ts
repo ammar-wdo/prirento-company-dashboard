@@ -65,7 +65,8 @@ export const editCompany = async (data: any, id: string) => {
       data: {
      ...rest,
      email:rest.email.toLocaleLowerCase(),
-     password:thePassword
+     password:thePassword,
+     ...(firstEmail !== rest.email && {pushNotificationToken:null})
       },
     });
 

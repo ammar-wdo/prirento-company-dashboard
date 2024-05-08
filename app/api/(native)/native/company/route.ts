@@ -98,6 +98,10 @@ export const POST = async (req:Request)=>{
 
     const validData = companySchema.safeParse(data);
     if (!validData.success) throw new CustomError('Invalid inputs');
+
+
+
+    const setPushNotificationToNull = decoded.email !== validData.data.email
     
 
 
@@ -108,6 +112,7 @@ export const POST = async (req:Request)=>{
       data: {
      ...validData.data,
      email:validData.data.email.toLocaleLowerCase(),
+     ...(!!setPushNotificationToNull && {pushNotificationToken:null})
 
       },
     });
