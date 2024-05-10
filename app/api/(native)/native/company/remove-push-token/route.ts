@@ -16,25 +16,25 @@ export const GET = async (req:Request)=>{
 
 
     try{
+  
+    const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
+
+    if (!apiSecret || apiSecret !== process.env.API_SECRET) {
       return NextResponse.json({success:true},{status:201})
-  //   const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
-
-  //   if (!apiSecret || apiSecret !== process.env.API_SECRET) {
-  //     throw new CustomError("Unauthorized request");
-  //   }
+    }
 
 
 
-  //   const authHeader = req.headers.get("Authorization");
-  //   console.log("header", authHeader);
-  //   if (!authHeader || !authHeader.startsWith("Bearer "))
-  //     throw new CustomError("Not Authorized");
+    const authHeader = req.headers.get("Authorization");
+    console.log("header", authHeader);
+    if (!authHeader || !authHeader.startsWith("Bearer "))
+    return NextResponse.json({success:true},{status:201})
 
-  //   const token = authHeader.split(" ")[1];
+    const token = authHeader.split(" ")[1];
 
-  //   const decoded = verifyToken(token);
+    const decoded = verifyToken(token);
 
-  //   if (!decoded) throw new CustomError("Not Authorized");
+    if (!decoded) return NextResponse.json({success:true},{status:201})
 
 
 
@@ -42,20 +42,20 @@ export const GET = async (req:Request)=>{
     
 
 
-  //   const updatedCompany = await prisma.company.update({
-  //     where: {
-  //       email:decoded.email,
-  //     },
-  //     data: {
-  // pushNotificationToken:null
+    const updatedCompany = await prisma.company.update({
+      where: {
+        email:decoded.email,
+      },
+      data: {
+  pushNotificationToken:null
 
-  //     },
-  //   });
+      },
+    });
 
   
 
 
-  //  return NextResponse.json({success:true},{status:201})
+   return NextResponse.json({success:true},{status:201})
   } catch (error) {
     let message = "Something went wrong";
     if (error instanceof CustomError) {
