@@ -16,11 +16,11 @@ export const GET = async (req:Request)=>{
 
 
     try{
-  
+      
     const apiSecret = req.headers.get("api-Secret"); //API secret key to prevent 3rd party requests
 
     if (!apiSecret || apiSecret !== process.env.API_SECRET) {
-      return NextResponse.json({success:true},{status:201})
+      throw new CustomError("Unauthorized request");
     }
 
 
@@ -28,13 +28,13 @@ export const GET = async (req:Request)=>{
     const authHeader = req.headers.get("Authorization");
     console.log("header", authHeader);
     if (!authHeader || !authHeader.startsWith("Bearer "))
-    return NextResponse.json({success:true},{status:201})
+      throw new CustomError("Not Authorized");
 
     const token = authHeader.split(" ")[1];
 
     const decoded = verifyToken(token);
 
-    if (!decoded) return NextResponse.json({success:true},{status:201})
+    if (!decoded) throw new CustomError("Not Authorized");
 
 
 
