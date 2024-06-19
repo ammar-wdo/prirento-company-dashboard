@@ -24,8 +24,10 @@ export const GET = async(req:Request)=>{
 
            return {...rest}
         })
+
+        const categories = await prisma.blogCategory.findMany()
        
-        return NextResponse.json({success:true,blogs:blogsWithNowContent},{status:200})
+        return NextResponse.json({success:true,blogs:blogsWithNowContent,categories},{status:200})
 
 
 
